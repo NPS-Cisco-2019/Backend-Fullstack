@@ -1,0 +1,144 @@
+:root {
+    --popupHeight: 0;
+}
+
+.fadein {
+    animation: fadein 1000ms;
+}
+
+.fadein-short {
+    animation: fadein 500ms;
+}
+
+.fadeout {
+    animation: fadeout 500ms;
+}
+
+.lateFade {
+    animation: fadeout 200ms 600ms;
+}
+
+.slidein {
+    animation: slidein 500ms cubic-bezier(0.215, 0.610, 0.355, 1);
+    overflow: hidden;
+}
+
+.slideout {
+    animation: slideout 500ms cubic-bezier(0.215, 0.610, 0.355, 1);
+    overflow: hidden;
+}
+
+.nav-button-animation {
+    animation: 300ms flip ease-in-out;
+}
+
+
+.dipReplace-enter, .dipReplace-appear {
+    opacity: 0;
+    transform: translateY(var(--transY));
+}
+
+.dipReplace-enter-active {
+    opacity: 1;
+    transform: translateY(0%);
+    transition: opacity 700ms linear 700ms, transform 700ms ease-out 700ms;
+}
+
+.dipReplace-exit {
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+.dipReplace-exit-active{
+    opacity: 0;
+    transform: translateY(var(--transY));
+    transition: opacity 700ms linear, transform 700ms ease-in;
+}
+
+
+
+.fade-enter, .fade-appear {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity 400ms linear 300ms;
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit-active {
+    opacity: 0;
+    transition: opacity 200ms linear;
+}
+
+
+@keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes popup {
+    from { height: 0; }
+    to { height: var(--popupHeight) }
+}
+
+@keyframes fadeto06 {
+    from { opacity: 0 ;}
+    to { opacity: 0.6; }
+}
+
+@keyframes fadeto0 {
+    from { opacity: 0.6; }
+    to { opacity: 0; }
+}
+
+@keyframes slidein {
+    from { transform: translateX(-100%); }
+    to {transform: translateX(0%); }
+}
+
+@keyframes slideout {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+}
+
+@keyframes flip {
+    0% {
+        transform: rotateX(0deg);
+        transform: rotateY(0deg);
+    }
+
+    49.99% {
+        transform: rotateX(90deg);
+        transform: rotateY(90deg);
+    }
+
+    50.01% {
+        transform: rotateX(270deg);
+        transform: rotateY(270deg);
+    }
+
+    100% {
+        transform: rotateX(360deg);
+        transform: rotateY(360deg);
+    }
+}
