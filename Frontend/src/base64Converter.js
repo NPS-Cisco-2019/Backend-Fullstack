@@ -11,17 +11,18 @@ export default function base64(imgPath, cropJSON){
         x = 0;
         y = 0;
         width = img.naturalWidth;
-        height = img.naturalHeight;
+        height = img.naturalHeight
     }
 
-    let htmlImg = document.getElementById('image').getBoundingClientRect();
     // console.log({h: img.naturalHeight, img})
+    let h = 9*window.innerHeight/10;
     let imgH = img.naturalHeight;
     let imgW = img.naturalWidth;
 
+    let htmlImg = document.getElementById('image').getBoundingClientRect();
     // console.log({imgH})
     let scaleX = imgW / htmlImg.width;
-    let scaleY = imgH / htmlImg.height;
+    let scaleY = imgH/h;
     // scale = 1;
     x *= scaleX;
     y *= scaleY;

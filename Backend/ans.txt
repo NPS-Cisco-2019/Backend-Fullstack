@@ -1,0 +1,1 @@
+{'answer': ['Dear studentEfficiency (n) = 1 - T2/T1 = 1 - (350/Tsource)0.3 = 1 - (350/Tsource)350/ Tsource = 0.7Tsource = 500 KAlso if (n), efficiency = 0.50.5 = 1 - 350/T350/T = 0.5T = 700 KHence change in temperature of source = 200 K increaseRegardsArun (askIITiajs forum expert)', []], 'domain': ['askiitans']}
