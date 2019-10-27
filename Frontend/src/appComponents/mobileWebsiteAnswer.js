@@ -7,44 +7,11 @@ import Swipe from 'react-easy-swipe';
 import { Route, Link, Switch, withRouter } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PropTypes from 'prop-types';
+import styles from './style';
 // !SECTION
 
-// SECTION Inline Styles
-const botNavStyle = {
-    width: window.innerWidth/3,
-    margin: 0
-}
+let { botNavStyle, webStyle, container, infoStyle } = styles;
 
-const webStyle = {
-    fontSize: '1.2em',
-    margin: 0,
-    position: 'fixed',
-    zIndex: 69
-}
-
-const container = {
-    position: 'absolute',
-    margin: 0,
-    top: window.innerHeight / 11,
-    width: window.innerWidth,
-    padding: window.innerWidth / 20,
-    justifyItems: 'center',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-    paddingTop: 0,
-    paddingBottom: 7 * window.innerHeight / 100,
-    overflow: 'hidden',
-    backgroundColor: 'var(--backCol)'
-}
-
-const infoStyle = {
-    boxSizing: 'border-box',
-    borderRadius: window.innerWidth/50,
-    width: 9 * window.innerWidth/10,
-    padding: 10,
-    margin: '1.4% 0'
-}
-// !SECTION
 
 class MobileAppAnswer extends React.Component{
     constructor(props){
@@ -55,6 +22,8 @@ class MobileAppAnswer extends React.Component{
             showMenu: false,
             backToAns: false
         }
+
+        console.log(this.props);
         
         this.props.history.push('/Answer/answer0');
 
@@ -88,7 +57,7 @@ class MobileAppAnswer extends React.Component{
     }
 
     handleMenuClick(){
-        this.setState({ showMenu: true });
+        this.setState({ showMenu: !this.state.showMenu });
     }
 
     returnToAnswer(){
@@ -230,7 +199,17 @@ class MobileAppAnswer extends React.Component{
                         <ul style={{height: len * window.innerHeight/13, width: window.innerWidth/2, left: window.innerWidth/4,
                                     bottom: 7 * window.innerHeight / 100}} className={`menu-ul ${this.state.backToAns ? 'end' : null}`}>
                             {this.props.websites.map((website, i) => (
-                                <li key={website} value={i} style={{height: window.innerHeight/15, bottom: i*window.innerHeight/14, animation: `fadein 400ms linear ${i * 200 / len}ms`}} className="menu-li" onClick={this.jumpto}>{website}</li>
+                                <li
+                                    key={website}
+                                    value={i}
+                                    style={{
+                                        height: window.innerHeight/15,
+                                        bottom: i*window.innerHeight/14,
+                                        animation: `fadein 400ms linear ${i * 200 / len}ms`
+                                    }}
+                                    className="menu-li"
+                                    onClick={this.jumpto}
+                                >{website}</li>
                             ))}
                         </ul>
                     </div>)
@@ -242,8 +221,17 @@ class MobileAppAnswer extends React.Component{
                         <p className="botItem button" style={{...botNavStyle, opacity: 1}} onClick={this.backClick}>{'< Back'}</p>
                     </Link>:
                     <p className="botItem button" style={{...botNavStyle, opacity: 0.5}}>{'< Back'}</p>}
-                    
-                    <p className="botItem" style={botNavStyle} onClick={this.handleMenuClick}>Answer {this.state.num + 1}</p>
+
+                    <button className="botItem" style={botNavStyle} onClick={this.handleMenuClick}>
+                        <div className={`hamburger hamburger--collapse ${this.state.showMenu ? 'is-active' : ''}`}>
+                            <span className="hamburger-box">
+                                <span className="hamburger-inner"></span>
+                            </span>
+                        </div>
+                        <p style={{margin: 0}}>
+                            Answer {this.state.num + 1}
+                        </p>
+                    </button>
 
                     {next ?
                     <Link to={`/Answer/answer${this.state.num+1}`}>

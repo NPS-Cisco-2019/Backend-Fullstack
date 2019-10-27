@@ -2,6 +2,7 @@ import flask
 from flask import jsonify, request
 import os, sys
 import OCR.text_from_im as OCR
+import time
 
 
 app = flask.Flask("__main__")
@@ -17,6 +18,7 @@ def get_img():
     # print(img)
 
     question = OCR.text_from_image(img['img'])
+    # question = "iitians man running"
 
     print(question)
 
@@ -39,6 +41,8 @@ def get_question():
     current_dict["question"] = question["question"]
     current_dict["answers"] = ans["answer"]
     current_dict["websites"] = ans["domain"]
+
+    print(type(current_dict["answers"]), type(current_dict["websites"]))
 
     print("CURRENT_DICT:", current_dict)
 

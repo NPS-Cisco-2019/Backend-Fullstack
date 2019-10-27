@@ -15,10 +15,13 @@ export function init(){
     let mode = localStorage.getItem('mode');
     if (mode === null){
         localStorage.setItem('mode', 'dark');
-    mode = 'dark'
+        mode = 'dark'
     }
 
     changeMode(mode);
+
+    localStorage.setItem('subject', 'General');
+    localStorage.setItem('subjectSelector', 'Drop down on screen');
 
     style.setProperty('--highlightCol', highlightColor)
 
@@ -32,8 +35,9 @@ export function init(){
 export function reset(){
     localStorage.setItem('highlightCol', 'rgb(50, 90, 245)');
     localStorage.setItem('pressDelay', '300')
-    localStorage.setItem('grade', '11');
     localStorage.setItem('mode', 'dark');
+    localStorage.setItem('subject', 'General');
+    localStorage.setItem('subjectSelector', 'Drop down on screen');
     
     changeMode('dark');
     style.setProperty('--highlightCol', 'rgb(50, 90, 245)')

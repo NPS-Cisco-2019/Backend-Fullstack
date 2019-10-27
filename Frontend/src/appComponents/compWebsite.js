@@ -1,6 +1,6 @@
 // SECTION imports
 import React from 'react';
-import { Firefox, Chrome, Safari } from './elements';
+import { Firefox, Chrome, Safari } from './tutorialElements';
 import './desktopApp.css';
 import './animations.css';
 import { BrowserRouter, Route, Link, Switch, Redirect } from 'react-router-dom';
