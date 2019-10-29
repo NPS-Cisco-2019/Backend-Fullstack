@@ -140,6 +140,7 @@ export function Answer(props){
     
     let ansLength = props.answer.length
     let [height, setHeight] = useState(0);
+    let [imgLoaded, setImgLoaded] = useState(false);
 
     useEffect(() => {
         setTimeout(() => {
@@ -150,18 +151,15 @@ export function Answer(props){
 
             setHeight(Math.min((container.height - 20), (pRect.height + (2 * infoStyle.padding))));
 
-            if (props.answer[ansLength - 1]) {
-                let img = document.getElementById(`${props.id}img`);
-                img.onLoad = () => {
-                    let div = document.getElementById(props.id).getBoundingClientRect();
-                    let img = document.getElementById(`${props.id}img`).getBoundingClientRect();
-                    setHeight(Math.min(Math.max(img.height, div.height), (container.height - 20)));
-                }
+            if (imgLoaded) {
+                let div = document.getElementById(props.id).getBoundingClientRect();
+                let img = document.getElementById(`${props.id}img`).getBoundingClientRect();
+                setHeight(Math.min(Math.max(img.height, div.height), container.height));
             }
         }, 100);
         
         // eslint-disable-next-line
-    }, []);
+    }, [imgLoaded]);
 
     return (
         <div className="info" style={{...infoStyle, ...answer, height: height}}>
@@ -171,13 +169,19 @@ export function Answer(props){
                 ))}
 
                 {props.answer[ansLength - 1] ?
-                    <img
-                        src={ props.answer[ansLength - 1] }
-                        alt={`answer-${props.id}`}
-                        style={{width: "100%"}}
-                        id={`${props.id}img`}
-                    /> : null
+                    <React.Fragment>
+                        <img
+                            src={ props.answer[ansLength - 1] }
+                            alt={`answer-${props.id}`}
+                            style={{width: "100%", marginBottom: 15}}
+                            id={`${props.id}img`}
+                            onLoad={() => setImgLoaded(true)}
+                        />
+                        { imgLoaded ? null : <p>Loading...</p> }
+                    </React.Fragment>
+                     : null
                 }
+
             </div>
         </div>
     )
