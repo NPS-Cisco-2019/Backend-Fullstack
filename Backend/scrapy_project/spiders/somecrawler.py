@@ -13,8 +13,8 @@ import requests
 class QuotesSpider(scrapy.Spider):
     name = "answerbot"
 
-    with open("ans.txt", "a+") as f:
-        f.close()
+    # with open("ans.txt", "a+") as f:
+        # f.close()
     
 
     

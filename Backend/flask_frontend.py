@@ -17,8 +17,8 @@ def get_img():
     img = request.get_json()
     # print(img)
 
-    question = OCR.text_from_image(img['img'])
-    # question = "iitians man running"
+    # question = OCR.text_from_image(img['img'])
+    question = "iitians man running"
 
     print(question)
 
