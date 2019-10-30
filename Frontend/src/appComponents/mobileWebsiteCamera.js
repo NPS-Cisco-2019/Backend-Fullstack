@@ -387,7 +387,7 @@ class MobileAppPicture extends React.Component {
               <Webcam 
               audio={false}
               videoConstraints={videoConstraints}
-              onUserMediaError={this.cameraErrorHandlerndler}
+              onUserMediaError={this.cameraErrorHandler}
               style={imgStyle}
               screenshotFormat="image/jpeg"
               id="camera"

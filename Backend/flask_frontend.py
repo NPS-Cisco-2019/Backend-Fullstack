@@ -17,8 +17,8 @@ def get_img():
     img = request.get_json()
     # print(img)
 
-    # question = OCR.text_from_image(img['img'])
-    question = "iitians man running"
+    question = OCR.text_from_image(img['img'])
+    # question = "iitians man running"
 
     print(question)
 
@@ -29,7 +29,9 @@ def get_question():
     current_dict = {}
     question = request.get_json()
 
-    os.system("scrapy crawl answerbot -a question={}".format(question["question"].replace(" ", "+")))
+    question
+
+    os.system('scrapy crawl answerbot -a question="{}"'.format(question["question"].replace(" ", "+").replace("\n", "+")))
 
     with open("ans.txt", "r") as file:
         ans = eval(file.read())
