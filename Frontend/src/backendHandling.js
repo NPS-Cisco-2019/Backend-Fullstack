@@ -4,7 +4,6 @@ import testDetails from "./test";
 let deploy = true;
 
 // NOTE functions which will handle all backend calls
-// TODO integration
 
 export function OCR(imgPath, cropJSON){
 
@@ -35,7 +34,11 @@ export function scrape(question){
     if (deploy) {
         return fetch("/scrapy", {
             method: 'POST',
-            body: JSON.stringify({question: question}),
+            body: JSON.stringify({
+                question: question,
+                subject: localStorage.getItem('subject'),
+                grade: localStorage.getItem('grade')
+            }),
             headers: { 'Content-Type': 'application/json' }
         });
     } else {
@@ -49,7 +52,7 @@ export function scrape(question){
                             answers: testDetails.answers,
                             websites: testDetails.websites
                         });
-                    }, 5000)
+                    }, 1000)
                 })
             })
         })

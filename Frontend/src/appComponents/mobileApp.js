@@ -8,6 +8,7 @@ import SettingsPage from './settings';
 import GradeChoice from './gradeChoice';
 import Tutorial from './mobileTutorial';
 import { init } from '../localStorageHandleing';
+import "./hamburger.css"
 
 // ANCHOR Main Mobile App that renders various mobile pages
 // NOTE gets called by <App />, does not render by itself
@@ -19,7 +20,6 @@ let newPerson = sessionStorage.getItem('new') === "true";
 class MobileApp extends React.Component {
   constructor(props){
     super(props);
-    // TODO change question, answer and website to inlclude integration
     this.state = {
       question: testDetails.question,
       answers: testDetails.answers,
@@ -37,9 +37,9 @@ class MobileApp extends React.Component {
       console.log("YEET");
       this.props.history.push("/Unknown");
     } else {
-      // this.props.history.push(newPerson ? '/GradeChoice' : '/Picture')
+      this.props.history.push(newPerson ? '/GradeChoice' : '/Picture')
       // TODO delete below history.pushes, the one above is correct
-      this.props.history.push(false ? '/Answer' : '/Picture' );
+      // this.props.history.push(false ? '/Answer' : '/Picture' );
       // this.props.history.push('/Settings');
     }
   }

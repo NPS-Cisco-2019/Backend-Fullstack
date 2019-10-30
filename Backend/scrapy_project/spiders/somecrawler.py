@@ -12,6 +12,9 @@ import requests
 
 class QuotesSpider(scrapy.Spider):
     name = "answerbot"
+
+    # with open("ans.txt", "a+") as f:
+        # f.close()
     
 
     
@@ -107,6 +110,7 @@ class QuotesSpider(scrapy.Spider):
         #l_img = response.xpath('//div[@class="brn-main-attachment js-attachment-image-wrapper"]//img').extract()
         #ans = json.loads(l[0])
         #ans["mainEntity"]["acceptedAnswer"][0]["text"]
+        ans  = self.janitor(ans)
         
 
 
@@ -118,11 +122,10 @@ class QuotesSpider(scrapy.Spider):
         #     b.write(str(ans)+ str(imgsrc))
 
         self.answer["domain"].append("brainly")
-        self.answer["answer"].append(ans)
         if imgsrc :
-            self.answer["answer"].append(0)
+            self.answer["answer"].append([ans, imgsrc])
         else:
-            self.answer["answer"].append(imgsrc)
+            self.answer["answer"].append([ans, 0])
 
 
 
@@ -167,11 +170,10 @@ class QuotesSpider(scrapy.Spider):
 
 
         self.answer["domain"].append("askiitans")
-        self.answer["answer"].append(l)
         if img :
-            self.answer["answer"].append(0)
+            self.answer["answer"].append([l, img])
         else:
-            self.answer["answer"].append(img)
+            self.answer["answer"].append([l, 0])
 
         
 
@@ -196,8 +198,7 @@ class QuotesSpider(scrapy.Spider):
         answer = half_almost_answer[-ind_almost_answer:]
 
         self.answer["domain"].append("askiitans")
-        self.answer["answer"].append(answer)
-        self.answer["answer"].append(0)
+        self.answer["answer"].append([answer, 0])
         self.writetheanswer()
     def janitor(self,raw_html):
 
@@ -218,5 +219,7 @@ class QuotesSpider(scrapy.Spider):
             
         
     def writetheanswer(self):
+        a = open("ans.txt", "a+")
+        a.close()
         with open("ans.txt", "w") as f:
             f.write(str(self.answer))

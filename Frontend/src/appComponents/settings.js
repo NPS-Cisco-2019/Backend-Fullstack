@@ -1,5 +1,6 @@
 import React from 'react';
-import { Back, Setting, Slider, Null, ColorPicker } from './elements';
+import { Setting, Slider, Null, ColorPicker, Choice } from './settingsElements';
+import { Back } from './elements';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { changeMode, reset } from '../localStorageHandleing';
@@ -24,7 +25,8 @@ class SettingsPage extends React.Component {
                 borderRadius: window.innerWidth/50,
                 width: window.innerWidth * 0.95,
                 top: Math.round(window.innerHeight/10),
-                marginLeft: window.innerWidth / 40
+                marginLeft: window.innerWidth / 40,
+                zIndex: 42
             },
             bannerChildAnimation: '',
             fadeout: false
@@ -56,7 +58,8 @@ class SettingsPage extends React.Component {
                 borderRadius: 0,
                 width: window.innerWidth,
                 marginLeft: 0,
-                top: 0
+                top: 0,
+                zIndex: 1000
             },
             bannerChildAnimation: 'lateFade'
         })
@@ -107,13 +110,21 @@ class SettingsPage extends React.Component {
                 >
                     <section>
                         <p>Functionality</p>
-                        <Setting name="Grade" type="value" id="gradeSelector" props={{prefix: 'Class ', defaultValue: 11}} childProps={{min: 9, max: 12, localStorageItem: 'grade'}} compValue={localStorage.getItem('grade')} Children={Slider} />
-                        <Setting name="Long Press Delay" type="value" id="pressDelay" props={{suffix: 'ms', defaultValue: 300}} childProps={{min: 200, max: 600, localStorageItem: 'pressDelay'}} compValue={localStorage.getItem('pressDelay')} Children={Slider} />
+                        <Setting name="Grade" type="value" id="gradeSelector" props={{prefix: 'Class '}} childProps={{min: 9, max: 12, localStorageItem: 'grade'}} compValue={localStorage.getItem('grade')} Children={Slider}>
+                            <p className="setting-description">Choosing a grade will help to get more adequate search results.</p>
+                        </Setting>
+                        
+                        <Setting name="Subject Choice" type="value" id="subjectSelector" childProps={{localStorageItem: 'subjectSelector', arr: subjectArr}} compValue={localStorage.getItem('subjectSelector')} Children={Choice}>
+                            <p className="setting-description">Choosing a particular subject will help in getting more accurate search results.</p>
+                        </Setting>
+                        
+                        <Setting name="Long Press Delay" type="value" id="pressDelay" props={{suffix: 'ms'}} childProps={{min: 200, max: 600, localStorageItem: 'pressDelay'}} compValue={localStorage.getItem('pressDelay')} Children={Slider} />
                     </section>
                     <hr/>
                     <section>
                         <p>Looks</p>
                         <Setting name="Dark Mode" type="switch" id="darkMode" handleClick={this.changeMode} props={{enabled: mode === 'dark'}} Children={Null} />
+                        
                         <Setting name="Highlight Colour" type="colorPicker" id="highlightColPick" props={{colour, localStorageItem: 'highlightCol'}} childProps={{localStorageItem: 'highlightCol'}} Children={ColorPicker} />
                     </section>
                     <hr/>
@@ -129,10 +140,14 @@ class SettingsPage extends React.Component {
 
 export default withRouter(SettingsPage);
 
-// function changeLongDuration(){
-//     let value = document.getElementById('pressDelaySlider').value;
-//     localStorage.setItem('pressDelay', value + '');
-// }
+
+const subjectArr = [
+    "Drop down on screen",
+    "Physics",
+    "Chemistry",
+    "Mathematics",
+    "General"
+]
 
 
 SettingsPage.propTypes = {

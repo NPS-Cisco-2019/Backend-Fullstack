@@ -31,11 +31,6 @@ function GradeChoice({ history }){
                 marginBottom: 4 * window.innerHeight/100,
                 marginTop: 3 * window.innerHeight / 100
             }}>Which grade are you in?</div>
-              {/* border-radius: 2vh;
-  font-size: 2.5vh;
-  height: 14vh;
-  margin: 3vh 5vw; */}
-
             {grades.map((grade) => (
                 <div style={{
                     backgroundColor: grade === selected ? 'rgba(50, 90, 245, 0.2)' : 'rgba(255, 255, 255, 0.2)',

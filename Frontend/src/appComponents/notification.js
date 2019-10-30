@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
-export default function notification(content){
+export default function notification(content, important = false){
     if (typeof content === "string"){
         content = [content]
     }
-    ReactDOM.render(<Notify content={content} />, document.getElementById('notification-root'))
+    ReactDOM.render(<Notify content={content} important={important} />, document.getElementById('notification-root'))
 }
 
 
-function Notify({ content }){
+function Notify({ content, important }){
 
     const closeNotification = () => {
         setWrapperStyle({
@@ -26,6 +26,12 @@ function Notify({ content }){
         let notifyRect = document.getElementById('notify').getBoundingClientRect();
         setHeight(notifyRect.height);
         setWrapperStyle({ transform: 'translateY(0)' })
+        if (!important) {
+            setTimeout(() => {
+                document.getElementById('notification-x').click();
+            }, 5000);
+        }
+        // eslint-disable-next-line
     }, [])
 
     const [height, setHeight] = useState()
@@ -38,7 +44,7 @@ function Notify({ content }){
                     <p key={`notification-p-${i}`}>{text}</p>
                 ))}
             </div>
-            <div className="close-x" onClick={closeNotification}>
+            <div className="close-x" onClick={closeNotification} id="notification-x">
                 <button>&#215;</button>
             </div>
         </div>

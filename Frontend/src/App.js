@@ -17,7 +17,7 @@ let dev = true;
 function App(){
   //checks whether user is on mobile
   if (typeof window.orientation !== "undefined" || dev){
-    return <BrowserRouter basename="/Frontend"><MobileApp /></BrowserRouter>;
+    return <BrowserRouter><MobileApp /></BrowserRouter>;
   } else {
     return <CompApp />;
   }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Chrome, Firefox, Safari, Back } from './elements';
+import { Chrome, Firefox, Safari } from './tutorialElements';
+import { Back } from './elements';
 import browser from '../browserDetection';
 import PropTypes from 'prop-types';
 

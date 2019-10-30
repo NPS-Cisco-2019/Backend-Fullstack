@@ -1,15 +1,11 @@
 import flask
 from flask import jsonify, request
 import os, sys
-# TODO ADD SCRAPY
-# import tutorial.SE as scrapy
-#import OCR.text_from_im as OCR
+import OCR.text_from_im as OCR
+import time
 
 
 app = flask.Flask("__main__")
-
-
-
 
 @app.route("/")
 def my_index():
@@ -21,8 +17,8 @@ def get_img():
     img = request.get_json()
     # print(img)
 
-    #question = OCR.text_from_image(img['img'])
-    question = "brainly man running"
+    question = OCR.text_from_image(img['img'])
+    # question = "iitians man running"
 
     print(question)
 
@@ -30,8 +26,9 @@ def get_img():
 
 @app.route("/scrapy", methods=['POST', 'GET'])
 def get_question():
+    current_dict = {}
     question = request.get_json()
-    os.system("scrapy crawl anserbot -a question={}".format(question["question"].replace(" ", "+")))
+    os.system("scrapy crawl anserbot -a question={}".format(question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+.+"))+"+site%3Aaskiitians.com+OR+site%3Adoubtnut.com+OR+site%3Abrainly.in")
     with open("ans.txt", "r") as file:
         ans = eval(file.read())
     print("scrapy running....")
@@ -47,11 +44,25 @@ def get_question():
 
 
 
-    
+    question
 
-    # scrapy.return_links('brainly+man+runs')
+    os.system('scrapy crawl answerbot -a question="{}"'.format(question["question"].replace(" ", "+").replace("\n", "+")))
 
-    # implement Scrapey
+    with open("ans.txt", "r") as file:
+        ans = eval(file.read())
+
+    # del ans["domain"]
+
+    print("ANSWER:", ans)
+
+    current_dict["question"] = question["question"]
+    current_dict["answers"] = ans["answer"]
+    current_dict["websites"] = ans["domain"]
+
+    print(type(current_dict["answers"]), type(current_dict["websites"]))
+
+    print("CURRENT_DICT:", current_dict)
+
     return jsonify(current_dict)
 
 app.run()
