@@ -8,7 +8,8 @@ let deploy = true;
 
 export function OCR(imgPath, cropJSON){
 
-    let img = base64(imgPath, cropJSON);
+    //let img = base64(imgPath, cropJSON);
+    let img = "hbrgvyejnwrhq" ;
 
     if (deploy) {
         return fetch("/OCR", {
