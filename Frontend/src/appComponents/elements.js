@@ -8,19 +8,19 @@ let { infoStyle, navObj, imgStyle, answer } = styles;
 export class Flash extends React.Component {
     constructor(props){
         super(props);
-        this.state = {selected: true};
+        this.state = {selected: false};
         this.handleClick = this.handleClick.bind(this);
     }
 
     // changes whether flashlight is enabled or disabled
-    // TODO add flashlight fucntionality
     handleClick(){
         this.setState({ selected: !this.state.selected });
     }
 
     render(){
+        
         return (
-            <div id={this.state.selected ? 'selected' : '' } className="selectable" style={navObj} onClick={this.handleClick}>
+            <div className={`selectable ${this.state.selected ? 'selected' : ''}`} id="flash" style={navObj} onClick={this.handleClick}>
                 <img id={this.state.selected ? 'selectedImg' : '' } src={require("./pictures/flash.png")} alt="flash" className="nav-img" />
             </div>
         );
@@ -210,16 +210,6 @@ export function Subject(){
             }}
             onClick={() => setOpen(!open)}
         >
-            {/* <button className="botItem" style={botNavStyle} onClick={this.handleMenuClick}>
-                <div className={`hamburger hamburger--collapse ${this.state.showMenu ? 'is-active' : ''}`}>
-                    <span className="hamburger-box">
-                        <span className="hamburger-inner"></span>
-                    </span>
-                </div>
-                <p style={{margin: 0}}>
-                    Answer {this.state.num + 1}
-                </p>
-            </button> */}
             <button style ={{ opacity, fontFamily: "Raleway" }}>
                 <div className={`hamburger hamburger--collapse ${open ? 'is-active' : ''}`}>
                     <span className="hamburger-box">
@@ -250,7 +240,7 @@ export class ErrorBoundary extends React.Component {
       this.state = { hasError: false };
     }
   
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError() {
       // Update state so the next render will show the fallback UI.
       return { hasError: true };
     }

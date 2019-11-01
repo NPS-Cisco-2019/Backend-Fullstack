@@ -2,9 +2,9 @@ const maxLength = (10/100) * (69/100) * window.innerHeight;
 
 const styles = {
     imgStyle: {
-        height: 9*window.innerHeight/10,
         zIndex: '0',
-        margin: 'auto'
+        margin: 'auto',
+        width: window.innerWidth
     },
     imgContainerStyle: {
         backgroundColor: 'var(--backCol)',
@@ -25,10 +25,10 @@ const styles = {
         alignItems: 'center'
     },
     videoConstraints: {
-        // facingMode: 'user',
-        facingMode:  { exact: "environment" },
-        height: window.innerWidth,
-        width: window.innerHeight
+        facingMode: 'user',
+        // facingMode:  { exact: "environment" },
+        width: 9*window.innerHeight/10,
+        height: window.innerWidth
     },
     botNavStyle: {
         width: window.innerWidth/3,

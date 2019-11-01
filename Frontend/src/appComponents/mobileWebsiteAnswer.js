@@ -22,8 +22,6 @@ class MobileAppAnswer extends React.Component{
             showMenu: false,
             backToAns: false
         }
-
-        console.log(this.props);
         
         this.props.history.push('/Answer/answer0');
 
