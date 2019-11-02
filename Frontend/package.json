@@ -91,7 +91,7 @@
     ]
   },
   "homepage": "/static/react",
-  "proxy": "http://localhost:5000",
+  "proxy": "https://npsinrcisco.live",
   "jest": {
     "roots": [
       "<rootDir>/src"
