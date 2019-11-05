@@ -6,18 +6,12 @@ import urllib.request
 import os
 import json
 import datetime
-#from bs4 import BeautifulSoup
 import requests
-#from ..\..items import CiscoProjectItem
+
 
 class QuotesSpider(scrapy.Spider):
-    name = "answerbot"
+    name = "spider"
 
-    # with open("ans.txt", "a+") as f:
-        # f.close()
-    
-
-    
     def __init__(self, question=None, *args, **kwargs):
         super(QuotesSpider, self).__init__(*args, **kwargs)
         self.question = question
@@ -28,11 +22,7 @@ class QuotesSpider(scrapy.Spider):
 
     def start_requests(self):
 
-
-
-        
-        
-        #log(return_links(x.replace(" ", "+")))
+        #self.log(return_links(x.replace(" ", "+")))
         default_username = "bob"
         current_time =  datetime.datetime.now().time()
         answerdict = {"user": default_username, "time" :current_time, "answer" :{}}
@@ -42,9 +32,7 @@ class QuotesSpider(scrapy.Spider):
         
         self.log(str(str(self.urls)))
         for url in self.urls:
-
            listt = tldextract.extract(url)
-           
 
            website = listt.domain
            if website == 'brainly':
@@ -54,20 +42,14 @@ class QuotesSpider(scrapy.Spider):
            elif website == 'doubtnut':
                yield scrapy.Request(url=url, callback=self.parsedoubtnut)
 
-        
-
-
-
 
     def return_links(self,user_query):
         self.log("RETURN LINKS CALL")
         self.link_to_be_parsed = {}
         self.user_query = user_query
 
-        
-        
-        self.google_search = "https://www.google.com/search?q=" + self.user_query
-        self.rq = requests.get(self.google_search).text 
+        google_search = "https://www.google.com/search?q=" + self.user_query
+        self.rq = requests.get(google_search).text 
         
         self.urls = re.findall(r'href=[\'"]?([^\'" >]+)', self.rq)
         self.useful_domains = ["doubtnut","brainly", "askiitians","topperlearning", "byjus"]
@@ -82,8 +64,6 @@ class QuotesSpider(scrapy.Spider):
        
         for url in self.urls:
             #string format url based on how google's internal system works
-            
-         
             self.urlx = url[7:url.find(';') -4]
             
             if tldextract.extract(self.urlx).domain in self.useful_domains :
@@ -91,55 +71,23 @@ class QuotesSpider(scrapy.Spider):
                self.link_to_be_parsed["domain"].append(str(tldextract.extract(self.urlx).domain))
         self.log(str(self.link_to_be_parsed))
 
-
-
-        
-
-
         return self.link_to_be_parsed
-        
-        
-    
-    
 
 
     def parsebrainly(self, response):
-        #self.log("WWW.BRAINLY.COM ACTIVATED")
-        # l = response.xpath('//script[@type ="application/ld+json"]/text()').extract()
-        ans =response.xpath("//div[@class='sg-text js-answer-content brn-rich-content']").extract()
-        #l_img = response.xpath('//div[@class="brn-main-attachment js-attachment-image-wrapper"]//img').extract()
-        #ans = json.loads(l[0])
-        #ans["mainEntity"]["acceptedAnswer"][0]["text"]
-        
+        ans =response.xpath("//div[@class='sg-text js-answer-content brn-rich-content']").extract()        
 
 
-        #imgsrc = response.xpath('//div[@class="brn-main-attachment brn-main-attachment--loading js-attachment-image-wrapper "]/@src').extract()[:2]
         imgsrc = response.xpath("//section[@id='answers']//img[@title='Attachment']/@src").getall()
         
-        #self.log("HELLO FROM BRAINL")
-        # with open("brainly.txt", "w+") as b:
-        #     b.write(str(ans)+ str(imgsrc))
-
         self.answer["domain"].append("brainly")
         if imgsrc :
             self.answer["answer"].append([ans, imgsrc])
         else:
             self.answer["answer"].append([ans, 0])
 
-
-
-        
         self.writetheanswer()
-        
-
-
-        
-
-            
-
-            
-        #ans = str(l["mainEntity"]["suggestedAnswer"][0]["text"])
-        
+    
         #self.log(self.answer)
 
             
@@ -149,24 +97,10 @@ class QuotesSpider(scrapy.Spider):
 
     def parseaskiitans(self, response):
         self.log("WWW>ASKIITIANS.COM STARTED")
-        # with open("ians.txt", "a+") as f:
-        #     self.log("ask")
-        #     l = response.xpath(
-        #         '//div[@id ="rptAnswers_ctl01_pnlAnswer"]//div').extract()[3][5:-6]
-        #     imgsrc = response.xpath(
-        #         '//div[@id ="rptAnswers_ctl01_pnlAnswer"]//div//img[@src]').extract()[0]
-        #     imgsrc = imgsrc[imgsrc.find('src="')+5:imgsrc.find('.jpg"') + 4]
-        #     #downloadImage(imgsrc, "A")
-        #     urllib.request.urlretrieve(imgsrc, "img_Ask")
-        #     self.log(imgsrc)
-        #     f.write(str(l))
-        #     f.write(str(imgsrc))
         l = str(response.xpath('//*[@id="rptAnswers_ctl01_pnlAnswer"]').extract())
         l = self.janitor(l)
-
-        
+       
         img = response.xpath('//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract()
-
 
         self.answer["domain"].append("askiitans")
         if img :
@@ -174,18 +108,12 @@ class QuotesSpider(scrapy.Spider):
         else:
             self.answer["answer"].append([l, 0])
 
-        
-
         self.writetheanswer()
 
-        
-
+    
 
     def parsedoubtnut(self, response):
-        self.log("D FOR DOUBTNUT")
-        #with open("hi.txt", "a+") as ff:
-         #   ff.write("HELLO")
-        
+        self.log("D FOR DOUBTNUT")        
             
         htmls = str(response.text)
         i_ans_text = htmls.find("Answer Text")
@@ -199,15 +127,15 @@ class QuotesSpider(scrapy.Spider):
         self.answer["domain"].append("askiitans")
         self.answer["answer"].append([answer, 0])
         self.writetheanswer()
+
+    
     def janitor(self,raw_html):
 
         self.cleanr = re.compile('<.*?>')
         self.cleantext = re.sub(self.cleanr, '', raw_html)
-        # self.cleantext = self.cleantext.replace("\\n")
         self.cleantext = re.sub('\\\\xa0','',self.cleantext)
         self.cleantext = re.sub('\\\\[A-Za-z]','',self.cleantext)
-        # self.cleantext = re.sub(r'[\\\\\w]', '', self.cleantext)
-        self.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO OOOOOO")
+        self.log("[DATA]")
         self.log(self.cleantext)
         self.log(type(self.cleantext))
         

@@ -31,7 +31,7 @@ def get_question():
 
     question
 
-    os.system('scrapy crawl answerbot -a question="{}"'.format(question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+")+"site%3Adoubtnut.com+OR+site%3Aaskiitians.com+OR+site%3Abrainly.in"))
+    os.system('scrapy crawl spider -a question="{}"'.format(question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+")+"site%3Adoubtnut.com+OR+site%3Aaskiitians.com+OR+site%3Abrainly.in"))
 
     with open("ans.txt", "r") as file:
         ans = eval(file.read())
