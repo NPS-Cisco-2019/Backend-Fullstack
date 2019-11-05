@@ -244,7 +244,7 @@ class MobileAppPicture extends React.Component {
     }
 
     let responseOCR = await OCR(this.state.picture, ocrJSON);
-    if (responseOCR.status !== '200') {
+    if (responseOCR.status != '200') {
       this.backendError(responseOCR)
       return
     }
@@ -258,7 +258,7 @@ class MobileAppPicture extends React.Component {
     console.log('question gotten');
     
     let responseScrapy = await scrape(this.state.question);
-    if (responseScrapy.status !== '200') {
+    if (responseScrapy.status != '200') {
       this.backendError(responseScrapy)
       return
     }
@@ -274,7 +274,7 @@ class MobileAppPicture extends React.Component {
     if (e.key === 'Enter'){
       this.setState({isTextBox: false, isLoading: true, gotAnswer: false})
       let response = await scrape(this.state.question);
-      if (response.status !== '200') {
+      if (response.status != '200') {
         this.backendError(response);
         return
       }
