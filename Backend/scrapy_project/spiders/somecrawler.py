@@ -28,6 +28,8 @@ class QuotesSpider(scrapy.Spider):
         answerdict = {"user": default_username, "time" :current_time, "answer" :{}}
         q = self.question
         self.urls = self.return_links(q)["link"][:5]
+        self.log("[ALL THE LINKS WE PROCESS]")
+        self.log(str(self.urls))
         
         
         self.log(str(str(self.urls)))
@@ -79,6 +81,8 @@ class QuotesSpider(scrapy.Spider):
 
 
         imgsrc = response.xpath("//section[@id='answers']//img[@title='Attachment']/@src").getall()
+
+        ans = self.janitor(str(ans))
         
         self.answer["domain"].append("brainly")
         if imgsrc :
@@ -123,26 +127,52 @@ class QuotesSpider(scrapy.Spider):
         half_almost_answer = htmls[:p_indexes]
         ind_almost_answer = half_almost_answer[::-1].find('>')
         answer = half_almost_answer[-ind_almost_answer:]
+        answer = self.janitor(answer)
 
-        self.answer["domain"].append("askiitans")
+        self.answer["domain"].append("doubtnut")
         self.answer["answer"].append([answer, 0])
         self.writetheanswer()
 
     
     def janitor(self,raw_html):
-
-        self.cleanr = re.compile('<.*?>')
-        self.cleantext = re.sub(self.cleanr, '', raw_html)
-        self.cleantext = re.sub('\\\\xa0','',self.cleantext)
-        self.cleantext = re.sub('\\\\[A-Za-z]','',self.cleantext)
-        self.log("[DATA]")
-        self.log(self.cleantext)
-        self.log(type(self.cleantext))
+        split_str = '!@#$%^&*()'
         
-        self.cleantext = str(self.cleantext).rstrip(" []'")
-        self.cleantext = str(self.cleantext).lstrip("[] '")
+        #self.log(str(raw_html))
+        
 
-        return self.cleantext
+        # cleanr = re.compile('<.*?>')
+        # self.log("[]")
+        # self.log("[UNCLEANED TEXT]")
+        # self.log(str(cleanr))
+        cleantext = re.sub('<br/?>', split_str, raw_html)
+        cleantext = re.sub('<.*?>', ' ', cleantext)
+        cleantext = re.sub('\\\\xa0',' ',cleantext)
+        cleantext = re.sub('\\\\[A-Za-z]',' ',cleantext)
+        
+
+        self.log("[DATA]")
+        self.log(cleantext)
+        self.log(type(cleantext))
+        
+        cleantext = str(cleantext).rstrip(" []'")
+        cleantext = str(cleantext).lstrip("[] '")
+        i = 0
+        spaceFound = False
+        while i < len(cleantext) :
+
+            if cleantext[i] == " " and spaceFound == False:
+                temp = i
+                spaceFound = True
+            if cleantext[i] != " " and spaceFound == True:
+                spaceFound = False
+                cleantext = cleantext[:temp] + " " + cleantext[i:]
+            i+=1
+            
+        
+        self.log("[CLEANED TEXT]")
+        self.log(cleantext)
+
+        return cleantext
             
         
     def writetheanswer(self):

@@ -1,3 +1,5 @@
+
+
 import flask
 from flask import jsonify, request
 import os, sys
@@ -34,7 +36,7 @@ def get_question():
     os.system('scrapy crawl spider -a question="{}"'.format(question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+")+"site%3Adoubtnut.com+OR+site%3Aaskiitians.com+OR+site%3Abrainly.in"))
 
     with open("ans.txt", "r") as file:
-        ans = eval(file.read())
+        ans = eval(file.read())               
 
     # del ans["domain"]
 
