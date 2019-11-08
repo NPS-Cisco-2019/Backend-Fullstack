@@ -145,6 +145,7 @@ class QuotesSpider(scrapy.Spider):
         # self.log("[UNCLEANED TEXT]")
         # self.log(str(cleanr))
         cleantext = re.sub('<br/?>', split_str, raw_html)
+        cleantext  =re.sub('<p.*?>', split_str. raw_html)
         cleantext = re.sub('<.*?>', ' ', cleantext)
         cleantext = re.sub('\\\\xa0',' ',cleantext)
         cleantext = re.sub('\\\\[A-Za-z]',' ',cleantext)
