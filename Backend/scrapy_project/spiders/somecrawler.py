@@ -145,7 +145,7 @@ class QuotesSpider(scrapy.Spider):
         # self.log("[UNCLEANED TEXT]")
         # self.log(str(cleanr))
         cleantext = re.sub('<br/?>', split_str, raw_html)
-        cleantext  =re.sub('<p.*?>', split_str. raw_html)
+        cleantext  =re.sub('<p.*?>', split_str, cleantext)
         cleantext = re.sub('<.*?>', ' ', cleantext)
         cleantext = re.sub('\\\\xa0',' ',cleantext)
         cleantext = re.sub('\\\\[A-Za-z]',' ',cleantext)
@@ -172,8 +172,17 @@ class QuotesSpider(scrapy.Spider):
         
         self.log("[CLEANED TEXT]")
         self.log(cleantext)
-
-        return cleantext
+        l = cleantext.split(split_str)
+        i = 0
+        self.log("[LIST] : {}".format(l))
+        while i < len(l) :
+            if l[i] == ' ' or l[i] == '' :
+                l.pop(i)
+            i+=1
+        
+        
+        
+        return str(l)
             
         
     def writetheanswer(self):
