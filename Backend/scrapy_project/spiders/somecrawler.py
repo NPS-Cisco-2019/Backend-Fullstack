@@ -128,10 +128,11 @@ class QuotesSpider(scrapy.Spider):
             self.answer["answer"].append([l, 0])
 
         self.writetheanswer()
-    def parsetopperlearning(self, response):
-        self.log("[topper LERNING CLLED]")
-        l = str(response.xpath('//div[@class="expertTitle"]//h3/text()').extract())
-        self.log("[TL] {}".format(l))
+    def parsestackexchange(self,response):
+        answer = response.xpath(response.xpath("//div[@class='post-text']/p/text()").extract())
+        links =  response.xpath("//div[@class='post-text']//a/@href").extract()
+        self.answer["answer"].append([answer, links])
+        self.writetheanswer()
     
 
     
@@ -167,6 +168,7 @@ class QuotesSpider(scrapy.Spider):
         # self.log("[UNCLEANED TEXT]")
         # self.log(str(cleanr))
         cleantext = re.sub('<br/?>', split_str, raw_html)
+        cleantext = re.sub('&lt;br&gt;', split_str, cleantext)
         cleantext  =re.sub('<p.*?>', split_str, cleantext)
         cleantext = re.sub('<.*?>', ' ', cleantext)
         cleantext = re.sub('\\\\xa0',' ',cleantext)
