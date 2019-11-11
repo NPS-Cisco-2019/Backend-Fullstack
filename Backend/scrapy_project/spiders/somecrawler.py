@@ -15,9 +15,10 @@ class QuotesSpider(scrapy.Spider):
     def __init__(self, question=None, *args, **kwargs):
         super(QuotesSpider, self).__init__(*args, **kwargs)
         self.question = question
+        self.isAnswerThere = True 
 
         self.log(self.question)
-        self.answer =  { "answer": [] ,"domain" : [] }
+        self.answer =  { "answer": [] ,"domain" : [], "success" : [] }
 
 
     def start_requests(self):
@@ -28,21 +29,32 @@ class QuotesSpider(scrapy.Spider):
         answerdict = {"user": default_username, "time" :current_time, "answer" :{}}
         q = self.question
         self.urls = self.return_links(q)["link"][:5]
-        self.log("[ALL THE LINKS WE PROCESS]")
-        self.log(str(self.urls))
-        
-        
-        self.log(str(str(self.urls)))
-        for url in self.urls:
-           listt = tldextract.extract(url)
+        self.log("[LINKS GOT IN START_REQUESTS]")
+        self.log(str(bool(self.urls)))
+        self.isAnswerThere = bool(self.urls)
+        if self.isAnswerThere :
 
-           website = listt.domain
-           if website == 'brainly':
-               yield scrapy.Request(url=url, callback=self.parsebrainly)
-           elif website == 'askiitians':
-               yield scrapy.Request(url=url, callback=self.parseaskiitans)
-           elif website == 'doubtnut':
-               yield scrapy.Request(url=url, callback=self.parsedoubtnut)
+        
+        
+        
+            self.log(str(str(self.urls)))
+            for url in self.urls:
+                listt = tldextract.extract(url)
+                website = listt.domain
+                if website == 'brainly':
+                    yield scrapy.Request(url=url, callback=self.parsebrainly)
+                elif website == 'askiitians':
+                    yield scrapy.Request(url=url, callback=self.parseaskiitans)
+                elif website == 'doubtnut':
+                    yield scrapy.Request(url=url, callback=self.parsedoubtnut)
+                elif website == 'topperlearning':
+                    yield scrapy.Request(url=url, callback=self.parsetopperlearning)
+
+        else:
+            self.answer["success"].append(0)
+            self.writetheanswer()
+
+
 
 
     def return_links(self,user_query):
@@ -54,7 +66,7 @@ class QuotesSpider(scrapy.Spider):
         self.rq = requests.get(google_search).text 
         
         self.urls = re.findall(r'href=[\'"]?([^\'" >]+)', self.rq)
-        self.useful_domains = ["doubtnut","brainly", "askiitians","topperlearning", "byjus"]
+        self.useful_domains = ["doubtnut","brainly", "askiitians", "topperlearning"]
         
         self.default_username = "bob"
         self.current_time =  datetime.datetime.now().time()
@@ -63,6 +75,7 @@ class QuotesSpider(scrapy.Spider):
         self.link_to_be_parsed["current_time"] = str(self.current_time)
         self.link_to_be_parsed["link"] = []
         self.link_to_be_parsed["domain"] = []
+        
        
         for url in self.urls:
             #string format url based on how google's internal system works
@@ -85,6 +98,7 @@ class QuotesSpider(scrapy.Spider):
         ans = self.janitor(str(ans))
         
         self.answer["domain"].append("brainly")
+        self.answer["success"].append(1)
         if imgsrc :
             self.answer["answer"].append([ans, imgsrc])
         else:
@@ -107,20 +121,27 @@ class QuotesSpider(scrapy.Spider):
         img = response.xpath('//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract()
 
         self.answer["domain"].append("askiitans")
+        self.answer["success"].append(1)
         if img :
             self.answer["answer"].append([l, img])
         else:
             self.answer["answer"].append([l, 0])
 
         self.writetheanswer()
+    def parsetopperlearning(self, response):
+        self.log("[topper LERNING CLLED]")
+        l = str(response.xpath('//div[@class="expertTitle"]//h3/text()').extract())
+        self.log("[TL] {}".format(l))
+    
 
     
 
     def parsedoubtnut(self, response):
         self.log("D FOR DOUBTNUT")        
-            
+        
         htmls = str(response.text)
         i_ans_text = htmls.find("Answer Text")
+        
         htmls = htmls[i_ans_text:]
            
         p_indexes = [m.start() for m in re.finditer('</p>', htmls)][2]
@@ -128,6 +149,7 @@ class QuotesSpider(scrapy.Spider):
         ind_almost_answer = half_almost_answer[::-1].find('>')
         answer = half_almost_answer[-ind_almost_answer:]
         answer = self.janitor(answer)
+        self.answer["success"].append(1)
 
         self.answer["domain"].append("doubtnut")
         self.answer["answer"].append([answer, 0])
@@ -171,6 +193,7 @@ class QuotesSpider(scrapy.Spider):
             
         
         self.log("[CLEANED TEXT]")
+
         self.log(cleantext)
         l = cleantext.split(split_str)
         i = 0
@@ -182,7 +205,7 @@ class QuotesSpider(scrapy.Spider):
         
         
         
-        return str(l)
+        return l
             
         
     def writetheanswer(self):
