@@ -23,21 +23,12 @@ class QuotesSpider(scrapy.Spider):
 
     def start_requests(self):
 
-        #self.log(return_links(x.replace(" ", "+")))
-        default_username = "bob"
-        current_time =  datetime.datetime.now().time()
-        answerdict = {"user": default_username, "time" :current_time, "answer" :{}}
         q = self.question
         self.urls = self.return_links(q)["link"][:5]
         self.log("[LINKS GOT IN START_REQUESTS]")
         self.log(str(bool(self.urls)))
         self.isAnswerThere = bool(self.urls)
-        if self.isAnswerThere :
-
-        
-        
-        
-            self.log(str(str(self.urls)))
+        if self.isAnswerThere:
             for url in self.urls:
                 listt = tldextract.extract(url)
                 website = listt.domain
@@ -47,8 +38,6 @@ class QuotesSpider(scrapy.Spider):
                     yield scrapy.Request(url=url, callback=self.parseaskiitans)
                 elif website == 'doubtnut':
                     yield scrapy.Request(url=url, callback=self.parsedoubtnut)
-                elif website == 'topperlearning':
-                    yield scrapy.Request(url=url, callback=self.parsetopperlearning)
                 elif website == 'stackexchange':
                     yield scrapy.Request(url=url, callback=self.parsestackexchange)
 
@@ -132,8 +121,6 @@ class QuotesSpider(scrapy.Spider):
         self.writetheanswer()
     def parsestackexchange(self,response):
         answer = response.xpath("//div[@class='post-text']/p/text()").extract()
-        for i in range(len(answer)): 
-            answer[i] = answer[i].replace("\\n", "").replace("\\\\\\\\", "\\")
         links =  response.xpath("//div[@class='post-text']//a/@href").extract()
         self.answer["answer"].append([str(answer), str(links)])
         self.writetheanswer()
