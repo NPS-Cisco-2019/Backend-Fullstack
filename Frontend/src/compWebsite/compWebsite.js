@@ -1,6 +1,6 @@
 // SECTION imports
 import React from 'react';
-import { BrowserRouter, Route, Link, Switch, Redirect } from 'react-router-dom';
+import { Route, Link, Switch, Redirect } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import { Firefox, Chrome, Safari } from 'shared/tutorialElements';
@@ -121,64 +121,62 @@ export default class CompApp extends React.Component {
     // opacity for header
     let opacity = Math.max(Math.min(50 / this.state.currentScrollHeight  , 1), 0.7);
     return(
-      <BrowserRouter basename="/Frontend">
-        <div className="App deskApp">
-          <header className="deskHead" style={{opacity: opacity}} id="head">
-            <h1>This app is not supported on Computers.</h1>
-          </header>
-          <div className="body" style={{top: this.state.headHeight}} id="main">
-            {/* SECTION Main section, contains about and navlinks to tutorials */}
-            <div className="description">
-              <div style={{...highlightStyle, ...this.state[this.state.browser]}}></div>
-              <p style={{fontSize: "1.3em", marginBottom: 30, textAlign: "center"}}>Insert name here is a problem solving app, just take a picture and the app automatically scans the web to find the best answers for you.(this is temporary and not complete). Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-              <h2>Go to your mobile phone in one of the following browsers and follow these tutorials to install it.</h2>
-              <div className="logos">
-                <Link to="/Firefox">
-                  <button className="firefox" onClick={this.handleClick}>
-                    <img className="desk img" id="Firefox" src={require("pictures/firefox.png")} alt="firefox" />
-                    <label htmlFor="Firefox" id="firefox">Firefox</label>
-                  </button>
-                </Link>
-                <Link to="/Chrome">
-                  <button className="chrome" onClick={this.handleClick}>
-                    <img className="desk img" id="Chrome" src={require("pictures/chrome.png")} alt="chrome"/>
-                    <label htmlFor="Chrome" id="chrome">Chrome</label>
-                  </button>
-                </Link>
-                <Link to="/Safari">
-                  <button className="safari" onClick={this.handleClick}>
-                    <img className="desk img" id="Safari" src={require("pictures/safari.png")} alt="safari"/>
-                    <label htmlFor="Safari" id="safari">Safari</label>
-                  </button>
-                </Link>
-              </div>
+      <div className="App deskApp">
+        <header className="deskHead" style={{opacity: opacity}} id="head">
+          <h1>This app is not supported on Computers.</h1>
+        </header>
+        <div className="body" style={{top: this.state.headHeight}} id="main">
+          {/* SECTION Main section, contains about and navlinks to tutorials */}
+          <div className="description">
+            <div style={{...highlightStyle, ...this.state[this.state.browser]}}></div>
+            <p style={{fontSize: "1.3em", marginBottom: 30, textAlign: "center"}}>Insert name here is a problem solving app, just take a picture and the app automatically scans the web to find the best answers for you.(this is temporary and not complete). Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h2>Go to your mobile phone in one of the following browsers and follow these tutorials to install it.</h2>
+            <div className="logos">
+              <Link to="/Firefox">
+                <button className="firefox" onClick={this.handleClick}>
+                  <img className="desk img" id="Firefox" src={require("pictures/firefox.png")} alt="firefox" />
+                  <label htmlFor="Firefox" id="firefox">Firefox</label>
+                </button>
+              </Link>
+              <Link to="/Chrome">
+                <button className="chrome" onClick={this.handleClick}>
+                  <img className="desk img" id="Chrome" src={require("pictures/chrome.png")} alt="chrome"/>
+                  <label htmlFor="Chrome" id="chrome">Chrome</label>
+                </button>
+              </Link>
+              <Link to="/Safari">
+                <button className="safari" onClick={this.handleClick}>
+                  <img className="desk img" id="Safari" src={require("pictures/safari.png")} alt="safari"/>
+                  <label htmlFor="Safari" id="safari">Safari</label>
+                </button>
+              </Link>
             </div>
-            {/* !SECTION */}
-            {/* SECTION Tutorials */}
-            <Route render={({location}) => {return (
-              <TransitionGroup style={{overflow: 'hidden', marginTop: 30}}>
-                <CSSTransition
-                  timeout={1500}
-                  classNames="dipReplace"
-                  key={location.key}
-                >
-                  <Switch location={location}>
-                    <Route exact path="/Firefox" component={Firefox} />
-                    <Route exact path="/Chrome" component={Chrome} />
-                    <Route exact path="/Safari" component={Safari} />
-                    <Route path="/" render={() => {return (
-                      <Redirect to={this.defaultLink} />
-                    )}} />
-                    <Route path="/Unknown" component={Unknown} />
-                    <Route render={() => (<Redirect to="/Unknown" />)} />
-                  </Switch>
-                </CSSTransition>
-              </TransitionGroup>
-            )}} />
-            {/* !SECTION */}
           </div>
+          {/* !SECTION */}
+          {/* SECTION Tutorials */}
+          <Route render={({location}) => {return (
+            <TransitionGroup style={{overflow: 'hidden', marginTop: 30}}>
+              <CSSTransition
+                timeout={1500}
+                classNames="dipReplace"
+                key={location.key}
+              >
+                <Switch location={location}>
+                  <Route exact path="/Firefox" component={Firefox} />
+                  <Route exact path="/Chrome" component={Chrome} />
+                  <Route exact path="/Safari" component={Safari} />
+                  <Route path="/" render={() => {return (
+                    <Redirect to={this.defaultLink} />
+                  )}} />
+                  <Route path="/Unknown" component={Unknown} />
+                  <Route render={() => (<Redirect to="/Unknown" />)} />
+                </Switch>
+              </CSSTransition>
+            </TransitionGroup>
+          )}} />
+          {/* !SECTION */}
         </div>
-      </BrowserRouter>
+      </div>
     )
   }
 }

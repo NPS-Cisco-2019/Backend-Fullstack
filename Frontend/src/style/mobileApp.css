@@ -210,7 +210,7 @@ footer {
   justify-items: center;
   align-items: center;
   bottom: 0px;
-  height: 7%; 
+  height: 7%;
   background-color: var(--backCol);
 }
 
@@ -235,7 +235,8 @@ footer {
   align-items: center;
   color: var(--textCol);
   font-family: Raleway;
-  box-shadow: 10px 10px 5px var(--midGray2);
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.4);
+  padding: 2px 30px;
 }
 
 .link-container-wrapper {
@@ -331,7 +332,7 @@ footer {
   transition: all 300ms linear;
 }
 
-.setting-choice > p {
+.setting-choice>p {
   margin: 0;
 }
 
@@ -406,7 +407,7 @@ footer {
   transition: all 300ms linear;
 }
 
-.choice > p {
+.choice>p {
   margin: 0;
 }
 
@@ -438,21 +439,21 @@ footer {
   overflow: hidden;
 }
 
-.subject-button > button {
+.subject-button>button {
   width: 130px;
   height: 30px;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
   transition: opacity 400ms linear;
 }
 
-.subject-button > section {
+.subject-button>section {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
 }
 
-.subject-button > section > button {
+.subject-button>section>button {
   margin: 5px;
 }
 
@@ -464,7 +465,8 @@ footer {
   flex-direction: row-reverse;
 }
 
-.buttonHolder > div, .buttonHolder > button {
+.buttonHolder>div,
+.buttonHolder>button {
   font-family: Raleway;
 }
 
@@ -507,7 +509,7 @@ footer {
   border-radius: 10px;
 }
 
-.notification > div > p {
+.notification>div>p {
   margin: 0;
 }
 
@@ -541,6 +543,49 @@ footer {
 .deleteSavedAnswer img {
   width: 55%;
   transform: translateX(-8%);
+}
+
+.error-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+}
+
+.error-wrapper>img {
+  max-width: 100vw;
+  max-height: 50vh;
+}
+
+.error-text {
+  background-image: url("../pictures/error-icon.png");
+  height: 20vh;
+  background-size: 50%;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 5vh;
+}
+
+.error-text>h1 {
+  font-size: 28px;
+  transform: translateY(45%);
+}
+
+@media (max-width: 500px) {
+  .error-text {
+    background-size: 30%;
+  }
+}
+
+div {
+  font-family: Raleway;
+  font-weight: 300;
+  text-align: center;
 }
 
 button {

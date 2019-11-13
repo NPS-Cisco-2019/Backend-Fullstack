@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from 'style/style';
+import MathJax from "react-mathjax2";
+
 
 const maxLength = (10/100) * (69/100) * window.innerHeight;
 let { infoStyle, navObj, imgStyle, answerStyle } = styles;
@@ -167,6 +169,7 @@ export function Answer({ id, answer, width = 9*window.innerWidth/10 }){
     let ansLength = answer.length
     let [height, setHeight] = useState(0);
     let [imgLoaded, setImgLoaded] = useState(false);
+    let [mathLoaded, setMathLoaded] = useState(false);
 
     useEffect(() => {
         setTimeout(() => {
@@ -184,15 +187,39 @@ export function Answer({ id, answer, width = 9*window.innerWidth/10 }){
         }, 100);
         
         // eslint-disable-next-line
-    }, [imgLoaded]);
+    }, [imgLoaded, mathLoaded]);
 
     return (
         <div className="info" style={{...infoStyle, ...answerStyle, height, width}}>
-            <div id={id}>{
-                answer.slice(0, ansLength - 1).map((item, i) => (
-                    <p style={{marginBottom: 15}} key={id + '-' + i}>{item}</p>
-                ))}
-
+            <div id={id}>
+                <div>{
+                    answer.slice(0, ansLength - 1).map((item, i) => (
+                        <div key={id + '-' + i}>
+                            <MathJax.Context
+                                input='ascii'
+                                onLoad={ () => setMathLoaded(true) }
+                                onError={ (MathJax, error) => {
+                                    console.warn(error);
+                                    console.log("Encountered a MathJax error, re-attempting a typeset!");
+                                    MathJax.Hub.Queue(
+                                    MathJax.Hub.Typeset()
+                                    );
+                                } }
+                                script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=AM_HTMLorMML"
+                                options={ {
+                                    asciimath2jax: {
+                                        useMathMLspacing: true,
+                                        delimiters: [["$$","$$"], ["`", "`"]],
+                                        preview: "none",
+                                    }
+                                } }
+                            >
+                                <MathJax.Text text={ item }/>
+                            </MathJax.Context>
+                            <p/>
+                        </div>
+                    ))}
+                </div>
                 {answer[ansLength - 1] ?
                     <React.Fragment>
                         <img
@@ -257,33 +284,6 @@ export function Subject(){
     )
 }
 
-// NOTE Currently unused
-// TODO Add Error boundries and make Error page
-export class ErrorBoundary extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { hasError: false };
-    }
-  
-    static getDerivedStateFromError() {
-      // Update state so the next render will show the fallback UI.
-      return { hasError: true };
-    }
-  
-    componentDidCatch(error, errorInfo) {
-      // You can also log the error to an error reporting service
-      console.log(error, errorInfo);
-    }
-  
-    render() {
-      if (this.state.hasError) {
-        return <h1>Something went wrong.</h1>;
-      }
-  
-      return this.props.children; 
-    }
-}
-
 
 function createSubjectArray(subject){
     switch (subject) {
@@ -297,6 +297,9 @@ function createSubjectArray(subject){
             return ['General', 'Physics', 'Chemistry', 'Maths']
     }
 }
+
+
+
 
 SettingsButton.propTypes = {
     showSettings: PropTypes.func.isRequired

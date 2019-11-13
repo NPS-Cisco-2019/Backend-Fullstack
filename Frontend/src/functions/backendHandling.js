@@ -1,5 +1,4 @@
 import base64 from './base64Converter';
-import testDetails from "shared/test";
 
 // NOTE functions which will handle all backend calls
 

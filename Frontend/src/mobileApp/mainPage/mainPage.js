@@ -189,7 +189,7 @@ class MainPage extends React.Component {
       ansClicked: true
     })
     setTimeout(() => {
-      this.props.history.push('./Answer')
+      this.props.history.push('Answer')
     }, 600);
   }
 
