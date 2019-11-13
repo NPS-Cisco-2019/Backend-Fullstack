@@ -122,7 +122,8 @@ class QuotesSpider(scrapy.Spider):
     def parsestackexchange(self,response):
         answer = response.xpath("//div[@class='post-text']/p/text()").extract()
         links =  response.xpath("//div[@class='post-text']//a/@href").extract()
-        self.answer["answer"].append([str(answer), str(links)])
+        self.answer["answer"].append([*answer, str(links)])
+        self.answer["domain"].append("stackexchange")
         self.writetheanswer()
     
 
@@ -149,29 +150,38 @@ class QuotesSpider(scrapy.Spider):
 
     
     def janitor(self,raw_html):
-        split_str = '!@#$%^&*()'
+        # split_str = '!@#$%^&*()'
         
         #self.log(str(raw_html))
+
+        cleantext = raw_html
         
 
         # cleanr = re.compile('<.*?>')
         # self.log("[]")
         # self.log("[UNCLEANED TEXT]")
         # self.log(str(cleanr))
-        cleantext = re.sub('<br/?>', split_str, raw_html)
-        cleantext = re.sub('&lt;br&gt;', split_str, cleantext)
-        cleantext  =re.sub('<p.*?>', split_str, cleantext)
+        # cleantext = re.sub('<br/?>', split_str, raw_html)
+        # cleantext = re.sub('&lt;br&gt;', split_str, cleantext)
+        # cleantext  =re.sub('<p.*?>', split_str, cleantext)
         cleantext = re.sub('<.*?>', ' ', cleantext)
         cleantext = re.sub('\\\\xa0',' ',cleantext)
         cleantext = re.sub('\\\\[A-Za-z]',' ',cleantext)
         
 
         self.log("[DATA]")
-        self.log(cleantext)
-        self.log(type(cleantext))
+        
+        
         
         cleantext = str(cleantext).rstrip(" []'")
         cleantext = str(cleantext).lstrip("[] '")
+        i = 0
+        while i < len(cleantext) -1 :
+            if cleantext[i] == '$' and cleantext[i+1] != "$"  :
+                cleantext = cleantext[:i] + "$$" + cleantext[i+1:]
+                i+=2
+                self.log("[WORKS]")
+            i+=1
         i = 0
         spaceFound = False
         while i < len(cleantext) :
@@ -187,10 +197,10 @@ class QuotesSpider(scrapy.Spider):
         
         self.log("[CLEANED TEXT]")
 
-        self.log(cleantext)
-        l = cleantext.split(split_str)
+       
+        # l = cleantext.split(split_str)
         i = 0
-        self.log("[LIST] : {}".format(l))
+        
         while i < len(l) :
             if l[i] == ' ' or l[i] == '' :
                 l.pop(i)

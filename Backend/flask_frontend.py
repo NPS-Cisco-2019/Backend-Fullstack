@@ -33,12 +33,12 @@ def get_question():
 
     question
 
-    os.system('scrapy crawl spider -a question="{}"'.format(question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+")+"site%3Adoubtnut.com+OR+site%3Aaskiitians.com+OR+site%3Abrainly.in"))
+    os.system('scrapy crawl spider -a question="{}"'.format(question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+")+"site%3Adoubtnut.com+OR+site%3Aaskiitians.com+OR+site%3Abrainly.in+OR+site%3Astackexchange.com"))
 
     with open("ans.txt", "r") as file:
         ans = eval(file.read())               
 
-    # del ans["domain"]
+    # del ans["domain"]2
 
     print("ANSWER:", ans)
 
