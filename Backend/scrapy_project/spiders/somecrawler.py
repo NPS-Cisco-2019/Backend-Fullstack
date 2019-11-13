@@ -49,6 +49,8 @@ class QuotesSpider(scrapy.Spider):
                     yield scrapy.Request(url=url, callback=self.parsedoubtnut)
                 elif website == 'topperlearning':
                     yield scrapy.Request(url=url, callback=self.parsetopperlearning)
+                elif website == 'stackexchange':
+                    yield scrapy.Request(url=url, callback=self.parsestackexchange)
 
         else:
             self.answer["success"].append(0)
@@ -66,7 +68,7 @@ class QuotesSpider(scrapy.Spider):
         self.rq = requests.get(google_search).text 
         
         self.urls = re.findall(r'href=[\'"]?([^\'" >]+)', self.rq)
-        self.useful_domains = ["doubtnut","brainly", "askiitians", "topperlearning"]
+        self.useful_domains = ["doubtnut","brainly", "askiitians", "topperlearning", "stackexchange"]
         
         self.default_username = "bob"
         self.current_time =  datetime.datetime.now().time()
@@ -129,9 +131,11 @@ class QuotesSpider(scrapy.Spider):
 
         self.writetheanswer()
     def parsestackexchange(self,response):
-        answer = response.xpath(response.xpath("//div[@class='post-text']/p/text()").extract())
+        answer = response.xpath("//div[@class='post-text']/p/text()").extract()
+        for i in range(len(answer)): 
+            answer[i] = answer[i].replace("\\n", "").replace("\\\\\\\\", "\\")
         links =  response.xpath("//div[@class='post-text']//a/@href").extract()
-        self.answer["answer"].append([answer, links])
+        self.answer["answer"].append([str(answer), str(links)])
         self.writetheanswer()
     
 
