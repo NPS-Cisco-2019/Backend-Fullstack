@@ -122,7 +122,8 @@ class QuotesSpider(scrapy.Spider):
     def parsestackexchange(self,response):
         answer = response.xpath("//div[@class='post-text']/p/text()").extract()
         links =  response.xpath("//div[@class='post-text']//a/@href").extract()
-        self.answer["answer"].append([str(answer), str(links)])
+        self.answer["answer"].append([answer, str(links)])
+        self.answer["domain"].append("Stack Exchange")
         self.writetheanswer()
     
 
