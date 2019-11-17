@@ -91,9 +91,9 @@ class QuotesSpider(scrapy.Spider):
         self.answer["domain"].append("brainly")
         self.answer["success"].append(1)
         if imgsrc :
-            self.answer["answer"].append([ans, imgsrc])
+            self.answer["answer"].append([*ans, imgsrc])
         else:
-            self.answer["answer"].append([ans, 0])
+            self.answer["answer"].append([*ans, 0])
 
         self.writetheanswer()
     
@@ -114,15 +114,15 @@ class QuotesSpider(scrapy.Spider):
         self.answer["domain"].append("askiitans")
         self.answer["success"].append(1)
         if img :
-            self.answer["answer"].append([l, img])
+            self.answer["answer"].append([*l, img])
         else:
-            self.answer["answer"].append([l, 0])
+            self.answer["answer"].append([*l, 0])
 
         self.writetheanswer()
     def parsestackexchange(self,response):
         answer = response.xpath("//div[@class='post-text']/p/text()").extract()
         links =  response.xpath("//div[@class='post-text']//a/@href").extract()
-        self.answer["answer"].append([answer, str(links)])
+        self.answer["answer"].append([*answer, str(links)])
         self.answer["domain"].append("Stack Exchange")
         self.writetheanswer()
     
@@ -145,7 +145,7 @@ class QuotesSpider(scrapy.Spider):
         self.answer["success"].append(1)
 
         self.answer["domain"].append("doubtnut")
-        self.answer["answer"].append([answer, 0])
+        self.answer["answer"].append([*answer, 0])
         self.writetheanswer()
 
     
@@ -161,7 +161,8 @@ class QuotesSpider(scrapy.Spider):
         # self.log(str(cleanr))
         cleantext = re.sub('<br/?>', split_str, raw_html)
         cleantext = re.sub('&lt;br&gt;', split_str, cleantext)
-        cleantext  =re.sub('<p.*?>', split_str, cleantext)
+        cleantext = re.sub('<p.*?>', split_str, cleantext)
+        cleantext = re.sub('&gt;', '>', cleantext)
         cleantext = re.sub('<.*?>', ' ', cleantext)
         cleantext = re.sub('\\\\xa0',' ',cleantext)
         cleantext = re.sub('\\\\[A-Za-z]',' ',cleantext)
