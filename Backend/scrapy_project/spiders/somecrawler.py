@@ -119,11 +119,14 @@ class QuotesSpider(scrapy.Spider):
 
     def parsestackexchange(self, response):
         answer = response.xpath("//div[@class='post-text']/p/text()").extract()
-        links = response.xpath("//div[@class='post-text']//a/@href").extract()
+        links = self.convertLinks(response.xpath(
+            "//div[@class='post-text']//a/@href").extract())
         for i in range(len(answer)):
-            answer[i] = answer[i].replace("$$". "$")
+            answer[i] = answer[i].replace("$$", "$")
 
-        self.answer["answer"].append([*answer, *(self.convertLinks(links))])
+            # print(f"\n\n\n\n[LINKS] {links}\n\n\n\n")
+
+        self.answer["answer"].append([*answer, *links, 0])
         self.answer["domain"].append("Stack Exchange")
         self.answer["success"] = 1
         # with open("ans.txt", "w") as f:
@@ -201,10 +204,13 @@ class QuotesSpider(scrapy.Spider):
         return l
 
     def convertLinks(self, links):
+        newLinks = []
         for link in links:
-            link = "link"+link
+            newLinks.append("link"+link)
 
-        return links
+        print(f"\n\n\n[NEW LINKS] {newLinks}")
+
+        return newLinks
 
     def writetheanswer(self):
         a = open("ans.txt", "a+")
