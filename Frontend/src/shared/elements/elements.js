@@ -209,7 +209,7 @@ export function Answer({ id, answer, width = 9*window.innerWidth/10 }){
                                 options={ {
                                     asciimath2jax: {
                                         useMathMLspacing: true,
-                                        delimiters: [["$$","$$"], ["`", "`"]],
+                                        delimiters: [["$","$"], ["`", "`"]],
                                         preview: "none",
                                     }
                                 } }

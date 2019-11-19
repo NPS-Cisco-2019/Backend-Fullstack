@@ -86,7 +86,7 @@ class QuotesSpider(scrapy.Spider):
         ans = self.janitor(str(ans))
 
         self.answer["domain"].append("brainly")
-        self.answer["success"].append(1)
+        self.answer["success"] = 1
         if imgsrc:
             self.answer["answer"].append([*ans, imgsrc])
         else:
@@ -109,7 +109,7 @@ class QuotesSpider(scrapy.Spider):
             '//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract()
 
         self.answer["domain"].append("askiitans")
-        self.answer["success"].append(1)
+        self.answer["success"] = 1
         if img:
             self.answer["answer"].append([*l, img])
         else:
@@ -120,6 +120,8 @@ class QuotesSpider(scrapy.Spider):
     def parsestackexchange(self, response):
         answer = response.xpath("//div[@class='post-text']/p/text()").extract()
         links = response.xpath("//div[@class='post-text']//a/@href").extract()
+        for i in range(len(answer)):
+            answer[i] = answer[i].replace("$$". "$")
 
         self.answer["answer"].append([*answer, *(self.convertLinks(links))])
         self.answer["domain"].append("Stack Exchange")
@@ -143,7 +145,7 @@ class QuotesSpider(scrapy.Spider):
         ind_almost_answer = half_almost_answer[::-1].find('>')
         answer = half_almost_answer[-ind_almost_answer:]
         answer = self.janitor(answer)
-        self.answer["success"].append(1)
+        self.answer["success"] = 1
 
         self.answer["domain"].append("doubtnut")
         self.answer["answer"].append([*answer, 0])
