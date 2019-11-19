@@ -7,6 +7,7 @@ import os
 import json
 import datetime
 import requests
+import codecs
 
 
 class QuotesSpider(scrapy.Spider):
@@ -29,6 +30,7 @@ class QuotesSpider(scrapy.Spider):
         self.log(str(bool(self.urls)))
         self.isAnswerThere = bool(self.urls)
         if self.isAnswerThere:
+            self.answer["success"].append(1)
             for url in self.urls:
                 listt = tldextract.extract(url)
                 website = listt.domain
@@ -122,9 +124,18 @@ class QuotesSpider(scrapy.Spider):
     def parsestackexchange(self,response):
         answer = response.xpath("//div[@class='post-text']/p/text()").extract()
         links =  response.xpath("//div[@class='post-text']//a/@href").extract()
-        self.answer["answer"].append([answer, str(links)])
+        
+
+        
+        
+        self.answer["answer"] = rf"{''.join(answer)}" + "links : "  + str(links)
+        
+
+
         self.answer["domain"].append("Stack Exchange")
         self.writetheanswer()
+
+        
     
 
     
@@ -146,6 +157,7 @@ class QuotesSpider(scrapy.Spider):
 
         self.answer["domain"].append("doubtnut")
         self.answer["answer"].append([answer, 0])
+        
         self.writetheanswer()
 
     
@@ -165,6 +177,7 @@ class QuotesSpider(scrapy.Spider):
         cleantext = re.sub('<.*?>', ' ', cleantext)
         cleantext = re.sub('\\\\xa0',' ',cleantext)
         cleantext = re.sub('\\\\[A-Za-z]',' ',cleantext)
+        
         
 
         self.log("[DATA]")
@@ -206,4 +219,15 @@ class QuotesSpider(scrapy.Spider):
         a = open("ans.txt", "a+")
         a.close()
         with open("ans.txt", "w") as f:
-            f.write(str(self.answer))
+            f.write(r"{}".format(self.answer))
+        x = ""
+        with open("ans.txt", "r") as f:
+            x = f.read()
+            x = x.replace("\\\\","\\").replace("\\n", " ")
+        with open("ans.txt", "w") as f:
+            f.write(r"{}".format(x))
+            
+        
+        
+
+        
