@@ -36,8 +36,8 @@ def get_img():
     img = request.get_json()
     # print(img)
 
-    question = OCR.text_from_image(img['img'])
-    # question = "iitians man running"
+    # question = OCR.text_from_image(img['img'])
+    question = "stackexchange physics man running"
 
     print(question)
 
@@ -54,20 +54,22 @@ def get_question():
     question = request.get_json()
 
     os.system('scrapy crawl spider -a question="{}"'.format(question["question"].replace(
-        " ", "+").replace("\\n", "+").replace("\\t", "+")+"site%3A" + join(websites, "+OR+site%3A")))
+        " ", "+").replace("\\n", "+").replace("\\t", "+")+"+site%3A" + join(websites, "+OR+site%3A")))
 
     with open("ans.txt", "r") as file:
         ans = eval(file.read())
 
-    print("ANSWER:", ans)
+        print(ans)
+
+    # print("ANSWER:", ans)
 
     current_dict["question"] = question["question"]
     current_dict["answers"] = ans["answer"]
     current_dict["websites"] = ans["domain"]
 
-    print(type(current_dict["answers"]), type(current_dict["websites"]))
+    # print(type(current_dict["answers"]), type(current_dict["websites"]))
 
-    print("CURRENT_DICT:", current_dict)
+    # print("CURRENT_DICT:", current_dict)
 
     return jsonify(current_dict)
 
