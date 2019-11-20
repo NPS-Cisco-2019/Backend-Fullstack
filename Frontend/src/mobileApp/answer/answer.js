@@ -192,7 +192,7 @@ class AnswerPage extends React.Component{
                 {/* SECTION Answer displayer */}
                 <div style={container}>
                     <div className="info" style={infoStyle} id="question">
-                        <p style={{margin: 0}}>{this.props.question}</p>
+                        <p style={{margin: 0, fontWeight: 400}}>{this.props.question}</p>
                     </div>
                     <Swipe
                         onSwipeLeft={this.swipeNext}
