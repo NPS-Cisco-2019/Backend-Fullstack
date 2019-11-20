@@ -25,7 +25,7 @@ class QuotesSpider(scrapy.Spider):
         q = self.question
         self.urls = self.return_links(q)["link"][:5]
         self.log("[LINKS GOT IN START_REQUESTS]")
-        self.log(str(bool(self.urls)))
+        self.log(str(self.urls))
         self.isAnswerThere = bool(self.urls)
         if self.isAnswerThere:
             for url in self.urls:
@@ -34,7 +34,7 @@ class QuotesSpider(scrapy.Spider):
                 if website == 'brainly':
                     yield scrapy.Request(url=url, callback=self.parsebrainly)
                 elif website == 'askiitians':
-                    yield scrapy.Request(url=url, callback=self.parseaskiitans)
+                    yield scrapy.Request(url=url, callback=self.parseaskiitians)
                 elif website == 'doubtnut':
                     yield scrapy.Request(url=url, callback=self.parsedoubtnut)
                 elif website == 'stackexchange':
@@ -84,7 +84,7 @@ class QuotesSpider(scrapy.Spider):
             imgsrc = response.xpath(
                 "//section[@id='answers']//img[@title='Attachment']/@src").getall()
 
-            ans = self.janitor(str(ans))
+            ans = self.janitor(ans)
 
             self.answer["domain"].append("brainly")
             self.answer["success"] = 1
@@ -102,27 +102,27 @@ class QuotesSpider(scrapy.Spider):
             
             urllib.request.urlretrieve(self.urll, self.urllname) """
 
-        def parseaskiitans(self, response):
-            try:
-                self.log("WWW>ASKIITIANS.COM STARTED")
-                l = str(response.xpath(
-                    '//*[@id="rptAnswers_ctl01_pnlAnswer"]').extract())
-                l = self.janitor(l)
+    def parseaskiitians(self, response):
+        try:
+            self.log("WWW>ASKIITIANS.COM STARTED")
+            l = response.xpath(
+                '//*[@id="rptAnswers_ctl01_pnlAnswer"]').extract()
+            l = self.janitor(l)
 
-                img = response.xpath(
-                    '//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract()
+            img = response.xpath(
+                '//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract()
 
-                self.answer["domain"].append("askiitans")
-                self.answer["success"] = 1
-                if img:
-                    self.answer["answer"].append([*l, img])
-                else:
-                    self.answer["answer"].append([*l, 0])
+            self.answer["domain"].append("askiitans")
+            self.answer["success"] = 1
+            if img:
+                self.answer["answer"].append([*l, img])
+            else:
+                self.answer["answer"].append([*l, 0])
 
-                self.writetheanswer(True)
-            except:
-                self.writetheanswer(False)
-        
+            self.writetheanswer(True)
+        except:
+            self.writetheanswer(False)
+    
 
     def parsestackexchange(self, response):
         try:
@@ -214,15 +214,15 @@ class QuotesSpider(scrapy.Spider):
             self.log("[CLEANED TEXT]")
 
         
-            # l = cleantext.split(split_str)
-            # i = 0
+            l = cleantext.split(split_str)
+            i = 0
             
-            # while i < len(l) :
-            #     if l[i] == ' ' or l[i] == '' :
-            #         l.pop(i)
-            #     i += 1
+            while i < len(l) :
+                if l[i] == ' ' or l[i] == '' :
+                    l.pop(i)
+                i += 1
 
-            return cleantext
+            return l
         except :
             self.writetheanswer(False)
 
@@ -231,7 +231,7 @@ class QuotesSpider(scrapy.Spider):
         for link in links:
             newLinks.append("link"+link)
 
-        print(f"\n\n\n[NEW LINKS] {newLinks}")
+        
 
         return newLinks
 
@@ -242,7 +242,7 @@ class QuotesSpider(scrapy.Spider):
             with open("ans.txt", "w") as f:
                 f.write(str(self.answer))
         else:
-            self.answer = {"answer": ['Couldn\'t fetch answer, please try again'], "domain": ['Error'], "success": [0]}
+            self.answer = {"answer": ['Couldn\'t fetch answer, please try again'], "domain": ['Error'], "success": 0}
             a = open("ans.txt", "a+")
             a.close()
             with open("ans.txt", "w") as f:

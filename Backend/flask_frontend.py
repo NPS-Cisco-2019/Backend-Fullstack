@@ -62,12 +62,15 @@ def get_question():
     # del ans["domain"]2
 
     # print("ANSWER:", ans)
-
-    current_dict["question"] = question["question"]
-    current_dict["answers"] = ans["answer"]
-    current_dict["websites"] = ans["domain"]
-
-    # print(type(current_dict["answers"]), type(current_dict["websites"]))
+    if ans["success"]:
+            
+        current_dict["question"] = question["question"]
+        current_dict["answers"] = ans["answer"]
+        current_dict["websites"] = ans["domain"]
+    else:
+        current_dict["question"] = question["question"]
+        current_dict["answers"] = "ERROR"
+        current_dict["websites"] = "DOESNT MATTER WHAT YOU PUT BUT IM ONLLY CHECKING ANSWER"
 
     # print("CURRENT_DICT:", current_dict)
 
