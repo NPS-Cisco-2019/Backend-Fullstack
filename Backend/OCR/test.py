@@ -5,7 +5,7 @@ import json
 s = "scrapy crawl spider -a question="
 
 q = ["derivation of torque", "integration formulae", "isomers of butane"]
-l_websites = ["brainly"]
+l_websites = ["stackexchange", "brainly", "doubtnut"]
 # "askiitians", "doubtnut", "stackexchange
 
 no_tests = 3

@@ -1,5 +1,4 @@
 import scrapy
-import json
 import re
 import tldextract
 import urllib.request
@@ -87,7 +86,6 @@ class QuotesSpider(scrapy.Spider):
 
             imgsrc = self.convertLinks(response.xpath(
                 "//section[@id='answers']//img[@title='Attachment']/@src").extract())
-            
 
             ans = self.janitor(ans)
 
@@ -161,7 +159,9 @@ class QuotesSpider(scrapy.Spider):
             pass
 
     def janitor(self, html_list):
+
         try:
+            self.log(str(html_list))
             if type(html_list) != list:
                 html_list = [html_list]
 
@@ -223,14 +223,12 @@ class QuotesSpider(scrapy.Spider):
             if type(links) != list:
                 links = links.split(",")
             newLinks = []
-            
+
             for i in range(len(links)):
                 links.extend(links.pop(0).split(','))
-                
-                
 
             for link in links:
-                
+
                 newLinks.append("link"+link)
             return newLinks
         except:
