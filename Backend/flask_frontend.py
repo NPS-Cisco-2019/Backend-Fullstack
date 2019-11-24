@@ -36,7 +36,7 @@ def get_img():
     # print(img)
 
     # question = OCR.text_from_image(img['img'])
-    question = "stackexchange physics man running"
+    question = "brainly isomers of butane"
 
     print(question)
 
