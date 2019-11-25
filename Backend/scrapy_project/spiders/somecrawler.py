@@ -12,11 +12,12 @@ import codecs
 class QuotesSpider(scrapy.Spider):
     name = "spider"
 
-    def __init__(self, question=None, *args, **kwargs):
+    def __init__(self, question="",subject = "", *args, **kwargs):
         super(QuotesSpider, self).__init__(*args, **kwargs)
 
         self.question = question
         self.isAnswerThere = True
+        self.subject = subject
 
         self.answer = {"answer": [], "domain": [], "success": []}
 
@@ -50,8 +51,12 @@ class QuotesSpider(scrapy.Spider):
 
             self.link_to_be_parsed = {}
             self.user_query = user_query
+            user_query = user_query.split("site%",1)
+            
 
-            google_search = "https://www.google.com/search?q=" + self.user_query
+            google_search = "https://www.google.com/search?q=" + user_query[0] + self.subject + "+site%" + user_query[1] 
+
+            
             self.rq = requests.get(google_search).text
 
             self.urls = re.findall(r'href=[\'"]?([^\'" >]+)', self.rq)

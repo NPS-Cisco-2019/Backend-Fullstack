@@ -25,6 +25,16 @@ app = flask.Flask("__main__")
 
 # Frontend route
 @app.route("/")
+@app.route("/Firefox")
+@app.route("/Chrome")
+@app.route("/Safari")
+@app.route("/Picture")
+@app.route("/Answer")
+@app.route("/Settings")
+@app.route("/Saved Answers")
+@app.route("/GradeChoice")
+@app.route("/Tutorial")
+
 def my_index():
     # token can be sent, it can be anything usable by javascript
     return flask.render_template("index.html")
@@ -51,9 +61,9 @@ def get_question():
 
     current_dict = {}
     question = request.get_json()
-
-    os.system('scrapy crawl spider -a question="{}"'.format(question["question"].replace(
-        " ", "+").replace("\\n", "+").replace("\\t", "+")+"+site%3A" + join(websites, "+OR+site%3A")))
+    
+    question["question"]=question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+")
+    os.system(f'scrapy crawl spider -a question={question["question"]}+site%3A+{join(websites, "+OR+site%3A")} -a subject={question["subject"]}')
 
     with open("ans.json", "r") as file:
         ans = json.load(file)
@@ -69,7 +79,7 @@ def get_question():
     else:
         current_dict["question"] = question["question"]
         current_dict["answers"] = "ERROR"
-        current_dict["websites"] = "DOESNT MATTER WHAT YOU PUT BUT IM ONLLY CHECKING ANSWER"
+        current_dict["websites"] = "NOT FOUND"
 
     # print("CURRENT_DICT:", current_dict)
 
