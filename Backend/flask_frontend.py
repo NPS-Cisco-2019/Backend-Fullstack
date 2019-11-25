@@ -30,11 +30,15 @@ app = flask.Flask("__main__")
 @app.route("/Safari")
 @app.route("/Picture")
 @app.route("/Answer")
+@app.route("/Answer/answer0")
+@app.route("/Answer/answer1")
+@app.route("/Answer/answer2")
+@app.route("/Answer/answer3")
+@app.route("/Answer/answer4")
 @app.route("/Settings")
 @app.route("/Saved Answers")
 @app.route("/GradeChoice")
 @app.route("/Tutorial")
-
 def my_index():
     # token can be sent, it can be anything usable by javascript
     return flask.render_template("index.html")
