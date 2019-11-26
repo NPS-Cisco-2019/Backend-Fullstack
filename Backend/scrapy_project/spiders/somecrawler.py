@@ -145,15 +145,15 @@ class QuotesSpider(scrapy.Spider):
     def parsedoubtnut(self, response):
         try:
 
-            htmls = str(response.text)
-            i_ans_text = htmls.find("Answer Text")
+            html_string = str(response.text)
+            ans_txt_loc = html_string.find("Answer Text")
 
-            htmls = htmls[i_ans_text:]
+            html_string = html_string[ans_txt_loc:]
 
-            p_indexes = [m.start() for m in re.finditer('</p>', htmls)][2]
-            half_almost_answer = htmls[:p_indexes]
-            ind_almost_answer = half_almost_answer[::-1].find('>')
-            answer = half_almost_answer[-ind_almost_answer:]
+            p_indexes = [m.start() for m in re.finditer('</p>', html_string)][2]
+            response_slice = html_string[:p_indexes]
+            response_slice_loc = response_slice[::-1].find('>')
+            answer = response_slice[-response_slice_loc:]
             answer = self.janitor(answer)
             self.answer["success"] = 1
 
