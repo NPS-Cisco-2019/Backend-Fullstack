@@ -49,8 +49,10 @@ def get_img():
     img = request.get_json()
     # print(img)
 
-    # question = OCR.text_from_image(img['img'])
-    question = "brainly isomers of butane"
+    question = OCR.text_from_image(img['img'])
+
+    print(f"\n\n\n\n, [QUESTION]: {question}\n\n\n")
+    # question = "brainly isomers of butane"
 
     print(question)
 
@@ -66,8 +68,11 @@ def get_question():
     current_dict = {}
     question = request.get_json()
     
-    question["question"]=question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+")
-    os.system(f'scrapy crawl spider -a question={question["question"]}+site%3A+{join(websites, "+OR+site%3A")} -a subject={question["subject"]}')
+    question["question"]=question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
+
+    question_query = f'{question["question"]}+site%3A{join(websites, "+OR+site%3A")}'
+
+    os.system(f'scrapy crawl spider -a question={question_query} -a subject={question["subject"]}')
 
     with open("ans.json", "r") as file:
         ans = json.load(file)
