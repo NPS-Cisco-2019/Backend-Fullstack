@@ -8,6 +8,8 @@ import datetime
 import requests
 import codecs
 
+# TODO add sarthaks.com
+
 
 class QuotesSpider(scrapy.Spider):
     name = "spider"
@@ -97,7 +99,7 @@ class QuotesSpider(scrapy.Spider):
             self.answer["domain"].append("brainly")
             self.answer["success"] = 1
             if img:
-                self.answer["answer"].append([*ans, img])
+                self.answer["answer"].append([*ans, *img])
             else:
                 self.answer["answer"].append([*ans])
             self.writetheanswer(True)
@@ -117,7 +119,7 @@ class QuotesSpider(scrapy.Spider):
             self.answer["domain"].append("askiitans")
             self.answer["success"] = 1
             if img:
-                self.answer["answer"].append([*answer_l, img])
+                self.answer["answer"].append([*answer_l, *img])
             else:
                 self.answer["answer"].append([*answer_l])
 
