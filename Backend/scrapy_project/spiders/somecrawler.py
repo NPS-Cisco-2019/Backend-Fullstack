@@ -89,15 +89,15 @@ class QuotesSpider(scrapy.Spider):
             ans = response.xpath(
                 "//div[@class='sg-text js-answer-content brn-rich-content']").extract()
 
-            imgsrc = self.convertLinks(response.xpath(
+            img = self.convertLinks(response.xpath(
                 "//section[@id='answers']//img[@title='Attachment']/@src").extract())
 
             ans = self.janitor(ans)
 
             self.answer["domain"].append("brainly")
             self.answer["success"] = 1
-            if imgsrc:
-                self.answer["answer"].append([*ans, imgsrc])
+            if img:
+                self.answer["answer"].append([*ans, img])
             else:
                 self.answer["answer"].append([*ans])
             self.writetheanswer(True)
@@ -107,9 +107,9 @@ class QuotesSpider(scrapy.Spider):
     def parseaskiitians(self, response):
         try:
 
-            l = response.xpath(
+            answer_l = response.xpath(
                 '//*[@id="rptAnswers_ctl01_pnlAnswer"]').extract()
-            l = self.janitor(l)
+            answer_l = self.janitor(l)
 
             img = self.convertLinks(response.xpath(
                 '//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract())
@@ -117,9 +117,9 @@ class QuotesSpider(scrapy.Spider):
             self.answer["domain"].append("askiitans")
             self.answer["success"] = 1
             if img:
-                self.answer["answer"].append([*l, img])
+                self.answer["answer"].append([*answer_l, img])
             else:
-                self.answer["answer"].append([*l])
+                self.answer["answer"].append([*answer_l])
 
             self.writetheanswer(True)
         except:
