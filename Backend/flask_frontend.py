@@ -1,5 +1,5 @@
 import flask
-from flask import jsonify, request
+from flask import jsonify, request, render_template, redirect
 import os
 import sys
 import OCR.text_from_im as OCR
@@ -25,34 +25,35 @@ app = flask.Flask("__main__")
 
 # Frontend route
 @app.route("/")
-@app.route("/Firefox")
-@app.route("/Chrome")
-@app.route("/Safari")
-@app.route("/Picture")
+def redirectToMain():
+    return redirect("/Picture")
+
 @app.route("/Answer")
 @app.route("/Answer/answer0")
 @app.route("/Answer/answer1")
 @app.route("/Answer/answer2")
 @app.route("/Answer/answer3")
 @app.route("/Answer/answer4")
-@app.route("/Settings")
-@app.route("/Saved Answers")
+@app.route("/Chrome")
+@app.route("/Firefox")
 @app.route("/GradeChoice")
+@app.route("/Picture")
+@app.route("/Safari")
+@app.route("/Saved Answers")
+@app.route("/Settings")
 @app.route("/Tutorial")
-def my_index():
-    # token can be sent, it can be anything usable by javascript
-    return flask.render_template("index.html")
+@app.route("/Unknown")
+def main():
+    return render_template("index.html")
 
 # Route where image is sent
 @app.route("/OCR", methods=['POST', 'GET'])
 def get_img():
     img = request.get_json()
-    # print(img)
 
     question = OCR.text_from_image(img['img'])
 
     print(f"\n\n\n\n, [QUESTION]: {question}\n\n\n")
-    # question = "brainly isomers of butane"
 
     print(question)
 
@@ -77,9 +78,6 @@ def get_question():
     with open("ans.json", "r") as file:
         ans = json.load(file)
 
-    # del ans["domain"]2
-
-    # print("ANSWER:", ans)
     if ans["success"]:
 
         current_dict["question"] = question["question"]
@@ -90,14 +88,12 @@ def get_question():
         current_dict["answers"] = "ERROR"
         current_dict["websites"] = "NOT FOUND"
 
-    # print("CURRENT_DICT:", current_dict)
-
     return jsonify(current_dict)
 
 
 @app.errorhandler(404)
 def error404(error):
-    return flask.render_template("404.html"), 404
+    return redirect("/Unknown"), 404
 
 
 app.run(host="0.0.0.0")
