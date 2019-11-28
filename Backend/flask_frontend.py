@@ -51,11 +51,12 @@ def main():
 def get_img():
     img = request.get_json()
 
-    question = OCR.text_from_image(img['img'])
+    # question = OCR.text_from_image(img['img'])
+    question = "brainly man running"
 
     print(f"\n\n\n\n, [QUESTION]: {question}\n\n\n")
 
-    print(question)
+    # print(question)
 
     return jsonify({'question': question})
 
@@ -70,6 +71,9 @@ def get_question():
     question = request.get_json()
     
     question["question"]=question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
+
+    if question["subject"] != "General":
+        question["question"] += question["subject"]
 
     question_query = f'{question["question"]}+site%3A{join(websites, "+OR+site%3A")}'
 
