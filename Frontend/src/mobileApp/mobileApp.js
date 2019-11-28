@@ -5,7 +5,7 @@ import { init } from "functions/localStorageHandleing";
 
 import MainPage from "./mainPage";
 import AnswerPage from "./answer";
-import testDetails from "shared/test";
+// import testDetails from "shared/test";
 import Unknown from "shared/404";
 import SettingsPage from "./settings";
 import GradeChoice from "./gradeChoice";
@@ -19,16 +19,19 @@ import "style/hamburger.css";
 // ANCHOR Main Mobile App that renders various mobile pages
 
 init();
-// eslint-disable-next-line
+
 let newPerson = sessionStorage.getItem("new") === "true";
 
 class MobileApp extends React.Component {
     constructor(props) {
         super(props);
+
+        const details = JSON.parse(localStorage.getItem("lastAns"));
+
         this.state = {
-            question: testDetails.question,
-            answers: testDetails.answers,
-            websites: testDetails.websites,
+            question: details.question,
+            answers: details.answers,
+            websites: details.websites,
             backToCam: false
         };
 
@@ -43,12 +46,13 @@ class MobileApp extends React.Component {
         }
     }
 
-    // Passed to child <MobileAppPicture /> to allow it to change the Parent state to show answer
+    // Passed to child <MainPage /> to allow it to change the Parent state to show answer
     changeState(question, answers, websites) {
-        this.setState({ question: question, answers: answers, websites: websites });
+        localStorage.setItem("lastAns", JSON.stringify({ question, answers, websites }));
+        this.setState({ question, answers, websites });
     }
 
-    // Passed to child <MobileAnswerApp /> to allow it to change the Parent state to show picture mode
+    // Passed to child <AnswerPage /> to allow it to change the Parent state to show picture mode
     backToCamera() {
         this.setState({ backToCam: true });
         setTimeout(() => {
