@@ -4,12 +4,12 @@ import json
 
 s = "scrapy crawl spider -a question="
 
-q = [["d", "physics"], ["integration formulae","Mathemathics"], ["isomers of butane", "chemistry"],[""]]
-l_websites = ["stackexchange", "brainly", "doubtnut"]
+q = [["mmachanics fluid", "physics"], ["integration formulae","Mathemathics"], ["isomers of butane", "chemistry"]]
+l_websites = ["sarthaks"]
 # "askiitians", "doubtnut", "stackexchange
 
 no_tests = 3
-test_ans_json = dict(brainly={}, askiitians={}, doubtnut={}, stackexchange={})
+test_ans_json = dict(brainly={}, askiitians={}, doubtnut={}, stackexchange={}, sarthaks = {})
 for i in range(len(l_websites)):
     for j in q:
 

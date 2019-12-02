@@ -40,6 +40,9 @@ class QuotesSpider(scrapy.Spider):
                         yield scrapy.Request(url=url, callback=self.parsedoubtnut)
                     elif website == 'stackexchange':
                         yield scrapy.Request(url=url, callback=self.parsestackexchange)
+                    elif website == 'sarthaks':
+                        yield scrapy.Request(url=url, callback=self.parsesarthaks)
+                    
 
             else:
                 self.answer["success"].append(0)
@@ -64,7 +67,7 @@ class QuotesSpider(scrapy.Spider):
 
             self.urls = re.findall(r'href=[\'"]?([^\'" >]+)', self.rq)
             self.useful_domains = ["doubtnut", "brainly",
-                                   "askiitians", "stackexchange"]
+                                   "askiitians", "stackexchange","sarthaks"]
 
             self.default_username = "bob"
             self.current_time = datetime.datetime.now().time()
@@ -166,11 +169,27 @@ class QuotesSpider(scrapy.Spider):
             self.writetheanswer(True)
         except:
             pass
+    def parsesarthaks(self,response):
+        self.log("SARTHAK GAE")
+        try:
+            ans = response.xpath('//div[@itemprop="text"]/*').extract()
+            links = response.xpath('//div[@itemprop="text"]/img/@src').extract()
+            ans = self.janitor(ans)
+            self.answer["success"] = 1
+
+            self.answer["domain"].append("Sarthaks")
+            links = self.convertLinks(links)
+            self.answer["answer"].append([*answer, *links])
+            self.writetheanswer(True)
+            
+
+        except Exception as e:
+            self.log(str(e))
 
     def janitor(self, html_list):
 
         try:
-            self.log(str(html_list))
+            
             if type(html_list) != list:
                 html_list = [html_list]
 
