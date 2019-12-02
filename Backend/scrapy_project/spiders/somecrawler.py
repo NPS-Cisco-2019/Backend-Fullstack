@@ -8,8 +8,6 @@ import datetime
 import requests
 import codecs
 
-# TODO add sarthaks.com
-
 
 class QuotesSpider(scrapy.Spider):
     name = "spider"
@@ -24,6 +22,7 @@ class QuotesSpider(scrapy.Spider):
 
     def start_requests(self):
         try:
+            self.log("[STARTED REQUETS]")
             q = self.question
             self.urls = self.return_links(q)["link"][:5]
 
@@ -45,12 +44,15 @@ class QuotesSpider(scrapy.Spider):
             else:
                 self.answer["success"].append(0)
         except:
-            self.writetheanswer(False)
+             self.log("[FAILED1]")
+             self.writetheanswer(False)
 
     def return_links(self, user_query):
         try:
+            
 
             self.link_to_be_parsed = {}
+            self.log("[reahced A]")
             self.user_query = user_query
             
             self.log("[USER_QUERY]  " + str(user_query))
@@ -80,25 +82,26 @@ class QuotesSpider(scrapy.Spider):
                     self.link_to_be_parsed["link"].append(str(self.urlx))
                     self.link_to_be_parsed["domain"].append(
                         str(tldextract.extract(self.urlx).domain))
+                self.log("[RETURNED LINKS]")
 
             return self.link_to_be_parsed
         except:
             self.writetheanswer(False)
-
+            self.log("[FAILED2]")
     def parsebrainly(self, response):
         try:
             ans = response.xpath(
                 "//div[@class='sg-text js-answer-content brn-rich-content']").extract()
 
-            img = self.convertLinks(response.xpath(
+            imgsrc = self.convertLinks(response.xpath(
                 "//section[@id='answers']//img[@title='Attachment']/@src").extract())
 
             ans = self.janitor(ans)
 
             self.answer["domain"].append("brainly")
             self.answer["success"] = 1
-            if img:
-                self.answer["answer"].append([*ans, *img])
+            if imgsrc:
+                self.answer["answer"].append([*ans, imgsrc])
             else:
                 self.answer["answer"].append([*ans])
             self.writetheanswer(True)
@@ -108,9 +111,9 @@ class QuotesSpider(scrapy.Spider):
     def parseaskiitians(self, response):
         try:
 
-            answer_l = response.xpath(
+            l = response.xpath(
                 '//*[@id="rptAnswers_ctl01_pnlAnswer"]').extract()
-            answer_l = self.janitor(l)
+            l = self.janitor(l)
 
             img = self.convertLinks(response.xpath(
                 '//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract())
@@ -118,9 +121,9 @@ class QuotesSpider(scrapy.Spider):
             self.answer["domain"].append("askiitans")
             self.answer["success"] = 1
             if img:
-                self.answer["answer"].append([*answer_l, *img])
+                self.answer["answer"].append([*l, img])
             else:
-                self.answer["answer"].append([*answer_l])
+                self.answer["answer"].append([*l])
 
             self.writetheanswer(True)
         except:
@@ -146,15 +149,15 @@ class QuotesSpider(scrapy.Spider):
     def parsedoubtnut(self, response):
         try:
 
-            html_string = str(response.text)
-            ans_txt_loc = html_string.find("Answer Text")
+            htmls = str(response.text)
+            i_ans_text = htmls.find("Answer Text")
 
-            html_string = html_string[ans_txt_loc:]
+            htmls = htmls[i_ans_text:]
 
-            p_indexes = [m.start() for m in re.finditer('</p>', html_string)][2]
-            response_slice = html_string[:p_indexes]
-            response_slice_loc = response_slice[::-1].find('>')
-            answer = response_slice[-response_slice_loc:]
+            p_indexes = [m.start() for m in re.finditer('</p>', htmls)][2]
+            half_almost_answer = htmls[:p_indexes]
+            ind_almost_answer = half_almost_answer[::-1].find('>')
+            answer = half_almost_answer[-ind_almost_answer:]
             answer = self.janitor(answer)
             self.answer["success"] = 1
 
