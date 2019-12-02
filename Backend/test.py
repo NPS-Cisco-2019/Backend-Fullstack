@@ -4,7 +4,7 @@ import json
 
 s = "scrapy crawl spider -a question="
 
-q = [["mmachanics fluid", "physics"], ["integration formulae","Mathemathics"], ["isomers of butane", "chemistry"]]
+q = [["man running"], ["integration formulae"], ["isomers of butane"]]
 l_websites = ["sarthaks"]
 # "askiitians", "doubtnut", "stackexchange
 
@@ -13,7 +13,7 @@ test_ans_json = dict(brainly={}, askiitians={}, doubtnut={}, stackexchange={}, s
 for i in range(len(l_websites)):
     for j in q:
 
-        os.system(f"{s}{j[0].replace(' ', '+')}+{l_websites[i]} -a subject={j[1]}")
+        os.system(f"{s}{j[0].replace(' ', '+')}+{l_websites[i]}")
         time.sleep(5)
         with open("ans.json", "r") as f:
             x = json.load(f)

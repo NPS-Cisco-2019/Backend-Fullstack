@@ -1,18 +1,15 @@
-import argparse
+
 import cv2 as cv
-import sys
-import base64
-import os
+import sys, base64, os
 import pytesseract
 import numpy as np
-
-sys.path.append(os.path.join(os.getcwd(), "OCR"))
-
-import text_cropping
 # from text_cropping import *
+sys.path.append(os.path.join(os.getcwd(), "OCR"))
+# print(sys.path)
+import text_cropping
+import argparse
 
 # pytesseract.pytesseract.tesseract_cmd = r"C:\Users\Student\AppData\Local\Tesseract-OCR\tesseract.exe"
-
 
 def main():
     # construct the argument parser and parse the arguments
@@ -39,7 +36,6 @@ def base64_to_cv2_img(uri):
     img = cv.imdecode(nparr, cv.IMREAD_COLOR)
     return img
 
-
 def text_from_image_path(image_path):
 
     im = cv.imread(image_path)
@@ -48,15 +44,15 @@ def text_from_image_path(image_path):
 
     if text_box is None:
         return 'TEXT NOT FOUND'
-
+        
     else:
         text_box = cv.cvtColor(text_box, cv.COLOR_BGR2GRAY)
 
         _, text_box = cv.threshold(
             text_box, 0, 255, cv.THRESH_OTSU + cv.THRESH_BINARY)
 
-        # cv.imshow('TB', text_box)
-        # cv.waitKey(0)
+        cv.imshow('TB', text_box)
+        cv.waitKey(0)
         # in order to apply Tesseract v4 to OCR text we must supply
         # (1) a language, (2) an OEM flag of 4, indicating that the we
         # wish to use the LSTM neural net model for OCR, and finally
@@ -66,7 +62,6 @@ def text_from_image_path(image_path):
         text = pytesseract.image_to_string(text_box, config=config)
         print(text)
         return text
-
 
 def text_from_image(image):
 
@@ -78,7 +73,7 @@ def text_from_image(image):
 
     if text_box is None:
         return 'TEXT NOT FOUND'
-
+        
     else:
         text_box = cv.cvtColor(text_box, cv.COLOR_BGR2GRAY)
 
@@ -86,7 +81,7 @@ def text_from_image(image):
             text_box, 0, 255, cv.THRESH_OTSU+cv.THRESH_BINARY)
 
         # cv.imshow('TB', text_box)
-        # cv.waitKey(0)
+        cv.waitKey(0)
         # in order to apply Tesseract v4 to OCR text we must supply
         # (1) a language, (2) an OEM flag of 4, indicating that the we
         # wish to use the LSTM neural net model for OCR, and finally
@@ -96,7 +91,6 @@ def text_from_image(image):
         text = pytesseract.image_to_string(text_box, config=config)
         # print(text)
         return text
-
 
 if __name__ == '__main__':
     main()

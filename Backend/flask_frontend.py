@@ -51,8 +51,8 @@ def main():
 def get_img():
     img = request.get_json()
 
-    # question = OCR.text_from_image(img['img'])
-    question = "brainly man running"
+    question = OCR.text_from_image(img['img'])
+    # question = "brainly man running"
 
     print(f"\n\n\n\n, [QUESTION]: {question}\n\n\n")
 
@@ -69,15 +69,17 @@ def get_question():
 
     current_dict = {}
     question = request.get_json()
+
+    question["question"] = join((question["question"].split()[:15]), "+").replace(".", "")
     
     question["question"]=question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
 
     if question["subject"] != "General":
-        question["question"] += question["subject"]
+        question["question"] += "+" + question["subject"]
 
     question_query = f'{question["question"]}+site%3A{join(websites, "+OR+site%3A")}'
 
-    os.system(f'scrapy crawl spider -a question={question_query} -a subject={question["subject"]}')
+    os.system(f'scrapy crawl spider -a question={question_query}')
 
     with open("ans.json", "r") as file:
         ans = json.load(file)
@@ -100,4 +102,4 @@ def error404(error):
     return redirect("/Unknown"), 404
 
 
-app.run(host="0.0.0.0")
+# app.run(host="0.0.0.0")

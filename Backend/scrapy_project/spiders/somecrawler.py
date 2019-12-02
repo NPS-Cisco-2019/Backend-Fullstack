@@ -26,7 +26,9 @@ class QuotesSpider(scrapy.Spider):
             q = self.question
             self.urls = self.return_links(q)["link"][:5]
 
-            self.isAnswerThere = bool(self.urls)
+            self.log("[URLS]  " + str(self.urls) + " ----- [LEN]  " + str(len(self.urls)))
+
+            self.isAnswerThere = len(self.urls) != 0
             if self.isAnswerThere:
                 self.answer["success"].append(1)
                 for url in self.urls:
@@ -42,10 +44,9 @@ class QuotesSpider(scrapy.Spider):
                         yield scrapy.Request(url=url, callback=self.parsestackexchange)
                     elif website == 'sarthaks':
                         yield scrapy.Request(url=url, callback=self.parsesarthaks)
-                    
-
             else:
-                self.answer["success"].append(0)
+                self.answer["success"] = 0
+                self.writetheanswer(False)
         except:
              self.log("[FAILED1]")
              self.writetheanswer(False)
@@ -58,10 +59,11 @@ class QuotesSpider(scrapy.Spider):
             self.log("[reahced A]")
             self.user_query = user_query
             
-            self.log("[USER_QUERY]  " + str(user_query))
+            user_query = user_query.replace("++", "+")
+
+            self.log("\n" + "-" * 50 + "\n[USER_QUERY]  " + str(user_query))
 
             google_search = "https://www.google.com/search?q=" + user_query
-
             
             self.rq = requests.get(google_search).text
 
@@ -170,17 +172,25 @@ class QuotesSpider(scrapy.Spider):
         except:
             pass
     def parsesarthaks(self,response):
-        self.log("SARTHAK GAE")
+        # self.log("SARTHAK GAE")
         try:
-            ans = response.xpath('//div[@itemprop="text"]/*').extract()
-            links = response.xpath('//div[@itemprop="text"]/img/@src').extract()
+            ans = response.xpath('//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/*').extract()
+            links = self.convertLinks(response.xpath('//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/p//span/img/@src').extract())
             ans = self.janitor(ans)
-            self.answer["success"] = 1
+
+            i = 0
+
+            while i < len(ans):
+                if ans[i] == "":
+                    ans.pop(i)
+                else:
+                    i += 1
 
             self.answer["domain"].append("Sarthaks")
-            links = self.convertLinks(links)
-            self.answer["answer"].append([*answer, *links])
-            self.writetheanswer(True)
+            if len(ans) > 0:
+                self.answer["answer"].append([*ans, *links])
+                self.answer["success"] = 1
+                self.writetheanswer(True)
             
 
         except Exception as e:
