@@ -172,10 +172,12 @@ class QuotesSpider(scrapy.Spider):
         except:
             pass
     def parsesarthaks(self,response):
-        # self.log("SARTHAK GAE")
+        
         try:
             ans = response.xpath('//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/*').extract()
-            links = self.convertLinks(response.xpath('//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/p//span/img/@src').extract())
+            
+            links = response.xpath('//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/p//span/img/@src').extract()
+            
             ans = self.janitor(ans)
 
             i = 0
