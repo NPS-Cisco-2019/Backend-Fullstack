@@ -171,8 +171,7 @@ class QuotesSpider(scrapy.Spider):
             self.writetheanswer(True)
         except:
             pass
-    def parsesarthaks(self,response):
-        
+    def parsesarthaks(self,response):      
         try:
             ans = response.xpath('//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/*').extract()
             
