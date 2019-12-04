@@ -102,4 +102,4 @@ def error404(error):
     return redirect("/Unknown"), 404
 
 
-# app.run(host="0.0.0.0")
+app.run(host="0.0.0.0")

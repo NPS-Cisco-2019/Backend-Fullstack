@@ -1,0 +1,21 @@
+[LM] Cropping Begun:
+[LM] Get scores 1
+[INFO] loading EAST text detector...
+east:frozen_east_text_detection.pb
+[INFO] text detection took 0.585406 seconds
+[LM] Get scores 1 END
+[DATA] Initital mean: 0.8353777056609282
+[DATA] Updated Theta:0.0
+[DATA] Inclinations and theta: 
+THETAS:1702
+INCL: 1692
+[LM] Get scores 2
+[INFO] loading EAST text detector...
+east:frozen_east_text_detection.pb
+[INFO] text detection took 0.560470 seconds
+[LM] Get scores 2 END
+[INFO] Felzenszwalb NMS took 0.002997 seconds and found 10 boxes
+[DATA] Bounding boxes Before: 10
+[DATA] Bounding boxes After: 10
+For which of the following processes, AS
+is negative ?

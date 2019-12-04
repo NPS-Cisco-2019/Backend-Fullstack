@@ -5,21 +5,24 @@ import time
 
 import cv2 as cv
 from nms import nms
-from math import degrees, sin, cos
-# from matplotlib import pyplot as plt
+from math import *
+from matplotlib import pyplot as plt
 import numpy as np
+
+from config import *
 
 from opencv_text_detection import utils
 from opencv_text_detection.decode import decode
 from opencv_text_detection.draw import drawPolygons, drawBoxes
 
-
+# SECTION Main Function
 def get_cropped_image(image, east='frozen_east_text_detection.pb', min_confidence=0.5, width=320, height=320):
 
-    print('[LM] Cropping Begun:')
+    log('[LM] Cropping Begun:')
 
-    # cv.imshow('INPUT', image)
-    # cv.waitKey(0)
+    if TESTING:
+        cv.imshow('INPUT', image)
+        cv.waitKey(0)
 
     image = normalizeImageSize(image)
     (h, w) = image.shape[:2]
@@ -33,11 +36,13 @@ def get_cropped_image(image, east='frozen_east_text_detection.pb', min_confidenc
     theta_thresh = 2
     m = 3
 
-    print('[LM] Get scores 1')
+    log('[LM] Get scores 1')
+
+    image = normalizeImageSize(image)
 
     (rects, confidences, baggage) = get_scores(image, east)
 
-    print('[LM] Get scores 1 END')
+    log('[LM] Get scores 1 END')
 
     offsets = []
     thetas = []
@@ -47,31 +52,33 @@ def get_cropped_image(image, east='frozen_east_text_detection.pb', min_confidenc
 
     incl = np.array(thetas)
 
-    print('[DATA] Initital mean: ', degrees(np.mean(incl)))
+    log('[DATA] Initital mean: ', degrees(np.mean(incl)))
 
     if incl.size == 0:
-        print('[ERROR] No theta found in included', thetas)
+        log('[ERROR] No theta found in included', thetas)
         return None
 
     theta, std = np.mean(incl), np.std(incl)
     incl = incl[abs(incl-theta)/std <= m]
     theta = np.mean(incl)
 
-    if theta < theta_thresh:
+    if degrees(theta) < theta_thresh:
         theta = 0
 
-    # plt.plot(incl)
-    # plt.show()
+    if TESTING:
+        plt.plot(incl)
+        plt.show()
 
-    print('[DATA] Updated Theta:', degrees(theta))
-    print('[DATA] Inclinations and theta: ')
-    print('THETAS:', len(np.array(thetas)))
-    print('INCL: ', len(incl))
+    log('[DATA] Updated Theta:', degrees(theta))
+    log('[DATA] Inclinations and theta: ')
+    log('THETAS:', len(np.array(thetas)))
+    log('INCL: ', len(incl))
 
     res = rotate_image(orig.copy(), theta)
 
-    # cv.imshow('TEST', res)
-    # cv.waitKey(0)
+    if TESTING:
+        cv.imshow('TEST', res)
+        cv.waitKey(0)
 
     drawOn = orig.copy()
 
@@ -82,17 +89,19 @@ def get_cropped_image(image, east='frozen_east_text_detection.pb', min_confidenc
     
     drawrects = np.array(rects)[indicies]
 
-
     drawBoxes(drawOn, drawrects, 1, 1, (0, 255, 0), 2)
 
-    # cv.imshow('DRAW', drawOn)
-    # cv.waitKey(0)
+    if TESTING:
+        cv.imshow('DRAW', drawOn)
+        cv.waitKey(0)
 
-    print('[LM] Get scores 2')
+    log('[LM] Get scores 2')
+
+    res = normalizeImageSize(res)
 
     (rects, confidences, baggage) = get_scores(res, east)
 
-    print('[LM] Get scores 2 END')
+    log('[LM] Get scores 2 END')
 
     function = nms.felzenszwalb.nms
     start = time.time()
@@ -103,31 +112,44 @@ def get_cropped_image(image, east='frozen_east_text_detection.pb', min_confidenc
     indicies = np.array(indicies).reshape(-1)
     drawrects = np.array(rects)[indicies]
     name = function.__module__.split('.')[-1].title()
-    print("[INFO] {} NMS took {:.6f} seconds and found {} boxes".format(
+    log("[INFO] {} NMS took {:.6f} seconds and found {} boxes".format(
         name, end - start, len(drawrects)))
 
     drawOn = res.copy()
     drawBoxes(drawOn, drawrects, 1, 1, (0, 255, 0), 2)
 
-    # cv.imshow('DRAWON AFTER ROTATION', drawOn)
-    # cv.waitKey(0)
+    if TESTING:
+        cv.imshow('DRAWON AFTER ROTATION', drawOn)
+        cv.waitKey(0)
+
+    h, w = res.shape[:2]
+
+    uLim = lambda x, m: x if x < m else m
+    lLim = lambda x: x if x > 0 else 0 
+
+    drawrects = removeExtremes(drawrects)
 
     bb_coords = [int(min(drawrects[:, 0])), int(min(
         drawrects[:, 1])), int(max(drawrects[:, 0] + (1+tb_padding)*drawrects[:, 2])), int(max(drawrects[:, 1] + (1+tb_padding)*drawrects[:, 3]))]
     bb_w = bb_coords[3] - bb_coords[1]
     bb_h = bb_coords[2] - bb_coords[0]
 
-    text_box = res[bb_coords[1]-int(h*bb_padding[1]/2):bb_coords[3] +
-                   int(h*bb_padding[1]/2), bb_coords[0]-int(w*bb_padding[0]/2):bb_coords[2]+int(w*bb_padding[0]/2)]
 
-    # if not(text_box):
-    #     return None
+    text_box = res[lLim(bb_coords[1]-int(h*bb_padding[1]/2)):uLim(bb_coords[3] +
+                   int(h*bb_padding[1]/2), h), lLim(bb_coords[0]-int(w*bb_padding[0]/2)):uLim(bb_coords[2]+int(w*bb_padding[0]/2), w)]
 
-    # cv.imshow("Final Cropping", text_box)
-    # cv.waitKey(0)
+    if text_box.size == 0:
+        log('[ERROR] Textbox not found')
+        return None
+
+    if TESTING:
+        cv.imshow("Final Cropping", text_box)
+        cv.waitKey(0)
 
     return text_box
+# !SECTION 
 
+# SECTION Helper Code
 
 def text_detection_command():
     # construct the argument parser and parse the arguments
@@ -138,14 +160,20 @@ def text_detection_command():
 
     get_cropped_image(cv.imread(args["image"]))
 
+def N(u, s, x):
+    return np.exp(-(x-u)**2/s**2)
+
+def removeExtremes(drawrects):
+    y = drawrects[:, 1]
+    log('[DATA] Bounding boxes Before: ', len(drawrects))
+    drawrects = drawrects[N(np.mean(y), np.std(y), y) > p_thresh]
+    log('[DATA] Bounding boxes After: ', len(drawrects))
+    return drawrects
 
 def rotate_image(mat, angle):
-    # angle in degrees
 
     height, width = mat.shape[:2]
     image_center = (width/2, height/2)
-
-    # rotation_mat = cv.getRotationMatrix2D(image_center, degrees(angle), 1.)
     rotation_mat = np.array([[cos(angle), -sin(angle), 0], [sin(angle), cos(angle), 0]])
 
     abs_cos = abs(rotation_mat[0,0])
@@ -168,28 +196,16 @@ def normalizeImageSize(image):
         k = 1
     rH, rW = (32*round(k*h/32), 32*round(k*w/32))
 
-    image = cv.resize(image, (rW, rH))
+    image = cv.resize(image, (rW, rH), interpolation=cv.INTER_CUBIC)
 
     return image
 
 
 def get_scores(image, east='frozen_east_text_detection.pb', min_confidence=0.5, width=320, height=320):
-    # image = cv.imread(image, 1)
-    (origHeight, origWidth) = image.shape[:2]
 
-    image = normalizeImageSize(image)
+    if TESTING:
+        cv.imshow('SCORES INPUT', image)
 
-    # cv.imshow('SCORES INPUT', image)
-
-
-
-    # rH, rW = (32*int(h/32), 32*int(w/32))
-
-    # (newW, newH) = (width, height)
-    # ratioWidth = origWidth / float(newW)
-    # ratioHeight = origHeight / float(newH)
-
-    # image = cv.resize(image, (newW, newH))
     (imageHeight, imageWidth) = image.shape[:2]
 
     layerNames = [
@@ -197,9 +213,9 @@ def get_scores(image, east='frozen_east_text_detection.pb', min_confidence=0.5, 
         "feature_fusion/concat_3"]
 
     # load the pre-trained EAST text detector
-    print("[INFO] loading EAST text detector...")
+    log("[INFO] loading EAST text detector...")
 
-    print('east:',east)
+    log('east:',east)
     net = cv.dnn.readNetFromTensorflow(east)
 
     blob = cv.dnn.blobFromImage(
@@ -212,13 +228,12 @@ def get_scores(image, east='frozen_east_text_detection.pb', min_confidence=0.5, 
 
     end = time.time()
 
-    print("[INFO] text detection took {:.6f} seconds".format(end - start))
+    log("[INFO] text detection took {:.6f} seconds".format(end - start))
 
     confidenceThreshold = min_confidence
-    nmsThreshold = 0.4
 
     return decode(scores, geometry, confidenceThreshold)
-
+# !SECTION 
 
 if __name__ == '__main__':
     text_detection_command()

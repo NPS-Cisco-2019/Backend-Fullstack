@@ -1,1 +1,65 @@
-{"answer": [[" \u00a0Isomerism is a phenomenon due to which some compounds have same molecular formula but different structural formulae.\u00a0", " Characteristics:\u00a0", " (i) They differ in structural formula.\u00a0", " (ii) They differ in melting point.\u00a0", " (iii) They differ in boiling point.\u00a0", " (iv) They differ in solubility in same solvent.", " There are two isomers of butane,C 4 H 10"], [" Structural formula of the two isomers of butane"]], "domain": ["Sarthaks", "Sarthaks"], "success": 1}
+{
+  "answer": [
+    [],
+    [],
+    [
+      "What is the sign of the ",
+      " done on the system and by the system?",
+      "My chemistry book says when work is done on the system, it is positive. When work is done by the system, it is negative.",
+      "My physics book says the opposite. It says that when work is done on the system, it is negative. When work is done by the system, it is positive.",
+      "Why do they differ?",
+      "It is just a matter of convention. It should be consistent throughout. ",
+      "Case 1: Work done ",
+      " the system is positive.",
+      "Here the first law is written as \n$ \\mathrm{d}U = \\mathrm{d}Q + \\mathrm{d}W  \\,.\\tag{1}$",
+      "If your frame of reference is \"system\", then the work done on the system ($W$) is positive and the heat that is added to the system is also positive, which means the change in internal energy is also positive by first law of thermodynamics, which means that there is an increase in temperature. This appeals to common sense. Here positive change in internal energy corresponds to increase in temperature",
+      "Case 2: Work done ",
+      " the system is positive",
+      "Here the first law is written as \n$ \\mathrm{d}U = \\mathrm{d}Q - \\mathrm{d}W  \\,. \\tag{2}$",
+      "If work is applied to the system, $\\mathrm{d}W$ term becomes negative making two negatives positive, which is identical to equation (1) and heat added to the system is still positive here. Rest of the arguments follow as above.",
+      "Taking it in a different sense: chemistry is taken the approach that you want to create a new configuration inside the reaction vessel (and input energy like heat or such) and the physics course book is taking about letting the system doing work (eg. burning what is in the reaction vessel). ",
+      "In both ways entropy will be at least equal or positive.     ",
+      "It's just a convention in physics we are more interested in getting some work output say a mechanical device , engine etc while in chemistry we are more concerned with the internal energy things so we do so in both the cases the result is same \nphysics case : du = dq - dw , doing work on system increases internal energy as dw = negative for work done on system and vice versa ",
+      "chemistry case : du = dq + dw ; doing work on system will increase the internal energy of the system as dw = positive which is obvious and vice versa.",
+      "we can take any sign convention in a given problem but we should be consistent with that throughout the problem to avoid confusion and mistake.",
+      "linkhttp://en.wikipedia.org/wiki/Work_%28thermodynamics%29#Formal_definition"
+    ],
+    [
+      "I use the sign convention:",
+      "Could anyone please tell me, that volume increased in system does positive or negative work?",
+      "Volume increase in the system is due to work done by the system.  Therefore W is negative using your notation.  Think of it this way, work done on the system would push the system inwards, decreasing volume.  Therefore a volume increase is work done by the system.",
+      "Alternatively you could reason using the formula:\n$dU = dQ - dW$ (using your notation conventions, were $U$ is internal energy, $W$ is work and $Q$ is heat added to the system)",
+      "$dW = PdV.$",
+      "Therefore",
+      "$dU = dQ - PdV$.",
+      "Therefore if $dV$ (change in volume) is positive, $dU$ (change in internal energy) is negative.",
+      "to solve this sign conflict between physics and chemistry, you may, in the two cases, only refer to the decrease of the internal energy, U, as an indication of work done by the system, and refer to the increase of the internal energy, U, as an indication of work done on the system.",
+      "I think the confusion arises due to difference in equations from Physics and Chemistry text books.",
+      "The physics text writes \u2206U=q-w while chemistry says \u2206U=q+w.",
+      "\nFrom the physics text its mentioned that work done by the system is positive means \u2206U=q-(+w)\nand work done on the system is negative means \u2206U=q-(-w).",
+      "THEREFORE, both are correct in their own way. Hope I've figured it out correctly."
+    ],
+    [
+      "In a book on Thermodynamics I found one exercise that asked the following:",
+      "Now, I really didn't understand the point with this. First of all, I thought that $\\Delta S > 0$ was the very ",
+      " of irreversible.",
+      "Second, if the process is adiabatic $dQ = 0$ and so $dS=dQ/T$ seems to be zero also. So there is something ",
+      ".",
+      "I thought for some time on this now and couldn't get any conclusion.",
+      "What are those difficulties, and how would anyone actually show that $\\Delta S > 0$ in such process?",
+      "Entropy change of a system has two causes: 1) Flux of entropy due to exchange of mass or heat with surroundings, $\\Delta S_{flux}$, and 2) Entropy generated internally, $\\Delta S_{generated}$. Total change in entropy of a system is therefore, $\\Delta S_{total}=\\Delta S_{flux}+\\Delta S_{generated}$. While $\\Delta S_{flux}$ can be either positive or negative, $\\Delta S_{generated}$ is strictly non-negative, i.e. $\\Delta S_{generated}\\geq 0$. In fact this may be taken as an alternative way of stating the second law (see: Modern Thermodynamics, by Kondepudi and Prigogine). $\\Delta S_{generated}\\geq 0$ has the status of a postulate, and cannot be proved (unless you get into statistical mechanics, where again a new postulate such as ergodic hypothesis is required).",
+      "In a closed system undergoing adiabatic process, flux of entropy is zero (there is neither mass nor heat exchange with surroundings). But entropy can be generated internally due to dissipative processes, such as due to viscous action within flowing gas when it is being compressed. Since $\\Delta S_{flux}=0$ and $\\Delta S_{generated}\\geq 0$, we have $\\Delta S_{total}\\geq 0$, where in this case $\\Delta S_{total}$ also equals change of entropy of the universe. If you can compress the gas quasi-statically such that $\\Delta S_{generated}=0$, then and only then do you have a reversible process.",
+      "P.S. You are right in saying that $\\Delta S>0$ implies irreversible process, with the caveat that entropy change of the entire universe must be considered.",
+      "$dS=\\frac{dQ_\\textrm{rev}}{T}$....(heat supplied in the reversible process) ...in other words, it means that the formula is valid only for a reversible process where $\\frac{dQ_\\textrm{rev}}{T}$ is a state function. The formula you have to use for say an irreversible adiabatic expansion would be $\\Delta S = nC_{v}\\ln\\frac{T_2}{T_1} + n\\mathcal R\\ln\\frac{V_2}{V_1} > 0$. The reasoning is as follows....",
+      "You cannot use $T_1V_1^{\\gamma-1}$ = $T_2V_2^{\\gamma-1}$ because the final temperature reached by the same amount of expansion in a reversible and an irreversible process are different ( $T_\\textrm{2irrev}$ > $T_\\textrm{2rev}$ )"
+    ]
+  ],
+  "domain": [
+    "askiitans",
+    "askiitans",
+    "Stack Exchange",
+    "Stack Exchange",
+    "Stack Exchange"
+  ],
+  "success": 1
+}

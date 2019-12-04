@@ -5,7 +5,6 @@ import { init } from "functions/localStorageHandleing";
 
 import MainPage from "./mainPage";
 import AnswerPage from "./answer";
-// import testDetails from "shared/test";
 import Unknown from "shared/404";
 import SettingsPage from "./settings";
 import GradeChoice from "./gradeChoice";

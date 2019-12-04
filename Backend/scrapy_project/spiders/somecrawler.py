@@ -125,8 +125,12 @@ class QuotesSpider(scrapy.Spider):
 
             self.answer["domain"].append("askiitans")
             self.answer["success"] = 1
+
+            if type(img) != list:
+                img = [img]
+            
             if img:
-                self.answer["answer"].append([*l, img])
+                self.answer["answer"].append([*l, *img])
             else:
                 self.answer["answer"].append([*l])
 

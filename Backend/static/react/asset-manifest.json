@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/react/css/main.567e7049.chunk.css",
-    "main.js": "/static/react/js/main.38d52fdb.chunk.js",
-    "main.js.map": "/static/react/js/main.38d52fdb.chunk.js.map",
+    "main.css": "/static/react/css/main.e4fca8da.chunk.css",
+    "main.js": "/static/react/js/main.c53dc695.chunk.js",
+    "main.js.map": "/static/react/js/main.c53dc695.chunk.js.map",
     "runtime-main.js": "/static/react/js/runtime-main.dc76b154.js",
     "runtime-main.js.map": "/static/react/js/runtime-main.dc76b154.js.map",
     "js/2.1fb28e19.chunk.js": "/static/react/js/2.1fb28e19.chunk.js",
     "js/2.1fb28e19.chunk.js.map": "/static/react/js/2.1fb28e19.chunk.js.map",
     "../../templates/index.html": "/static/react/../../templates/index.html",
-    "css/main.567e7049.chunk.css.map": "/static/react/css/main.567e7049.chunk.css.map",
+    "css/main.e4fca8da.chunk.css.map": "/static/react/css/main.e4fca8da.chunk.css.map",
     "media/404.png": "/static/react/media/404.1eae7a3b.png",
     "media/back.png": "/static/react/media/back.7865f30b.png",
     "media/calvin-error.png": "/static/react/media/calvin-error.62690901.png",
@@ -26,7 +26,7 @@
     "media/safari2.jpg": "/static/react/media/safari2.2d039f67.jpg",
     "media/safari3.jpg": "/static/react/media/safari3.88a2743b.jpg",
     "media/settings.png": "/static/react/media/settings.371bf301.png",
-    "precache-manifest.d9988bb18782491a5acaee28baf59acf.js": "/static/react/precache-manifest.d9988bb18782491a5acaee28baf59acf.js",
+    "precache-manifest.a198a0e9b42ed42255f701efa6a11a6a.js": "/static/react/precache-manifest.a198a0e9b42ed42255f701efa6a11a6a.js",
     "service-worker.js": "/static/react/service-worker.js"
   }
 }

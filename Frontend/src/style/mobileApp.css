@@ -597,7 +597,7 @@ footer {
     max-width: 80vw;
     text-decoration-line: underline;
     text-decoration-color: var(--highlightCol);
-    color: var(--highlightCol);
+    color: rgb(70, 120, 255);
 }
 
 @media (max-width: 500px) {
