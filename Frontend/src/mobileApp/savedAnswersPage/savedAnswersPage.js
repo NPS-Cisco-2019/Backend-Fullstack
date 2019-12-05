@@ -1,3 +1,4 @@
+import isImage from "is-image-url";
 import React, { useState, useEffect } from "react";
 import MathJax from "react-mathjax2";
 
@@ -97,6 +98,7 @@ function SavedAnswer({ obj, delSelf, i, id, setTranslate }) {
     const [transition, setTransition] = useState(false);
     const [height, setHeight] = useState("100%");
     const [mathLoaded, setMathLoaded] = useState(false);
+    const [imageLoaded, setImgLoaded] = useState(0);
 
     const unmount = () => {
         setTranslate(i);
@@ -110,7 +112,7 @@ function SavedAnswer({ obj, delSelf, i, id, setTranslate }) {
     };
 
     useEffect(() => {
-        if (mathLoaded) {
+        if (mathLoaded && imageLoaded) {
             setTimeout(() => {
                 let totHeight = document
                     .getElementById(`${id}-wrapper`)
@@ -128,7 +130,7 @@ function SavedAnswer({ obj, delSelf, i, id, setTranslate }) {
             setHeight(quesHeight + 20);
         }
         //eslint-disable-next-line
-    }, [mathLoaded]);
+    }, [mathLoaded, imageLoaded]);
 
     const openClick = () => {
         if (open) {
@@ -170,12 +172,27 @@ function SavedAnswer({ obj, delSelf, i, id, setTranslate }) {
                             {answer.slice(0, ansLength - 1).map((item, i) => (
                                 <div key={id + "-" + i}>
                                     {item.slice(0, 4) === "link" ? (
-                                        <a
-                                            className="link"
-                                            href={item.slice(4, item.length)}
-                                        >
-                                            {item.slice(4, item.length)}
-                                        </a>
+                                        isImage(item.slice(4, item.length)) ? (
+                                            <img
+                                                src={item.slice(4, item.length)}
+                                                alt={`answer-${id}-${i}`}
+                                                style={{
+                                                    width: "100%",
+                                                    marginBottom: 15
+                                                }}
+                                                id={`${id}img`}
+                                                onLoad={() =>
+                                                    setImgLoaded(imageLoaded + 1)
+                                                }
+                                            />
+                                        ) : (
+                                            <a
+                                                className="link"
+                                                href={item.slice(4, item.length)}
+                                            >
+                                                {item.slice(4, item.length)}
+                                            </a>
+                                        )
                                     ) : (
                                         <MathJax.Context
                                             input="ascii"

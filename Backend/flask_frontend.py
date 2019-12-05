@@ -1,14 +1,15 @@
 import flask
-from flask import jsonify, request, render_template, redirect
+from flask import jsonify, request, render_template, redirect, abort
 import os
 import sys
 import OCR.text_from_im as OCR
 import time
 import json
+import database.db_func as db
+
+db.create_table()
 
 # function to join all the websites
-
-
 def join(lst, sep):
     print("[LIST] ", str(lst))
 
@@ -48,27 +49,29 @@ def main():
 
 # Route where image is sent
 @app.route("/OCR", methods=['POST', 'GET'])
-def get_img():
+def get_question():
     img = request.get_json()
 
-    question = OCR.text_from_image(img['img'])
-    # question = "brainly man running"
+    # question = OCR.text_from_image(img['img'])
+    question = "brainly man running"
 
     print(f"\n\n\n\n, [QUESTION]: {question}\n\n\n")
 
-    # print(question)
-
-    return jsonify({'question': question})
+    return jsonify({ 'question': question })
 
 # Route where question is sent
 @app.route("/scrapy", methods=['POST', 'GET'])
-def get_question():
+def get_answer():
 
     websites = ["stackexchange.com", "doubtnut.com",
                 "askiitians.com", "brainly.in"]
 
     current_dict = {}
     question = request.get_json()
+
+    _id  = int(time.time())
+
+    db.add_question(question["question"], _id)
 
     question["question"] = join((question["question"].split()[:15]), "+").replace(".", "")
     
@@ -79,13 +82,29 @@ def get_question():
 
     question_query = f'{question["question"]}+site%3A{join(websites, "+OR+site%3A")}'
 
-    os.system(f'scrapy crawl spider -a question={question_query}')
+    os.system(f'scrapy crawl spider -a question={question_query} -a _id={_id}')
 
-    with open("ans.json", "r") as file:
-        ans = json.load(file)
+    # print("\n\n\n")
+    # db.prt()
+    # print("\n\n\n")
 
-    if ans["success"]:
+    success = True
 
+    while db.get_status(_id) != 1:
+        if db.get_status(_id) == -1:
+            success = False
+            break
+        # time.sleep(1)
+
+    print("\n\n\n")
+    db.prt()
+    print("\n\n\n")
+
+    ans = db.get_answer(_id)
+
+    print("\n\n\n" + str(ans) + " - " + str(type(ans)) + "\n\n\n")
+
+    if ans["success"] and success:
         current_dict["question"] = question["question"]
         current_dict["answers"] = ans["answer"]
         current_dict["websites"] = ans["domain"]

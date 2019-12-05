@@ -2,21 +2,27 @@ import scrapy
 import re
 import tldextract
 import urllib.request
-import os
+import os, sys
 import json
 import datetime
 import requests
 import codecs
-
+# sys.path.append(os.path.join(os.getcwd()[::-1].split("/", 2)[-1][::-1], "database"))
+# print(sys.path)
+from database.db_func import add_answer, connect, disconnect
+from json import dumps as stringify 
 
 class QuotesSpider(scrapy.Spider):
     name = "spider"
 
-    def __init__(self, question="", *args, **kwargs):
+    def __init__(self, question="", _id=0, *args, **kwargs):
         super(QuotesSpider, self).__init__(*args, **kwargs)
 
         self.question = question
         self.isAnswerThere = True
+        self.id = _id
+
+        self.log("\n\n\n\n\n" + str(_id) + "\n\n\n\n\n\n")
 
         self.answer = {"answer": [], "domain": [], "success": []}
 
@@ -278,18 +284,14 @@ class QuotesSpider(scrapy.Spider):
             self.writetheanswer(False)
 
     def writetheanswer(self, works):
+        conn, c = connect()
         if works:
-            a = open("ans.json", "a+")
-            a.close()
-            with open("ans.json", "w") as f:
-
-                json.dump(self.answer, f)
+            add_answer(stringify(self.answer), 1, self.id)
         else:
-            self.answer = {"answer": [
-                'Couldn\'t fetch answer, please try again'], "domain": ['Error'], "success": 0}
-            a = open("ans.json", "a+")
-            a.close()
+            self.answer = {
+                "answer": ['Couldn\'t fetch answer, please try again'],
+                "domain": ['Error'],
+                "success": 0
+            }
 
-            with open("ans.json", "w") as f:
-
-                json.dump(self.answer, f)
+            add_answer(stringify(self.answer), -1, self.id)

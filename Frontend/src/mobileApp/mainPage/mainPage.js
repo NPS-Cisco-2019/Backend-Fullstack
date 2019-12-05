@@ -83,7 +83,7 @@ class MainPage extends React.Component {
   // handles error recieved by Webcam component
   cameraErrorHandler(error) {
     console.log(error);
-    this.setState({ picture: require("pictures/error.jpg"), output: "img" });
+    this.setState({ picture: require("pictures/error.png"), output: "img" });
   }
 
   // changes whether picture or video is displayed
