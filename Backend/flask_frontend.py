@@ -39,9 +39,6 @@ app = flask.Flask("__main__")
 
 # Frontend route
 @app.route("/")
-def redirectToMain():
-    return redirect("/Picture")
-
 @app.route("/Answer")
 @app.route("/Answer/answer0")
 @app.route("/Answer/answer1")

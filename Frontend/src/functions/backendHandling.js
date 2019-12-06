@@ -4,6 +4,7 @@ import base64 from "./base64Converter";
 
 export function OCR(imgPath, cropJSON) {
     let img = base64(imgPath, cropJSON);
+
     return fetch("/OCR", {
         method: "POST",
         body: JSON.stringify({ img }),

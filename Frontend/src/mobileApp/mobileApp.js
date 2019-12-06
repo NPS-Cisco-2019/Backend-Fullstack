@@ -10,6 +10,7 @@ import SettingsPage from "./settings";
 import GradeChoice from "./gradeChoice";
 import Tutorial from "./tutorial";
 import SavedAnswerPage from "./savedAnswersPage";
+import StartScreen from "./startScreen";
 
 import "style/animations.css";
 import "style/mobileApp.css";
@@ -41,7 +42,7 @@ class MobileApp extends React.Component {
         this.backToCamera = this.backToCamera.bind(this);
 
         if (newPerson) {
-            this.props.history.push("/GradeChoice");
+            this.props.history.push("/?new=true");
         }
     }
 
@@ -101,6 +102,8 @@ class MobileApp extends React.Component {
                     <Route path="/BlackScreen" render={() => <div></div>} />
 
                     <Route path="/Unknown" component={Unknown} />
+
+                    <Route exact path="/" component={StartScreen} />
 
                     {this.started ? (
                         <Route path="*" render={() => <Redirect to="/Unknown" />} />

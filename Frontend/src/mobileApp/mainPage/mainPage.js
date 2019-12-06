@@ -128,7 +128,7 @@ class MainPage extends React.Component {
       this.forceUpdate();
     });
     setTimeout(() => {
-      sessionStorage.setItem("fromGradeChoice", false);
+      sessionStorage.setItem("fadePicture", false);
     }, 500);
 
     let canvas = document.getElementById("canvas");
@@ -444,13 +444,13 @@ class MainPage extends React.Component {
       ? 3
       : window.innerHeight / 25);
     let bot = this.calculateBottom();
-    let fromGradeChoice = sessionStorage.getItem("fromGradeChoice") === "true";
+    let fadePicture = sessionStorage.getItem("fadePicture") === "true";
     return (
       <div
         className={`App ${
           this.props.backToCam
             ? "slidein"
-            : fromGradeChoice
+            : fadePicture
             ? "fadein-short"
             : null
         }`}
