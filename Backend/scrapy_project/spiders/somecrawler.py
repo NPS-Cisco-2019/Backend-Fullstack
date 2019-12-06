@@ -71,8 +71,6 @@ class QuotesSpider(scrapy.Spider):
 
     def return_links(self, user_query):
         try:
-            
-
             self.link_to_be_parsed = {}
             self.log("[reahced A]")
             self.user_query = user_query
@@ -273,8 +271,8 @@ class QuotesSpider(scrapy.Spider):
                 ans_list += l
 
             return ans_list
-        except:
-            pass
+        except Exception as e:
+            self.log_error(e)
 
     def convertLinks(self, links):
         try:

@@ -1,3 +1,4 @@
-./Backend/ans.txt
+Backend/ans.txt
 *.json
-./Backend/database/requests.db
+*.db
+*.log
