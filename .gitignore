@@ -1,4 +1,4 @@
-Backend/ans.txt
 *.json
 *.db
 *.log
+*.pyc
