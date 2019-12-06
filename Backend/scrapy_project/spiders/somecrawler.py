@@ -21,19 +21,22 @@ class QuotesSpider(scrapy.Spider):
         self.question = question
         self.isAnswerThere = True
         self.id = _id
+        self.debug = False
 
         self.log("\n\n\n\n\n" + str(_id) + "\n\n\n\n\n\n")
 
         self.answer = {"answer": [], "domain": [], "success": []}
 
-    def log_error(*args):
-        s = "[ " + time.strftime("%m %d %H %M %S") + " GMT ]   "
+    def log_error(self, *args):
+        s = "[" + time.strftime("%d-%m %H:%M:%S") + " IST]   "
         for arg in args:
             s += str(arg) + " "
-        s += "/n/n"
-
-        with open(os.path.join(os.getcwd(), "error_logs", "flask.log"), "a+") as f:
-            f.write(s)
+        s += "\n\n"
+        if self.debug:
+            print(s)
+        else:
+            with open(os.path.join(os.getcwd(), "error_logs", "scrapy.log"), "a+") as f:
+                f.write(s)
 
     def start_requests(self):
         try:
@@ -89,7 +92,6 @@ class QuotesSpider(scrapy.Spider):
             self.default_username = "bob"
 
             self.link_to_be_parsed["username"] = self.default_username
-            self.link_to_be_parsed["current_time"] = str(self.current_time)
             self.link_to_be_parsed["link"] = []
             self.link_to_be_parsed["domain"] = []
 

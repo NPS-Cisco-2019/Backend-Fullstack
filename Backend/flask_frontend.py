@@ -6,17 +6,21 @@ import OCR.text_from_im as OCR
 import time
 import json
 import database.db_func as db
+debug = False
 
 db.create_table()
 
 def log_error(*args):
-    s = "[ " + time.strftime("%m %d %H %M %S") + " GMT ]   "
+    s = "[" + time.strftime("%d-%m %H:%M:%S") + " IST]   "
     for arg in args:
         s += str(arg) + " "
-    s += "/n/n"
+    s += "\n\n"
 
-    with open(os.path.join(os.getcwd(), "error_logs", "flask.log"), "a+") as f:
-        f.write(s)
+    if debug:
+        print(s)
+    else:
+        with open(os.path.join(os.getcwd(), "error_logs", "flask.log"), "a+") as f:
+            f.write(s)
 
 # function to join all the websites
 def join(lst, sep):
