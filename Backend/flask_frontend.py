@@ -9,6 +9,15 @@ import database.db_func as db
 
 db.create_table()
 
+def log_error(*args):
+    s = "[ " + time.strftime("%m %d %H %M %S") + " GMT ]   "
+    for arg in args:
+        s += str(arg) + " "
+    s += "/n/n"
+
+    with open(os.path.join(os.getcwd(), "error_logs", "flask.log"), "a+") as f:
+        f.write(s)
+
 # function to join all the websites
 def join(lst, sep):
     print("[LIST] ", str(lst))
@@ -50,70 +59,72 @@ def main():
 # Route where image is sent
 @app.route("/OCR", methods=['POST', 'GET'])
 def get_question():
-    img = request.get_json()
+    try:
+        img = request.get_json()
 
-    # question = OCR.text_from_image(img['img'])
-    question = "brainly man running"
+        question = OCR.text_from_image(img['img'])
+        # question = "brainly man running"
 
-    print(f"\n\n\n\n, [QUESTION]: {question}\n\n\n")
+        print(f"\n\n\n\n, [QUESTION]: {question}\n\n\n")
 
-    return jsonify({ 'question': question })
+        return jsonify({ 'question': question })
+    except Exception as e:
+        log_error(e)
+        abort(500)
 
 # Route where question is sent
 @app.route("/scrapy", methods=['POST', 'GET'])
 def get_answer():
+    try:
+        websites = ["stackexchange.com", "doubtnut.com",
+                    "askiitians.com", "brainly.in"]
 
-    websites = ["stackexchange.com", "doubtnut.com",
-                "askiitians.com", "brainly.in"]
+        current_dict = {}
+        question = request.get_json()
 
-    current_dict = {}
-    question = request.get_json()
+        _id  = int(time.time())
 
-    _id  = int(time.time())
+        db.add_question(question["question"], _id)
 
-    db.add_question(question["question"], _id)
+        question["question"] = join((question["question"].split()[:15]), "+").replace(".", "")
+        
+        question["question"]=question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
 
-    question["question"] = join((question["question"].split()[:15]), "+").replace(".", "")
-    
-    question["question"]=question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
+        if question["subject"] != "General":
+            question["question"] += "+" + question["subject"]
 
-    if question["subject"] != "General":
-        question["question"] += "+" + question["subject"]
+        question_query = f'{question["question"]}+site%3A{join(websites, "+OR+site%3A")}'
 
-    question_query = f'{question["question"]}+site%3A{join(websites, "+OR+site%3A")}'
+        os.system(f'scrapy crawl spider -a question={question_query} -a _id={_id}')
 
-    os.system(f'scrapy crawl spider -a question={question_query} -a _id={_id}')
+        success = True
 
-    # print("\n\n\n")
-    # db.prt()
-    # print("\n\n\n")
+        while db.get_status(_id) != 1:
+            if db.get_status(_id) == -1:
+                success = False
+                break
 
-    success = True
+        print("\n\n\n")
+        db.prt()
+        print("\n\n\n")
 
-    while db.get_status(_id) != 1:
-        if db.get_status(_id) == -1:
-            success = False
-            break
-        # time.sleep(1)
+        ans = db.get_answer(_id)
 
-    print("\n\n\n")
-    db.prt()
-    print("\n\n\n")
+        print("\n\n\n" + str(ans) + " - " + str(type(ans)) + "\n\n\n")
 
-    ans = db.get_answer(_id)
+        if ans["success"] and success:
+            current_dict["question"] = question["question"]
+            current_dict["answers"] = ans["answer"]
+            current_dict["websites"] = ans["domain"]
+        else:
+            current_dict["question"] = question["question"]
+            current_dict["answers"] = "ERROR"
+            current_dict["websites"] = "NOT FOUND"
 
-    print("\n\n\n" + str(ans) + " - " + str(type(ans)) + "\n\n\n")
-
-    if ans["success"] and success:
-        current_dict["question"] = question["question"]
-        current_dict["answers"] = ans["answer"]
-        current_dict["websites"] = ans["domain"]
-    else:
-        current_dict["question"] = question["question"]
-        current_dict["answers"] = "ERROR"
-        current_dict["websites"] = "NOT FOUND"
-
-    return jsonify(current_dict)
+        return jsonify(current_dict)
+    except Exception as e:
+        log_error(e)
+        abort(500)
 
 
 @app.errorhandler(404)

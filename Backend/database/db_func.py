@@ -1,9 +1,10 @@
 import sqlite3
 from json import loads as parse
 import pandas
+import os
 
 def connect():
-    conn = sqlite3.connect('requests.db')
+    conn = sqlite3.connect(os.path.join(os.getcwd(), 'database', 'requests.db'))
     c = conn.cursor()
     return conn, c
 
@@ -38,7 +39,7 @@ def get_answer(_id):
     c.execute("SELECT ajson FROM queue WHERE id = (?)", (_id,))
 
     a = c.fetchone()[0]
-    print("[A]  " + a +"\n[TYPE_A]  " + str(type(a)))
+
     disconnect(conn, c)
     return parse(a)
 
@@ -64,6 +65,5 @@ def prt():
     conn, c = connect()
     print(pandas.read_sql_query("SELECT * FROM queue", conn))
     disconnect(conn, c)
-
 
 # IT WORKS, nice

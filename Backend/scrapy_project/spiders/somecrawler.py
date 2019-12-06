@@ -4,7 +4,7 @@ import tldextract
 import urllib.request
 import os, sys
 import json
-import datetime
+import time
 import requests
 import codecs
 # sys.path.append(os.path.join(os.getcwd()[::-1].split("/", 2)[-1][::-1], "database"))
@@ -25,6 +25,15 @@ class QuotesSpider(scrapy.Spider):
         self.log("\n\n\n\n\n" + str(_id) + "\n\n\n\n\n\n")
 
         self.answer = {"answer": [], "domain": [], "success": []}
+
+    def log_error(*args):
+        s = "[ " + time.strftime("%m %d %H %M %S") + " GMT ]   "
+        for arg in args:
+            s += str(arg) + " "
+        s += "/n/n"
+
+        with open(os.path.join(os.getcwd(), "error_logs", "flask.log"), "a+") as f:
+            f.write(s)
 
     def start_requests(self):
         try:
@@ -53,9 +62,9 @@ class QuotesSpider(scrapy.Spider):
             else:
                 self.answer["success"] = 0
                 self.writetheanswer(False)
-        except:
-             self.log("[FAILED1]")
-             self.writetheanswer(False)
+        except Exception as e:
+            #  self.log("[FAILED1]")
+             self.writetheanswer(False, e)
 
     def return_links(self, user_query):
         try:
@@ -78,7 +87,6 @@ class QuotesSpider(scrapy.Spider):
                                    "askiitians", "stackexchange","sarthaks"]
 
             self.default_username = "bob"
-            self.current_time = datetime.datetime.now().time()
 
             self.link_to_be_parsed["username"] = self.default_username
             self.link_to_be_parsed["current_time"] = str(self.current_time)
@@ -96,9 +104,9 @@ class QuotesSpider(scrapy.Spider):
                 self.log("[RETURNED LINKS]")
 
             return self.link_to_be_parsed
-        except:
-            self.writetheanswer(False)
-            self.log("[FAILED2]")
+        except Exception as e:
+            self.writetheanswer(False, e)
+
     def parsebrainly(self, response):
         try:
             ans = response.xpath(
@@ -204,8 +212,8 @@ class QuotesSpider(scrapy.Spider):
                 self.writetheanswer(True)
             
 
-        except Exception as e:
-            self.log(str(e))
+        except:
+            pass
 
     def janitor(self, html_list):
 
@@ -280,14 +288,16 @@ class QuotesSpider(scrapy.Spider):
 
                 newLinks.append("link"+link)
             return newLinks
-        except:
-            self.writetheanswer(False)
+        except Exception as e:
+            self.writetheanswer(False, e)
 
-    def writetheanswer(self, works):
+    def writetheanswer(self, works, e = ""):
         conn, c = connect()
         if works:
             add_answer(stringify(self.answer), 1, self.id)
         else:
+            self.log_error(e)
+
             self.answer = {
                 "answer": ['Couldn\'t fetch answer, please try again'],
                 "domain": ['Error'],
