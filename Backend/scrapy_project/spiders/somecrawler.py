@@ -7,8 +7,6 @@ import json
 import time
 import requests
 import codecs
-# sys.path.append(os.path.join(os.getcwd()[::-1].split("/", 2)[-1][::-1], "database"))
-# print(sys.path)
 from database.db_func import add_answer, connect, disconnect
 from json import dumps as stringify 
 
@@ -120,7 +118,7 @@ class QuotesSpider(scrapy.Spider):
             self.answer["domain"].append("brainly")
             self.answer["success"] = 1
             if imgsrc:
-                self.answer["answer"].append([*ans, imgsrc])
+                self.answer["answer"].append([*ans, *imgsrc])
             else:
                 self.answer["answer"].append([*ans])
             self.writetheanswer(True)

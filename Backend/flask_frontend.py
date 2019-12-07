@@ -34,7 +34,6 @@ def join(lst, sep):
 
     return s
 
-
 app = flask.Flask("__main__")
 
 # Frontend route

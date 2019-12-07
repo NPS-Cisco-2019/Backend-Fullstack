@@ -7,7 +7,7 @@ import ErrorBoundary from "shared/Error";
 
 /* ANCHOR  Main app, renders all components and is attached to the DOM
  *
- * Suggestion: Add the Name: Comment Anchors Extension (for VS Code atleast)
+ * Suggestion: Add the Comment Anchors Extension (for VS Code at least)
  * VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
  */
 

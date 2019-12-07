@@ -4,7 +4,7 @@ import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import { init } from "functions/localStorageHandleing";
 
 import MainPage from "./mainPage";
-import AnswerPage from "./answer";
+import AnswerPage from "./answerPage";
 import Unknown from "shared/404";
 import SettingsPage from "./settings";
 import GradeChoice from "./gradeChoice";

@@ -1,3 +1,4 @@
-import { Answer, Back, BookmarkNav, Gallery, Img, SettingsButton, Subject } from "./elements";
+import Back from "./Back";
+import Img from "./Img";
 
-export { Answer, Back, BookmarkNav, Gallery, Img, SettingsButton, Subject };
+export { Back, Img };

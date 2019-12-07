@@ -6,7 +6,8 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PropTypes from 'prop-types';
 
 import styles from 'style/style';
-import { Back, Answer } from 'shared/elements';
+import { Back } from 'shared/elements';
+import Answer from "./Answer"
 // !SECTION
 
 let { botNavStyle, webStyle, container, infoStyle, navObj } = styles;

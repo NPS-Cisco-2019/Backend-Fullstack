@@ -34,4 +34,4 @@ def initLog():
 sys.path.append(os.path.join(os.getcwd(), "OCR"))
 
 # NOTE Uncomment if running on windows
-pytesseract.pytesseract.tesseract_cmd = r"C:\Users\Student\AppData\Local\Tesseract-OCR\tesseract.exe"
+# pytesseract.pytesseract.tesseract_cmd = r"C:\Users\Student\AppData\Local\Tesseract-OCR\tesseract.exe"

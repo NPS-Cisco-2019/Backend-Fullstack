@@ -441,7 +441,7 @@ footer {
 }
 
 .subject-button {
-    background-color: rgb(40, 40, 40);
+    background-color: var(--backCol2);
     width: 130px;
     border-radius: 15px;
     flex-direction: column;
@@ -492,7 +492,7 @@ footer {
     height: 30px;
     width: 60px;
     font-family: inherit;
-    background-color: rgb(40, 40, 40);
+    background-color: var(--backCol2);
 }
 
 #canvas {
