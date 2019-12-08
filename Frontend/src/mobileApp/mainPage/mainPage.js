@@ -33,7 +33,7 @@ class MainPage extends React.Component {
         super(props);
         this.state = {
             output: "vid",
-            picture: require("pictures/question.jpg"),
+            picture: require("pictures/default.png"),
             selectedFile: null,
             footStyle: { backgroundColor: "var(--midGray2)" },
             ansClicked: false,

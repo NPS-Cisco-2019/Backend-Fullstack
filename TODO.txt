@@ -1,0 +1,17 @@
+0. OCR:
+    ~ improvements:
+        - equation recognition
+
+1. Scrapy:
+    ~ bugs:
+        - doubtnut text formatting
+        - relative links need to be edited to contain domain
+    ~ improvements
+        - answer ranking
+        - memoization of answers
+        - link for each answer should be sent to Frontend
+
+2. Frontend:
+    ~ improvements:
+        - basic guide on how to use the app
+        - websites should be clickable to go to the actual answer
