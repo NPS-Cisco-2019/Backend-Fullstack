@@ -8,7 +8,7 @@ import AnswerPage from "./answerPage";
 import Unknown from "shared/404";
 import SettingsPage from "./settings";
 import GradeChoice from "./gradeChoice";
-import Tutorial from "./tutorial";
+import MobileTutorial from "./tutorial";
 import SavedAnswerPage from "./savedAnswersPage";
 import StartScreen from "./startScreen";
 
@@ -95,8 +95,8 @@ class MobileApp extends React.Component {
                     <Route path="/GradeChoice" component={GradeChoice} />
 
                     <Route
-                        path="/Tutorial"
-                        render={() => <Tutorial backClick={this.backToCamera} />}
+                        path={["/Tutorial", "/Chrome", "/Firefox", "/Safari"]}
+                        render={() => <MobileTutorial backClick={this.backToCamera} />}
                     />
 
                     <Route path="/BlackScreen" render={() => <div></div>} />

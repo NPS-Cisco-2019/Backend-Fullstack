@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "44e3209b11e7337a87a2bc7f93e4d058",
+    "revision": "76fbb24529d0f11da33e62941bba5495",
     "url": "/static/react/../../templates/index.html"
   },
   {
-    "revision": "19e5bee3ef25942b5618",
-    "url": "/static/react/css/main.f61c4756.chunk.css"
+    "revision": "38858fcab625e351fab6",
+    "url": "/static/react/css/main.366d2576.chunk.css"
   },
   {
     "revision": "97a46ceccfbbe55d25bc",
     "url": "/static/react/js/2.36a816d5.chunk.js"
   },
   {
-    "revision": "19e5bee3ef25942b5618",
-    "url": "/static/react/js/main.4581c156.chunk.js"
+    "revision": "38858fcab625e351fab6",
+    "url": "/static/react/js/main.4e9ae6f8.chunk.js"
   },
   {
     "revision": "3f5e914001b517a6902c",
@@ -66,10 +66,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "ef0036393c3e9da1c4aa4c5ae4a22e8b",
     "url": "/static/react/media/logo512.ef003639.png"
-  },
-  {
-    "revision": "2baaafd9a61c3ea1224f163c577e9456",
-    "url": "/static/react/media/question.2baaafd9.jpg"
   },
   {
     "revision": "a64f5d7fa3930da5f70703eb258247a6",

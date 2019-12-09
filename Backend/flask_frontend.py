@@ -10,6 +10,7 @@ debug = False
 
 db.create_table()
 
+
 def log_error(*args):
     s = "[" + time.strftime("%d-%m %H:%M:%S") + " IST]   "
     for arg in args:
@@ -23,6 +24,8 @@ def log_error(*args):
             f.write(s)
 
 # function to join all the websites
+
+
 def join(lst, sep):
     print("[LIST] ", str(lst))
 
@@ -33,6 +36,7 @@ def join(lst, sep):
     s += lst[-1]
 
     return s
+
 
 app = flask.Flask("__main__")
 
@@ -67,7 +71,7 @@ def get_question():
 
         print(f"\n\n\n\n, [QUESTION]: {question}\n\n\n")
 
-        return jsonify({ 'question': question })
+        return jsonify({'question': question})
     except Exception as e:
         log_error(e)
         abort(500)
@@ -82,20 +86,23 @@ def get_answer():
         current_dict = {}
         question = request.get_json()
 
-        _id  = int(time.time())
+        _id = int(time.time())
 
         db.add_question(question["question"], _id)
 
-        question["question"] = join((question["question"].split()[:15]), "+").replace(".", "")
-        
-        question["question"]=question["question"].replace(" ", "+").replace("\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
+        question["question"] = join(
+            (question["question"].split()[:15]), "+").replace(".", "")
+
+        question["question"] = question["question"].replace(" ", "+").replace(
+            "\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
 
         if question["subject"] != "General":
             question["question"] += "+" + question["subject"]
 
         question_query = f'{question["question"]}+site%3A{join(websites, "+OR+site%3A")}'
 
-        os.system(f'scrapy crawl spider -a question={question_query} -a _id={_id}')
+        os.system(
+            f'scrapy crawl spider -a question={question_query} -a _id={_id}')
 
         success = True
 
@@ -129,7 +136,7 @@ def get_answer():
 
 @app.errorhandler(404)
 def error404(error):
-    return redirect("/Unknown"), 404
+    return redirect("/Unknown")
 
 
 app.run(host="0.0.0.0")

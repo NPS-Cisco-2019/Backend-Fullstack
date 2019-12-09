@@ -4,10 +4,13 @@ import base64 from "./base64Converter";
 
 export function OCR(imgPath, cropJSON) {
     let img = base64(imgPath, cropJSON);
+
     return fetch("/OCR", {
         method: "POST",
         body: JSON.stringify({ img }),
-        headers: { "Content-Type": "application/json" }
+        headers: {
+            "Content-Type": "application/json"
+        }
     });
 }
 export function scrape(question) {
@@ -18,6 +21,8 @@ export function scrape(question) {
             subject: localStorage.getItem("subject"),
             grade: localStorage.getItem("grade")
         }),
-        headers: { "Content-Type": "application/json" }
+        headers: {
+            "Content-Type": "application/json"
+        }
     });
 }

@@ -1,3 +1,3 @@
-import Tut from './tutorial';
+import MobileTutorial from "./tutorial";
 
-export default Tut;
+export default MobileTutorial;

@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/react/css/main.f61c4756.chunk.css",
-    "main.js": "/static/react/js/main.4581c156.chunk.js",
-    "main.js.map": "/static/react/js/main.4581c156.chunk.js.map",
+    "main.css": "/static/react/css/main.366d2576.chunk.css",
+    "main.js": "/static/react/js/main.4e9ae6f8.chunk.js",
+    "main.js.map": "/static/react/js/main.4e9ae6f8.chunk.js.map",
     "runtime-main.js": "/static/react/js/runtime-main.dc76b154.js",
     "runtime-main.js.map": "/static/react/js/runtime-main.dc76b154.js.map",
     "js/2.36a816d5.chunk.js": "/static/react/js/2.36a816d5.chunk.js",
     "js/2.36a816d5.chunk.js.map": "/static/react/js/2.36a816d5.chunk.js.map",
     "../../templates/index.html": "/static/react/../../templates/index.html",
-    "css/main.f61c4756.chunk.css.map": "/static/react/css/main.f61c4756.chunk.css.map",
+    "css/main.366d2576.chunk.css.map": "/static/react/css/main.366d2576.chunk.css.map",
     "media/404.png": "/static/react/media/404.1eae7a3b.png",
     "media/back.png": "/static/react/media/back.7865f30b.png",
     "media/calvin-error.png": "/static/react/media/calvin-error.62690901.png",
@@ -21,13 +21,12 @@
     "media/firefox1.jpg": "/static/react/media/firefox1.9f6c16a3.jpg",
     "media/firefox2.jpg": "/static/react/media/firefox2.649f926e.jpg",
     "media/logo512.png": "/static/react/media/logo512.ef003639.png",
-    "media/question.jpg": "/static/react/media/question.2baaafd9.jpg",
     "media/safari.png": "/static/react/media/safari.a64f5d7f.png",
     "media/safari1.jpg": "/static/react/media/safari1.2a3eaaa6.jpg",
     "media/safari2.jpg": "/static/react/media/safari2.2d039f67.jpg",
     "media/safari3.jpg": "/static/react/media/safari3.88a2743b.jpg",
     "media/settings.png": "/static/react/media/settings.371bf301.png",
-    "precache-manifest.315b5befd095ef8f0af2e94b951d783c.js": "/static/react/precache-manifest.315b5befd095ef8f0af2e94b951d783c.js",
+    "precache-manifest.599fe19214dab00ebf086a079a28287b.js": "/static/react/precache-manifest.599fe19214dab00ebf086a079a28287b.js",
     "service-worker.js": "/static/react/service-worker.js"
   }
 }
