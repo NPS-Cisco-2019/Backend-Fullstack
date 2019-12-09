@@ -13,13 +13,14 @@ from json import dumps as stringify
 class QuotesSpider(scrapy.Spider):
     name = "spider"
 
-    def __init__(self, question="", _id=0, *args, **kwargs):
+    def __init__(self, question="",subject= " " , _id=0, *args, **kwargs):
         super(QuotesSpider, self).__init__(*args, **kwargs)
 
         self.question = question
         self.isAnswerThere = True
         self.id = _id
         self.debug = False
+        self.subject = subject
 
         self.log("\n\n\n\n\n" + str(_id) + "\n\n\n\n\n\n")
 
@@ -40,7 +41,10 @@ class QuotesSpider(scrapy.Spider):
         try:
             self.log("[STARTED REQUETS]")
             q = self.question
-            self.urls = self.return_links(q)["link"][:5]
+            if self.subject != "":
+                self.urls = self.return_links(q,1)["link"][:5]
+            else:
+                self.urls = self.return_links(q,0)["link"][:5]
 
             self.log("[URLS]  " + str(self.urls) + " ----- [LEN]  " + str(len(self.urls)))
 
@@ -67,23 +71,25 @@ class QuotesSpider(scrapy.Spider):
             #  self.log("[FAILED1]")
              self.writetheanswer(False, e)
 
-    def return_links(self, user_query):
+    def return_links(self, user_query,isQuestion):
         try:
             self.link_to_be_parsed = {}
-            self.log("[reahced A]")
             self.user_query = user_query
+            self.useful_domains = ["doubtnut", "brainly",
+                                   "askiitians", "stackexchange","sarthaks"]
             
             user_query = user_query.replace("++", "+")
 
             self.log("\n" + "-" * 50 + "\n[USER_QUERY]  " + str(user_query))
+            if isQuestion:
+                google_search = "https://www.google.com/search?q=" + user_query 
+            else:
+                google_search = "https://www.google.com/search?q=" + user_query + "+askiitians+revision+notes"
 
-            google_search = "https://www.google.com/search?q=" + user_query
-            
             self.rq = requests.get(google_search).text
 
             self.urls = re.findall(r'href=[\'"]?([^\'" >]+)', self.rq)
-            self.useful_domains = ["doubtnut", "brainly",
-                                   "askiitians", "stackexchange","sarthaks"]
+            
 
             self.default_username = "bob"
 

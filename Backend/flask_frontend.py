@@ -96,13 +96,11 @@ def get_answer():
         question["question"] = question["question"].replace(" ", "+").replace(
             "\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
 
-        if question["subject"] != "General":
-            question["question"] += "+" + question["subject"]
 
-        question_query = f'{question["question"]}+site%3A{join(websites, "+OR+site%3A")}'
+        
 
         os.system(
-            f'scrapy crawl spider -a question={question_query} -a _id={_id}')
+            f'scrapy crawl spider -a question={question["subject"]} -a subject ={question["subject"]} -a _id={_id}' )
 
         success = True
 
