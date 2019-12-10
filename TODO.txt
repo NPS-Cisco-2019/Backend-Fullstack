@@ -10,8 +10,12 @@
         - answer ranking
         - memoization of answers
         - link for each answer should be sent to Frontend
+        - revision notes
 
 2. Frontend:
     ~ improvements:
-        - basic guide on how to use the app
         - websites should be clickable to go to the actual answer
+        - rotate image
+        - basic guide on how to use the app
+        - voice typing
+        - rotate fixing
