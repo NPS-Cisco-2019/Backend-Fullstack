@@ -95,12 +95,10 @@ def get_answer():
 
         question["question"] = question["question"].replace(" ", "+").replace(
             "\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
-
-
-        
-
+        print(
+            f'scrapy crawl spider -a question={question["question"]} -a subject=revisionNotes  -a _id={_id}')
         os.system(
-            f'scrapy crawl spider -a question={question["subject"]} -a subject ={question["subject"]} -a _id={_id}' )
+            f'scrapy crawl spider -a question={question["question"]} -a subject=revisionNotes  -a _id={_id}')
 
         success = True
 

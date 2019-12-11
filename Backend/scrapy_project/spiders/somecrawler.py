@@ -2,18 +2,20 @@ import scrapy
 import re
 import tldextract
 import urllib.request
-import os, sys
+import os
+import sys
 import json
 import time
 import requests
 import codecs
 from database.db_func import add_answer, connect, disconnect
-from json import dumps as stringify 
+from json import dumps as stringify
+
 
 class QuotesSpider(scrapy.Spider):
     name = "spider"
 
-    def __init__(self, question="",subject= " " , _id=0, *args, **kwargs):
+    def __init__(self, question="", subject=" ", _id=0, *args, **kwargs):
         super(QuotesSpider, self).__init__(*args, **kwargs)
 
         self.question = question
@@ -41,12 +43,13 @@ class QuotesSpider(scrapy.Spider):
         try:
             self.log("[STARTED REQUETS]")
             q = self.question
-            if self.subject != "":
-                self.urls = self.return_links(q,1)["link"][:5]
-            else:
-                self.urls = self.return_links(q,0)["link"][:5]
+            if self.subject != "revisionNotes":
+                self.urls = self.return_links(q, 1)["link"][:5]
+            elif self.subject == "revisionNotes":
+                self.urls = self.return_links(q, 0)["link"][:5]
 
-            self.log("[URLS]  " + str(self.urls) + " ----- [LEN]  " + str(len(self.urls)))
+            self.log("[URLS]  " + str(self.urls) +
+                     " ----- [LEN]  " + str(len(self.urls)))
 
             self.isAnswerThere = len(self.urls) != 0
             if self.isAnswerThere:
@@ -56,8 +59,10 @@ class QuotesSpider(scrapy.Spider):
                     website = listt.domain
                     if website == 'brainly':
                         yield scrapy.Request(url=url, callback=self.parsebrainly)
-                    elif website == 'askiitians':
+                    elif website == 'askiitians' and self.isQuestion == 1:
                         yield scrapy.Request(url=url, callback=self.parseaskiitians)
+                    elif website == "askiitians" and self.isQuestion == 0:
+                        yield scrapy.Request(url=url, callback=self.parseaskiitiansnotes)
                     elif website == 'doubtnut':
                         yield scrapy.Request(url=url, callback=self.parsedoubtnut)
                     elif website == 'stackexchange':
@@ -69,27 +74,29 @@ class QuotesSpider(scrapy.Spider):
                 self.writetheanswer(False)
         except Exception as e:
             #  self.log("[FAILED1]")
-             self.writetheanswer(False, e)
+            self.writetheanswer(False, e)
 
-    def return_links(self, user_query,isQuestion):
+    def return_links(self, user_query, isQuestion):
         try:
             self.link_to_be_parsed = {}
+            self.isQuestion = isQuestion
             self.user_query = user_query
             self.useful_domains = ["doubtnut", "brainly",
-                                   "askiitians", "stackexchange","sarthaks"]
-            
+                                   "askiitians", "stackexchange", "sarthaks"]
+
             user_query = user_query.replace("++", "+")
 
             self.log("\n" + "-" * 50 + "\n[USER_QUERY]  " + str(user_query))
             if isQuestion:
-                google_search = "https://www.google.com/search?q=" + user_query 
+                google_search = "https://www.google.com/search?q=" + user_query
+                self.log(str(google_search))
             else:
-                google_search = "https://www.google.com/search?q=" + user_query + "+askiitians+revision+notes"
-
+                google_search = "https://www.google.com/search?q=" + \
+                    user_query + "+askiitians+revision+notes"
+                self.log(str(google_search))
             self.rq = requests.get(google_search).text
 
             self.urls = re.findall(r'href=[\'"]?([^\'" >]+)', self.rq)
-            
 
             self.default_username = "bob"
 
@@ -131,6 +138,31 @@ class QuotesSpider(scrapy.Spider):
         except:
             pass
 
+    def parseaskiitiansnotes(self, response):
+        self.log("[ASKNOTES CALLED]")
+        try:
+
+            l = response.xpath('//div[@id="content"]/pre/*').extract()
+            l = self.janitor(l)
+
+            img = self.convertLinks(response.xpath(
+                '//div[@id="content"]//p//img/@src').extract())
+
+            self.answer["domain"].append("askiitans")
+            self.answer["success"] = 1
+
+            if type(img) != list:
+                img = [img]
+
+            if img:
+                self.answer["answer"].append([*l, *img])
+            else:
+                self.answer["answer"].append([*l])
+
+            self.writetheanswer(True)
+        except:
+            pass
+
     def parseaskiitians(self, response):
         try:
 
@@ -146,7 +178,7 @@ class QuotesSpider(scrapy.Spider):
 
             if type(img) != list:
                 img = [img]
-            
+
             if img:
                 self.answer["answer"].append([*l, *img])
             else:
@@ -193,12 +225,15 @@ class QuotesSpider(scrapy.Spider):
             self.writetheanswer(True)
         except:
             pass
-    def parsesarthaks(self,response):      
+
+    def parsesarthaks(self, response):
         try:
-            ans = response.xpath('//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/*').extract()
-            
-            links = response.xpath('//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/p//span/img/@src').extract()
-            
+            ans = response.xpath(
+                '//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/*').extract()
+
+            links = response.xpath(
+                '//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/p//span/img/@src').extract()
+
             ans = self.janitor(ans)
 
             i = 0
@@ -214,7 +249,6 @@ class QuotesSpider(scrapy.Spider):
                 self.answer["answer"].append([*ans, *links])
                 self.answer["success"] = 1
                 self.writetheanswer(True)
-            
 
         except:
             pass
@@ -222,7 +256,7 @@ class QuotesSpider(scrapy.Spider):
     def janitor(self, html_list):
 
         try:
-            
+
             if type(html_list) != list:
                 html_list = [html_list]
 
@@ -295,7 +329,7 @@ class QuotesSpider(scrapy.Spider):
         except Exception as e:
             self.writetheanswer(False, e)
 
-    def writetheanswer(self, works, e = ""):
+    def writetheanswer(self, works, e=""):
         conn, c = connect()
         if works:
             add_answer(stringify(self.answer), 1, self.id)
