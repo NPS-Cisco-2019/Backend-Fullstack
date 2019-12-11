@@ -15,7 +15,8 @@
 2. Frontend:
     ~ improvements:
         - websites should be clickable to go to the actual answer
-        - rotate image
         - basic guide on how to use the app
         - voice typing
-        - rotate fixing
+
+3. Server:
+    - Add cron to call sh file everytime we want to reset the database
