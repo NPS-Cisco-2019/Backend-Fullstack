@@ -2,20 +2,18 @@
 [LM] Get scores 1
 [INFO] loading EAST text detector...
 east:frozen_east_text_detection.pb
-[INFO] text detection took 0.663201 seconds
+[INFO] text detection took 0.984112 seconds
 [LM] Get scores 1 END
-[DATA] Initital mean: 5.00626697999677
-[DATA] Updated Theta:5.086204098948015
+[DATA] Initital mean: 5.0084500792102356
+[DATA] Updated Theta:5.0882911486262765
 [DATA] Inclinations and theta: 
-THETAS:796
-INCL: 785
+THETAS:797
+INCL: 786
 [LM] Get scores 2
 [INFO] loading EAST text detector...
 east:frozen_east_text_detection.pb
-[INFO] text detection took 0.877622 seconds
+[INFO] text detection took 1.202212 seconds
 [LM] Get scores 2 END
-[INFO] Felzenszwalb NMS took 0.002991 seconds and found 26 boxes
+[INFO] Felzenszwalb NMS took 0.003395 seconds and found 26 boxes
 [DATA] Bounding boxes Before: 26
 [DATA] Bounding boxes After: 25
-. A Camot engine has the same efficiency (i) between 100 K and 500 K and
-(ii) between T K and 900 K. Calculate the temperature T K of the sink.

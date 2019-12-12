@@ -14,9 +14,11 @@
     font-weight: 100;
     font-display: swap;
     src: local("Raleway Thin"), local("Raleway-Thin"),
-        url(https://fonts.gstatic.com/s/raleway/v14/1Ptsg8zYS_SKggPNwE44TYFq.woff2) format("woff2");
+        url(https://fonts.gstatic.com/s/raleway/v14/1Ptsg8zYS_SKggPNwE44TYFq.woff2)
+            format("woff2");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-        U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+        U+FFFD;
 }
 
 @font-face {
@@ -28,7 +30,8 @@
         url(https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwOIpWqZPAA.woff2)
             format("woff2");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-        U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+        U+FFFD;
 }
 
 @font-face {
@@ -37,9 +40,11 @@
     font-weight: 400;
     font-display: swap;
     src: local("Raleway"), local("Raleway-Regular"),
-        url(https://fonts.gstatic.com/s/raleway/v14/1Ptug8zYS_SKggPNyC0ITw.woff2) format("woff2");
+        url(https://fonts.gstatic.com/s/raleway/v14/1Ptug8zYS_SKggPNyC0ITw.woff2)
+            format("woff2");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-        U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+        U+FFFD;
 }
 
 * {
@@ -98,8 +103,8 @@
 }
 
 .settings-transitions {
-    transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1), background-color 600ms ease-out,
-        border-radius 600ms ease-out;
+    transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1),
+        background-color 600ms ease-out, border-radius 600ms ease-out;
 }
 
 .inline-img {
@@ -122,8 +127,8 @@ footer {
     align-items: center;
     justify-content: center;
     transition: bottom 300ms ease-in-out;
-    transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1), background-color 600ms linear,
-        border-radius 600ms linear;
+    transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1),
+        background-color 600ms linear, border-radius 600ms linear;
 }
 
 .bar {
@@ -297,8 +302,8 @@ footer {
 }
 
 .height-trans {
-    transition: height 300ms ease-in-out, color 300ms linear, background-color 300ms linear,
-        opacity 3000ms;
+    transition: height 300ms ease-in-out, color 300ms linear,
+        background-color 300ms linear, opacity 3000ms;
 }
 
 .setting {
@@ -434,6 +439,7 @@ footer {
     z-index: 42;
     width: 100vw;
     justify-content: space-between;
+    align-items: center;
     flex-direction: row-reverse;
     padding: 0 10px;
     box-sizing: border-box;
@@ -493,6 +499,18 @@ footer {
     width: 60px;
     font-family: inherit;
     background-color: var(--backCol2);
+}
+
+.rotateImgButton {
+    border-radius: 17.5px;
+    height: 35px;
+    width: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--backCol2);
+    font-family: inherit;
+    font-size: 1.3rem;
 }
 
 #canvas {

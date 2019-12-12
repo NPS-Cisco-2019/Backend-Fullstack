@@ -36,8 +36,9 @@ class SettingsPage extends React.Component {
     this.reset = this.reset.bind(this);
     this.tutClick = this.tutClick.bind(this);
     this.backClick = this.backClick.bind(this);
-    this.changeMode = this.changeMode.bind(this);
+    this.toggleHelp = this.toggleHelp.bind(this);
     this.closeBanner = this.closeBanner.bind(this);
+    this.toggleDarkMode = this.toggleDarkMode.bind(this);
   }
 
   reset() {
@@ -76,7 +77,7 @@ class SettingsPage extends React.Component {
     }, 300);
   }
 
-  changeMode() {
+  toggleDarkMode() {
     let mode = localStorage.getItem("mode");
     let newMode = mode === "dark" ? "light" : "dark";
     localStorage.setItem("mode", newMode);
@@ -84,8 +85,16 @@ class SettingsPage extends React.Component {
     this.forceUpdate();
   }
 
+  toggleHelp() {
+    let helpMode = localStorage.getItem("helpMode");
+    let newHelpMode = helpMode !== "true";
+    localStorage.setItem("helpMode", newHelpMode);
+    console.log({ newHelpMode });
+  }
+
   render() {
     let mode = localStorage.getItem("mode");
+    let helpMode = localStorage.getItem("helpMode");
     let colour = localStorage.getItem("highlightCol");
     return (
       <div
@@ -96,11 +105,7 @@ class SettingsPage extends React.Component {
           backgroundColor: "var(--backCol)"
         }}
         className={
-          this.state.backToCam
-            ? "slideout"
-            : this.state.fadeout
-            ? "fadeout"
-            : "fadein"
+          this.state.backToCam ? "slideout" : this.state.fadeout ? "fadeout" : "fadein"
         }
       >
         <header
@@ -173,8 +178,8 @@ class SettingsPage extends React.Component {
               Children={Choice}
             >
               <p className="setting-description">
-                Choosing a particular subject will help in getting more accurate
-                search results.
+                Choosing a particular subject will help in getting more accurate search
+                results.
               </p>
             </Setting>
 
@@ -199,7 +204,7 @@ class SettingsPage extends React.Component {
               name="Dark Mode"
               type="switch"
               id="darkMode"
-              handleClick={this.changeMode}
+              handleClick={this.toggleDarkMode}
               props={{ enabled: mode === "dark" }}
               Children={Null}
             />
@@ -214,6 +219,18 @@ class SettingsPage extends React.Component {
             />
           </section>
           <hr />
+          <section>
+            <p>Help</p>
+            <Setting
+              name="Help Overlay"
+              handleClick={this.toggleHelp}
+              type="switch"
+              id="helpScreens"
+              props={{ enabled: helpMode === "true" }}
+              Children={Null}
+            />
+          </section>
+          <hr />
           <button
             className="center"
             style={{
@@ -221,7 +238,7 @@ class SettingsPage extends React.Component {
               height: 40,
               backgroundColor: "var(--midGray2)",
               borderRadius: 10,
-              marginBottom: 30
+              marginBottom: 50
             }}
             onClick={this.reset}
           >

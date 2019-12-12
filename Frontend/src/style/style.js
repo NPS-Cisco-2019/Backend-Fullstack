@@ -21,9 +21,10 @@ const styles = {
         backgroundColor: "rgb(224, 0, 0)",
         border: "0.15em solid white",
         transition: "bottom 500ms cubic-bezier(0.215, 0.61, 0.355, 1)",
-        display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        left: "50%",
+        transform: "translateX(-50%)"
     },
     videoConstraints: {
         // facingMode: 'user',

@@ -15,8 +15,7 @@
 2. Frontend:
     ~ improvements:
         - websites should be clickable to go to the actual answer
-        - basic guide on how to use the app
         - voice typing
 
 3. Server:
-    - Add cron to call sh file everytime we want to reset the database
+    - Add cron to call reset_db.py file everytime we want to reset the database

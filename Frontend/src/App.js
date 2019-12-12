@@ -16,17 +16,13 @@ import ErrorBoundary from "shared/Error";
 let dev = true;
 
 function App() {
-    return (
-        <BrowserRouter>
-            <ErrorBoundary>
-                {typeof window.orientation !== "undefined" || dev ? (
-                    <MobileApp />
-                ) : (
-                    <CompApp />
-                )}
-            </ErrorBoundary>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter basename="Frontend">
+      <ErrorBoundary>
+        {typeof window.orientation !== "undefined" || dev ? <MobileApp /> : <CompApp />}
+      </ErrorBoundary>
+    </BrowserRouter>
+  );
 }
 
 export default App;
