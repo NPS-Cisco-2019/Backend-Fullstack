@@ -1,5 +1,7 @@
 import base64 from "./base64Converter";
 
+// NOTE functions which will handle all backend calls
+
 export function OCR(imgPath, cropJSON) {
   let img = base64(imgPath, cropJSON);
 

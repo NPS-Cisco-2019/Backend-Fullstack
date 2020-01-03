@@ -8,14 +8,12 @@
         - relative links need to be edited to contain domain
     ~ improvements
         - answer ranking
-        - memoization of answers
         - link for each answer should be sent to Frontend
         - revision notes
 
-2. Frontend:
-    ~ improvements:
-        - websites should be clickable to go to the actual answer
-        - voice typing
+2. Databas:
+    ~ improvements
+        - memoization of answers
 
 3. Server:
     - Add cron to call reset_db.py file everytime we want to reset the database

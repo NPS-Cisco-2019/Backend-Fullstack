@@ -1,8 +1,6 @@
 // SECTION imports
 import React from "react";
 import Swipe from "react-easy-swipe";
-import { Route, Link, Switch, withRouter } from "react-router-dom";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import PropTypes from "prop-types";
 
 import Answer from "./Answer";
@@ -28,8 +26,6 @@ class AnswerPage extends React.Component {
         sessionStorage.getItem("new") === "true"
     };
 
-    this.props.history.push("/Answer/answer0");
-
     this.maxHeight = 0;
 
     document.body.style.overflowX = "hidden";
@@ -37,8 +33,6 @@ class AnswerPage extends React.Component {
       "--popupHeight",
       (this.props.websites.length * window.innerHeight) / 13 + "px"
     );
-
-    sessionStorage.setItem("new", false);
 
     // SECTION function bindings
     this.jumpto = this.jumpto.bind(this);
@@ -72,7 +66,6 @@ class AnswerPage extends React.Component {
   }
 
   jumpto(e) {
-    this.props.history.push(`/Answer/answer${e.target.value}`);
     this.setState({ num: e.target.value });
     this.returnToAnswer();
     setTimeout(() => {
@@ -80,7 +73,7 @@ class AnswerPage extends React.Component {
         .getElementById("websitePosition")
         .getBoundingClientRect();
       this.setState({ pos: { top: websitePosition.top, left: websitePosition.left } });
-    }, 260);
+    }, 250);
   }
 
   handleMenuClick() {
@@ -108,7 +101,7 @@ class AnswerPage extends React.Component {
         .getElementById("websitePosition")
         .getBoundingClientRect();
       this.setState({ pos: { top: websitePosition.top, left: websitePosition.left } });
-    }, 260);
+    }, 250);
   }
 
   // goes to next answer
@@ -119,21 +112,19 @@ class AnswerPage extends React.Component {
         .getElementById("websitePosition")
         .getBoundingClientRect();
       this.setState({ pos: { top: websitePosition.top, left: websitePosition.left } });
-    }, 260);
+    }, 250);
   }
 
   // SECTION swipe functions
   swipeNext() {
     if (this.state.num < this.state.lastNum - 1) {
       this.nextClick();
-      this.props.history.push(`/Answer/answer${this.state.num + 1}`);
     }
   }
 
   swipeBack() {
     if (this.state.num > 0) {
       this.backClick();
-      this.props.history.push(`/Answer/answer${this.state.num - 1}`);
     }
   }
   // !SECTION
@@ -180,12 +171,13 @@ class AnswerPage extends React.Component {
           id="head"
         >
           <Back handleClick={this.handleClick} />
-          <p
-            style={{ fontSize: "1.2em", margin: 0, visibility: "hidden" }}
+          <a
+            style={webStyle}
             id="websitePosition"
+            href={this.props.websites[this.state.num][1]}
           >
-            {this.props.websites[this.state.num]}
-          </p>
+            {this.props.websites[this.state.num][0]}
+          </a>
           <div style={navObj}>
             <div
               className="bookmark-holder"
@@ -203,63 +195,6 @@ class AnswerPage extends React.Component {
             </div>
           </div>
         </header>
-        {/* !SECTION */}
-        {/* SECTION Website displayer */}
-        {/* NOTE Its in a seperate Route because of different */}
-        <Route
-          render={({ location }) => (
-            <TransitionGroup>
-              <CSSTransition timeout={700} classNames="fade" key={location.key}>
-                <Switch location={location}>
-                  <Route
-                    path="/Answer/answer0"
-                    render={() => (
-                      <p style={{ ...webStyle, ...this.state.pos }}>
-                        {this.props.websites[0]}
-                      </p>
-                    )}
-                  />
-
-                  <Route
-                    path="/Answer/answer1"
-                    render={() => (
-                      <p style={{ ...webStyle, ...this.state.pos }}>
-                        {this.props.websites[1]}
-                      </p>
-                    )}
-                  />
-
-                  <Route
-                    path="/Answer/answer2"
-                    render={() => (
-                      <p style={{ ...webStyle, ...this.state.pos }}>
-                        {this.props.websites[2]}
-                      </p>
-                    )}
-                  />
-
-                  <Route
-                    path="/Answer/answer3"
-                    render={() => (
-                      <p style={{ ...webStyle, ...this.state.pos }}>
-                        {this.props.websites[3]}
-                      </p>
-                    )}
-                  />
-
-                  <Route
-                    path="/Answer/answer4"
-                    render={() => (
-                      <p style={{ ...webStyle, ...this.state.pos }}>
-                        {this.props.websites[4]}
-                      </p>
-                    )}
-                  />
-                </Switch>
-              </CSSTransition>
-            </TransitionGroup>
-          )}
-        />
         {/* !SECTION */}
         {/* SECTION Answer displayer */}
         <div style={container}>
@@ -327,7 +262,7 @@ class AnswerPage extends React.Component {
                   className="menu-li"
                   onClick={this.jumpto}
                 >
-                  {website}
+                  {website[0]}
                 </li>
               ))}
             </ul>
@@ -336,15 +271,13 @@ class AnswerPage extends React.Component {
         {/* SECTION Bottom Navigation */}
         <div className="bot fadein" id="bot">
           {back ? (
-            <Link to={`/Answer/answer${this.state.num - 1}`}>
-              <p
-                className="botItem button"
-                style={{ ...botNavStyle, opacity: 1 }}
-                onClick={this.backClick}
-              >
-                {"< Back"}
-              </p>
-            </Link>
+            <button
+              className="botItem button"
+              style={{ ...botNavStyle, opacity: 1 }}
+              onClick={this.backClick}
+            >
+              {"< Back"}
+            </button>
           ) : (
             <p className="botItem button" style={{ ...botNavStyle, opacity: 0.5 }}>
               {"< Back"}
@@ -365,15 +298,13 @@ class AnswerPage extends React.Component {
           </button>
 
           {next ? (
-            <Link to={`/Answer/answer${this.state.num + 1}`}>
-              <p
-                className="botItem button"
-                style={{ ...botNavStyle, opacity: 1 }}
-                onClick={this.nextClick}
-              >
-                {"Next >"}
-              </p>
-            </Link>
+            <button
+              className="botItem button"
+              style={{ ...botNavStyle, opacity: 1 }}
+              onClick={this.nextClick}
+            >
+              {"Next >"}
+            </button>
           ) : (
             <p className="botItem button" style={{ ...botNavStyle, opacity: 0.5 }}>
               {"Next >"}
@@ -386,7 +317,7 @@ class AnswerPage extends React.Component {
   }
 }
 
-export default withRouter(AnswerPage);
+export default AnswerPage;
 
 function createArr(len) {
   let arr = [];
