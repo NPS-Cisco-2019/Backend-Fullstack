@@ -57,6 +57,7 @@ class QuotesSpider(scrapy.Spider):
                 for url in self.urls:
                     listt = tldextract.extract(url)
                     website = listt.domain
+                    self.answer["link"].append(url)
                     if website == 'brainly':
                         yield scrapy.Request(url=url, callback=self.parsebrainly)
                     elif website == 'askiitians' and self.isQuestion == 1:
@@ -128,7 +129,7 @@ class QuotesSpider(scrapy.Spider):
 
             ans = self.janitor(ans)
 
-            self.answer["domain"].append("brainly")
+            self.answer["domain"].append(["brainly", response.request.url])
             self.answer["success"] = 1
             if imgsrc:
                 self.answer["answer"].append([*ans, *imgsrc])
@@ -138,7 +139,7 @@ class QuotesSpider(scrapy.Spider):
         except:
             pass
 
-    def parseaskiitiansnotes(self, response):
+    def parseaskiitiansnotes(self, response):.
         self.log("[ASKNOTES CALLED]")
         try:
 
@@ -148,7 +149,7 @@ class QuotesSpider(scrapy.Spider):
             img = self.convertLinks(response.xpath(
                 '//div[@id="content"]//p//img/@src').extract())
 
-            self.answer["domain"].append("askiitans")
+            self.answer["domain"].append(["askiitans",response.request.url])
             self.answer["success"] = 1
 
             if type(img) != list:
@@ -173,7 +174,7 @@ class QuotesSpider(scrapy.Spider):
             img = self.convertLinks(response.xpath(
                 '//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract())
 
-            self.answer["domain"].append("askiitans")
+            self.answer["domain"].append(["askiitans",response.request.url])
             self.answer["success"] = 1
 
             if type(img) != list:
@@ -198,7 +199,7 @@ class QuotesSpider(scrapy.Spider):
                 answer[i] = answer[i].replace("$$", "$")
 
             self.answer["answer"].append([*answer, *links])
-            self.answer["domain"].append("Stack Exchange")
+            self.answer["domain"].append(["Stack Exchange",response.request.url])
             self.answer["success"] = 1
 
             self.writetheanswer(True)
@@ -220,7 +221,7 @@ class QuotesSpider(scrapy.Spider):
             answer = self.janitor(answer)
             self.answer["success"] = 1
 
-            self.answer["domain"].append("doubtnut")
+            self.answer["domain"].append(["doubtnut",response.request.url])
             self.answer["answer"].append([*answer])
             self.writetheanswer(True)
         except:
@@ -244,7 +245,7 @@ class QuotesSpider(scrapy.Spider):
                 else:
                     i += 1
 
-            self.answer["domain"].append("Sarthaks")
+            self.answer["domain"].append(["Sarthaks",response.request.url])
             if len(ans) > 0:
                 self.answer["answer"].append([*ans, *links])
                 self.answer["success"] = 1
