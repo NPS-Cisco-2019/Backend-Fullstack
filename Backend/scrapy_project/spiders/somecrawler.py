@@ -30,6 +30,7 @@ class QuotesSpider(scrapy.Spider):
 
     def log_error(self, *args):
         s = "[" + time.strftime("%d-%m %H:%M:%S") + " IST]   "
+
         for arg in args:
             s += str(arg) + " "
         s += "\n\n"
@@ -74,7 +75,7 @@ class QuotesSpider(scrapy.Spider):
                 self.answer["success"] = 0
                 self.writetheanswer(False)
         except Exception as e:
-            #  self.log("[FAILED1]")
+            # self.log("[FAILED1]")
             self.writetheanswer(False, e)
 
     def return_links(self, user_query, isQuestion):
@@ -136,10 +137,11 @@ class QuotesSpider(scrapy.Spider):
             else:
                 self.answer["answer"].append([*ans])
             self.writetheanswer(True)
-        except:
-            pass
+        except Exception as e:
 
-    def parseaskiitiansnotes(self, response):.
+            self.log_error(e)
+
+    def parseaskiitiansnotes(self, response):
         self.log("[ASKNOTES CALLED]")
         try:
 
@@ -149,7 +151,7 @@ class QuotesSpider(scrapy.Spider):
             img = self.convertLinks(response.xpath(
                 '//div[@id="content"]//p//img/@src').extract())
 
-            self.answer["domain"].append(["askiitans",response.request.url])
+            self.answer["domain"].append(["askiitans", response.request.url])
             self.answer["success"] = 1
 
             if type(img) != list:
@@ -161,10 +163,11 @@ class QuotesSpider(scrapy.Spider):
                 self.answer["answer"].append([*l])
 
             self.writetheanswer(True)
-        except:
-            pass
+        except Exception as e:
+            self.log_error(e)
 
     def parseaskiitians(self, response):
+        self.log("[ASK IITIANS CALLED]")
         try:
 
             l = response.xpath(
@@ -174,7 +177,7 @@ class QuotesSpider(scrapy.Spider):
             img = self.convertLinks(response.xpath(
                 '//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract())
 
-            self.answer["domain"].append(["askiitans",response.request.url])
+            self.answer["domain"].append(["askiitans", response.request.url])
             self.answer["success"] = 1
 
             if type(img) != list:
@@ -185,9 +188,10 @@ class QuotesSpider(scrapy.Spider):
             else:
                 self.answer["answer"].append([*l])
 
-            self.writetheanswer(True)
-        except:
-            pass
+                self.writetheanswer(True)
+        except Exception as e:
+
+            self.log_error(e)
 
     def parsestackexchange(self, response):
         try:
@@ -199,12 +203,13 @@ class QuotesSpider(scrapy.Spider):
                 answer[i] = answer[i].replace("$$", "$")
 
             self.answer["answer"].append([*answer, *links])
-            self.answer["domain"].append(["Stack Exchange",response.request.url])
+            self.answer["domain"].append(
+                ["Stack Exchange", response.request.url])
             self.answer["success"] = 1
 
             self.writetheanswer(True)
-        except:
-            pass
+        except Exception as e:
+            self.log_error(e)
 
     def parsedoubtnut(self, response):
         try:
@@ -221,11 +226,11 @@ class QuotesSpider(scrapy.Spider):
             answer = self.janitor(answer)
             self.answer["success"] = 1
 
-            self.answer["domain"].append(["doubtnut",response.request.url])
+            self.answer["domain"].append(["doubtnut", response.request.url])
             self.answer["answer"].append([*answer])
             self.writetheanswer(True)
-        except:
-            pass
+        except Exception as e:
+            self.log_error(e)
 
     def parsesarthaks(self, response):
         try:
@@ -245,14 +250,14 @@ class QuotesSpider(scrapy.Spider):
                 else:
                     i += 1
 
-            self.answer["domain"].append(["Sarthaks",response.request.url])
+            self.answer["domain"].append(["Sarthaks", response.request.url])
             if len(ans) > 0:
                 self.answer["answer"].append([*ans, *links])
                 self.answer["success"] = 1
                 self.writetheanswer(True)
 
-        except:
-            pass
+        except Exception as e:
+            self.log_error(e)
 
     def janitor(self, html_list):
 
