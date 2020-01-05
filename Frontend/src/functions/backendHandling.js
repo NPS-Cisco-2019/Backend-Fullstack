@@ -11,6 +11,7 @@ export function OCR(imgPath, cropJSON) {
     headers: { "Content-Type": "application/json" }
   });
 }
+
 export function scrape(question) {
   return fetch("/scrapy", {
     method: "POST",

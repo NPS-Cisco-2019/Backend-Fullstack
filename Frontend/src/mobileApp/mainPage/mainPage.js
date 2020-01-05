@@ -294,9 +294,7 @@ class MainPage extends React.Component {
       rotation: this.state.rotation % 4
     };
 
-    let [responseOCR, img] = OCR(this.state.picture, ocrJSON);
-    this.setState({ picture: img, rotation: 0 });
-    responseOCR = await responseOCR;
+    let responseOCR = await OCR(this.state.picture, ocrJSON);
     // eslint-disable-next-line eqeqeq
     if (responseOCR.status != 200) {
       this.backendError(responseOCR);
@@ -432,7 +430,7 @@ class MainPage extends React.Component {
     ctx.clearRect(0, 0, this.screenWd, this.screenHt);
     ctx.beginPath();
     ctx.strokeStyle = localStorage.getItem("highlightCol");
-    ctx.lineWidth = 3
+    ctx.lineWidth = 3;
     ctx.rect(startX, startY, endCoords[0] - startX, endCoords[1] - startY);
     ctx.stroke();
 

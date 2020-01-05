@@ -10,7 +10,7 @@ import requests
 import codecs
 from database.db_func import add_answer, connect, disconnect
 from json import dumps as stringify
-
+from html import unescape as unescapeHTML
 
 class QuotesSpider(scrapy.Spider):
     name = "spider"
@@ -237,8 +237,13 @@ class QuotesSpider(scrapy.Spider):
             ans = response.xpath(
                 '//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/*').extract()
 
-            links = response.xpath(
-                '//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/p//span/img/@src').extract()
+            # links = response.xpath(
+            #     '//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/p//span/img/@src').extract()
+
+            for i in range(len(ans)):
+                regexSearchResult = re.search("src=[\"'](.*?)[\"']", ans[i])
+                if sub:
+                    ans[i] = "link" + unescapeHTML(regexSearchResult.group()[5:-1])
 
             ans = self.janitor(ans)
 
@@ -252,7 +257,7 @@ class QuotesSpider(scrapy.Spider):
 
             self.answer["domain"].append(["Sarthaks", response.request.url])
             if len(ans) > 0:
-                self.answer["answer"].append([*ans, *links])
+                self.answer["answer"].append(ans)
                 self.answer["success"] = 1
                 self.writetheanswer(True)
 
@@ -274,7 +279,6 @@ class QuotesSpider(scrapy.Spider):
                 cleantext = re.sub('<br/?>', split_str, raw_html)
                 cleantext = re.sub('&lt;br&gt;', split_str, cleantext)
                 cleantext = re.sub('<p.*?>', split_str, cleantext)
-                cleantext = re.sub('&gt;', '>', cleantext)
                 cleantext = re.sub('<.*?>', ' ', cleantext)
                 cleantext = re.sub('\\\\xa0', ' ', cleantext)
 
@@ -283,6 +287,9 @@ class QuotesSpider(scrapy.Spider):
 
                 cleantext = str(cleantext).rstrip(" []'")
                 cleantext = str(cleantext).lstrip("[] '")
+
+                cleantext = unescapeHTML(cleantext)
+
                 i = 0
                 while i < len(cleantext) - 1:
                     if cleantext[i] == '$' and cleantext[i+1] != "$":
@@ -336,7 +343,6 @@ class QuotesSpider(scrapy.Spider):
             self.writetheanswer(False, e)
 
     def writetheanswer(self, works, e=""):
-        conn, c = connect()
         if works:
             add_answer(stringify(self.answer), 1, self.id)
         else:
@@ -347,5 +353,4 @@ class QuotesSpider(scrapy.Spider):
                 "domain": ['Error'],
                 "success": 0
             }
-
             add_answer(stringify(self.answer), -1, self.id)
