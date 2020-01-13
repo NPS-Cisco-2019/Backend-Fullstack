@@ -3,36 +3,45 @@ from json import loads as parse
 import pandas
 import os
 
+
 def connect():
-    conn = sqlite3.connect(os.path.join(os.getcwd(), 'database', 'requests.db'))
+    conn = sqlite3.connect(os.path.join(
+        os.getcwd(), 'database', 'requests.db'))
     c = conn.cursor()
     return conn, c
+
 
 def disconnect(conn, c):
     c.close()
     conn.close()
 
+
 def create_table():
     conn, c = connect()
-    c.execute("CREATE TABLE IF NOT EXISTS queue (id INT, qjson TEXT, ajson TEXT, status INT)")
+    c.execute(
+        "CREATE TABLE IF NOT EXISTS queue (id INT, qjson TEXT, ajson TEXT, status INT)")
     conn.commit()
     disconnect(conn, c)
-    
+
+
 def add_question(question, _id):
     conn, c = connect()
     insertion = (question, _id, 0)
-    
+
     c.execute("INSERT INTO queue (qjson, id, status) VALUES (?, ?, ?)", insertion)
     conn.commit()
     disconnect(conn, c)
 
+
 def add_answer(answer, status, _id):
     conn, c = connect()
     insertion = (answer, status, _id)
-    
-    c.execute("UPDATE queue SET (ajson) = (?), (status) = (?) WHERE id = (?)", insertion)
+
+    c.execute(
+        "UPDATE queue SET (ajson) = (?), (status) = (?) WHERE id = (?)", insertion)
     conn.commit()
     disconnect(conn, c)
+
 
 def get_answer(_id):
     conn, c = connect()
@@ -43,6 +52,7 @@ def get_answer(_id):
     disconnect(conn, c)
     return parse(a)
 
+
 def get_status(_id):
     conn, c = connect()
     c.execute("SELECT status FROM queue WHERE id = (?)", (_id,))
@@ -50,6 +60,7 @@ def get_status(_id):
     a = c.fetchone()[0]
     disconnect(conn, c)
     return a
+
 
 def delete(*args, all=False):
     conn, c = connect()
@@ -60,6 +71,7 @@ def delete(*args, all=False):
             c.execute("DELETE FROM queue WHERE id = (?)", (_id,))
     conn.commit()
     disconnect(conn, c)
+
 
 def prt():
     conn, c = connect()

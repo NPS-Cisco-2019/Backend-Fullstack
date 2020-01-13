@@ -40,5 +40,7 @@ def initLog():
 sys.path.append(os.path.join(os.getcwd(), "OCR"))
 
 # NOTE Choose first one for windows, second for ubuntu
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Users\Student\AppData\Local\Tesseract-OCR\tesseract.exe")
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+if sys.platform[:3] == "win":
+    pytesseract.pytesseract.tesseract_cmd = r"C:\Users\Student\AppData\Local\Tesseract-OCR\tesseract.exe"
+else:
+    pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
