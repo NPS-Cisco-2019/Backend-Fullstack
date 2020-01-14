@@ -38,7 +38,11 @@ export default class CompApp extends React.Component {
                 <header className="deskHead" style={{ opacity }} id="head">
                     <h1>This app is not supported on Computers.</h1>
                 </header>
-                <div className="body" style={{ top: this.state.headHeight }} id="main">
+                <div
+                    className="body"
+                    style={{ top: this.state.headHeight }}
+                    id="main"
+                >
                     {/* SECTION Main section, contains about and navlinks to tutorials */}
                     <div className="description">
                         <p
@@ -48,14 +52,43 @@ export default class CompApp extends React.Component {
                                 textAlign: "center"
                             }}
                         >
-                            SnapSearch is a problem solving app, just take a picture and
-                            the app automatically scans the web to find the best answers
-                            for you.
-                            <br /> TODO add more to the description
+                            SnapSearch is a problem solving app, just take a
+                            picture and the app automatically scans the web to
+                            find the best answers for you.
+                            <br />
+                            <br />
+                            This app aims to provide instant solutions to
+                            problems in science subjects at the high school
+                            level. The user can provide an image of the question
+                            or simply enter it in a prompt.
+                            <br />
+                            SnapSearch sources answers from the internet,
+                            subject to a unique ranking system.
+                            <br />
+                            <ol>
+                                <li>
+                                    Gives access to quality quality answers from
+                                    the best of websites.
+                                </li>
+
+                                <li>
+                                    Converts images to text by using and hence
+                                    saves effort of typing.
+                                </li>
+
+                                <li>
+                                    Allows users to navigate between answers
+                                    seamlessly through a simple swipe.
+                                </li>
+
+                                <li>
+                                    Enables users to save answers for later.
+                                </li>
+                            </ol>
                         </p>
                         <h2>
-                            Go to your mobile phone in one of the following browsers and
-                            follow these tutorials to install it.
+                            Go to your mobile phone in one of the following
+                            browsers and follow these tutorials to install it.
                         </h2>
                     </div>
                     {/* !SECTION */}
