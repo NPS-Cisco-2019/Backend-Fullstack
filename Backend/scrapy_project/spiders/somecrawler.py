@@ -243,9 +243,11 @@ class QuotesSpider(scrapy.Spider):
             # links = response.xpath(
             #     '//div[@class="qa-a-item-content qa-post-content"]/div[@itemprop="text"]/p//span/img/@src').extract()
 
+
+
             for i in range(len(ans)):
                 regexSearchResult = re.search("src=[\"'](.*?)[\"']", ans[i])
-                if sub:
+                if regexSearchResult:
                     ans[i] = "link" + \
                         unescapeHTML(regexSearchResult.group()[5:-1])
 

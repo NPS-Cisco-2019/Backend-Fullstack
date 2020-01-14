@@ -7,7 +7,7 @@ db.create_table()
 
 s = "scrapy crawl spider -a question="
 
-q = ["integration formulae"]
+q = ["an alkebe A on ozonolysis gives a mixture od ehtana and pentan-3-one.", "Draw the structure of BeCl2 vapour Becl2 solid", "what are electron deficient compounds?", "justify among halogens, fluorine is best oxidation" ]
 l_websites = ["sarthaks", "askiitians", "doubtnut", "stackexchange", "brainly"]
 
 
@@ -43,7 +43,7 @@ for i in range(len(l_websites)):
         j = j.replace(" ", "+").replace(
             "\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
 
-        j += "+site%3A" + join(websites, "+OR+site%3A")
+        j += "+site%3A"+websites[i]
 
         print(
             f'scrapy crawl spider -a question={j} -a _id={_id}')
