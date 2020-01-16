@@ -130,6 +130,21 @@ def get_answer():
         abort(500)
 
 
+@app.route("/serviceWorker.js")
+def sw():
+    return app.send_static_file("serviceWorker.js")
+
+
+@app.route("/mainfest.js")
+def mainfest():
+    return app.send_static_file("manifest.js")
+
+
+@app.route("/static/react")
+def goto_main():
+    return redirect("/")
+
+
 @app.errorhandler(404)
 def error404(error):
     return redirect("/Unknown")

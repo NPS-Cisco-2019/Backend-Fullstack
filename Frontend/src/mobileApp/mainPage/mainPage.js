@@ -11,17 +11,25 @@ import { Back, Img } from "shared/elements";
 import Subject from "./Subject";
 import notification from "shared/notification";
 import { OCR, scrape } from "functions/backendHandling";
-import Camera from "./camera";
+// import Camera from "./camera";
+import Webcam from "react-webcam";
 
 import style from "style/style";
 import HelpOverlay from "./HelpOverlay";
 // !SECTION
 
 const width =
-  window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
+  window.innerHeight > window.innerWidth
+    ? window.innerWidth
+    : window.innerHeight;
 
 const maxLength = (10 / 100) * (69 / 100) * width;
-let { imgContainerStyle, captureButtonStyle } = style;
+let {
+  imgContainerStyle,
+  captureButtonStyle,
+  imgStyle,
+  videoConstraints
+} = style;
 
 let pressDelay = localStorage.getItem("pressDelay");
 const vibratable = "vibrate" in navigator;
@@ -56,9 +64,13 @@ class MainPage extends React.Component {
     };
 
     this.screenWd =
-      window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
+      window.innerHeight > window.innerWidth
+        ? window.innerWidth
+        : window.innerHeight;
     this.screenHt =
-      window.innerHeight > window.innerWidth ? window.innerHeight : window.innerWidth;
+      window.innerHeight > window.innerWidth
+        ? window.innerHeight
+        : window.innerWidth;
 
     document.body.style.overflowX = "auto";
 
@@ -107,15 +119,7 @@ class MainPage extends React.Component {
 
   // takes a picure and sets output mode
   capture() {
-    let canvas = document.createElement("CANVAS");
-    let ctx = canvas.getContext("2d");
-    let video = document.getElementById("camera");
-    canvas.height = video.videoHeight;
-    canvas.width = video.videoWidth;
-    ctx.drawImage(video, 0, 0);
-    let imageSrc = canvas.toDataURL("image/png");
-
-    // const imageSrc = this.refs.webcam.getScreenshot();
+    const imageSrc = this.refs.webcam.getScreenshot();
     this.setState({
       picture: imageSrc,
       output: "img",
@@ -201,10 +205,15 @@ class MainPage extends React.Component {
       this.submit({ key: "Enter" });
       return;
     }
-    this.props.changeState(this.state.question, this.state.answers, this.state.websites);
+    this.props.changeState(
+      this.state.question,
+      this.state.answers,
+      this.state.websites
+    );
 
-    let questionHeight = document.getElementById("question").getBoundingClientRect()
-      .height;
+    let questionHeight = document
+      .getElementById("question")
+      .getBoundingClientRect().height;
     let top = this.screenHt / 11 + (1.4 * questionHeight) / 100 + 4;
 
     this.setState({
@@ -235,7 +244,9 @@ class MainPage extends React.Component {
 
     let foot = document.getElementById("foot").getBoundingClientRect();
 
-    let bottomHeight = this.state.ansClicked ? foot.height : this.calculateHeight();
+    let bottomHeight = this.state.ansClicked
+      ? foot.height
+      : this.calculateHeight();
 
     return Math.max(bottomHeight + 60, (3 * this.screenHt) / 20);
   }
@@ -460,10 +471,15 @@ class MainPage extends React.Component {
         }}
       >
         {/* SECTION  NAV */}
-        <header className="nav" style={{ height: Math.round(this.screenHt / 10) }}>
+        <header
+          className="nav"
+          style={{ height: Math.round(this.screenHt / 10) }}
+        >
           <div
             id="bookmark-holder"
-            className={this.state.navButtonAnimation ? "nav-button-animation" : null}
+            className={
+              this.state.navButtonAnimation ? "nav-button-animation" : null
+            }
           >
             <this.state.navButton
               handleClick={this.backClick}
@@ -502,12 +518,23 @@ class MainPage extends React.Component {
               {this.state.output === "img" ? (
                 <Img src={this.state.picture} rotation={this.state.rotation} />
               ) : (
-                <Camera error={this.cameraErrorHandler} />
+                <Webcam
+                  audio={false}
+                  videoConstraints={videoConstraints}
+                  onUserMediaError={this.cameraErrorHandler}
+                  style={imgStyle}
+                  screenshotFormat="image/jpeg"
+                  id="camera"
+                  ref="webcam"
+                />
               )}
             </div>
             {/* !SECTION */}
             {/* SECTION Capture/Process buttom\n */}
-            <div className="buttonHolder" style={{ top: this.screenHt / 10 + 10 }}>
+            <div
+              className="buttonHolder"
+              style={{ top: this.screenHt / 10 + 10 }}
+            >
               <div className="cropDiv">
                 <button
                   className="imageSelector"
@@ -527,7 +554,12 @@ class MainPage extends React.Component {
                 <button
                   className="clearButton"
                   onClick={() =>
-                    this.state.context.clearRect(0, 0, this.screenWd, this.screenHt)
+                    this.state.context.clearRect(
+                      0,
+                      0,
+                      this.screenWd,
+                      this.screenHt
+                    )
                   }
                 >
                   clear
@@ -536,7 +568,8 @@ class MainPage extends React.Component {
               <div className="rotateImgButton">
                 <button onClick={this.rotateImg}>↻</button>
               </div>
-              {localStorage.getItem("subjectSelector") === "Drop down on screen" ? (
+              {localStorage.getItem("subjectSelector") ===
+              "Drop down on screen" ? (
                 <Subject />
               ) : null}
             </div>

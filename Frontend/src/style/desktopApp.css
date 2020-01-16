@@ -1,5 +1,5 @@
 :root {
-  --tutAreas: "img1 text1" "img2 text2" "img3 text3";
+  --tutAreas: "img1 text1""img2 text2""img3 text3";
   --otherRows: repeat(3, 30%);
   --firefoxRows: repeat(2, 45%);
   --fontSize: 300%;
@@ -93,7 +93,9 @@
   margin: auto;
 }
 
-.firefox, .safari, .chrome {
+.firefox,
+.safari,
+.chrome {
   object-fit: contain;
   max-width: 50px;
   height: 100%;
@@ -118,8 +120,8 @@
 
 .tut {
   position: relative;
-	display: grid;
-  grid-template-areas: "img1 text1" "img2 text2" "img3 text3";
+  display: grid;
+  grid-template-areas: "img1 text1""img2 text2""img3 text3";
   grid-template-areas: var(--tutAreas);
   margin: 30px;
   margin-top: 20px;
@@ -160,7 +162,9 @@
   min-width: 40%;
 }
 
-.p1, .p2, .p3 {
+.p1,
+.p2,
+.p3 {
   font-size: var(--fontSize);
   text-align: center;
   align-self: center;
@@ -194,7 +198,23 @@
   z-index: 20;
 }
 
-h2, p {
+.description p {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.description p br {
+  height: 0.5rem;
+}
+
+.description p ol {
+  width: 93%;
+  align-self: center;
+}
+
+h2,
+p {
   font-weight: 300;
   margin-bottom: 10px;
 }

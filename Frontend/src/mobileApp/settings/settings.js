@@ -105,7 +105,11 @@ class SettingsPage extends React.Component {
           backgroundColor: "var(--backCol)"
         }}
         className={
-          this.state.backToCam ? "slideout" : this.state.fadeout ? "fadeout" : "fadein"
+          this.state.backToCam
+            ? "slideout"
+            : this.state.fadeout
+            ? "fadeout"
+            : "fadein"
         }
       >
         <header
@@ -178,8 +182,8 @@ class SettingsPage extends React.Component {
               Children={Choice}
             >
               <p className="setting-description">
-                Choosing a particular subject will help in getting more accurate search
-                results.
+                Choosing a particular subject will help in getting more accurate
+                search results.
               </p>
             </Setting>
 
@@ -257,6 +261,7 @@ const subjectArr = [
   "Physics",
   "Chemistry",
   "Mathematics",
+  "Notes",
   "General"
 ];
 

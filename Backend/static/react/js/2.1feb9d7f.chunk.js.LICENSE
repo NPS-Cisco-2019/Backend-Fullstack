@@ -4,6 +4,20 @@ object-assign
 @license MIT
 */
 
+/*!******************************!*\
+        !*** ./src/react-webcam.tsx ***!
+        \******************************/
+
+/*! exports provided: default */
+
+/*! react */
+
+/*!**************************************************************************************!*\
+        !*** external {"root":"React","commonjs2":"react","commonjs":"react","amd":"react"} ***!
+        \**************************************************************************************/
+
+/*! no static exports found */
+
 /** @license React v16.12.0
  * react.production.min.js
  *
