@@ -4,7 +4,6 @@ import os
 import sys
 import OCR.text_from_im as OCR
 import time
-import json
 import database.db_func as db
 debug = False
 
