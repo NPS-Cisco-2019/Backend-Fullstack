@@ -2,13 +2,17 @@ import time
 import os
 import json
 import database.db_func as db
+a = os.getcwd()
 
 db.create_table()
 
 s = "scrapy crawl spider -a question="
 
 q = ["an alkebe A on ozonolysis gives a mixture od ehtana and pentan-3-one.", "Draw the structure of BeCl2 vapour Becl2 solid", "what are electron deficient compounds?", "justify among halogens, fluorine is best oxidation" ]
-l_websites = ["sarthaks", "askiitians", "doubtnut", "stackexchange", "brainly"]
+l_websites = ["sarthaks", "askiitians"]# "doubtnut", "stackexchange", "brainly"]
+l_websites.sort()
+websites = ["stackexchange.com",  "askiitians.com" ] #"doubtnut.com", "brainly.in", "sarthaks.com"]
+websites.sort()
 
 
 def join(lst, sep):
@@ -28,8 +32,7 @@ test_ans_json = dict(brainly={}, askiitians={},
                      doubtnut={}, stackexchange={}, sarthaks={})
 for i in range(len(l_websites)):
     for j in q:
-        websites = ["stackexchange.com", "doubtnut.com",
-                    "askiitians.com", "brainly.in", "sarthaks.com"]
+
 
         current_dict = {}
 
