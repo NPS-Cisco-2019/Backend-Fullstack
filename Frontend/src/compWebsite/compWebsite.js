@@ -47,9 +47,8 @@ export default class CompApp extends React.Component {
                     <div className="description">
                         <p
                             style={{
-                                fontSize: "1.3em",
-                                marginBottom: 30,
-                                textAlign: "center"
+                                fontSize: "1.15rem",
+                                marginBottom: 30
                             }}
                         >
                             SnapSearch is a problem solving app, just take a
@@ -57,13 +56,18 @@ export default class CompApp extends React.Component {
                             find the best answers for you.
                             <br />
                             <br />
+                            <br />
                             This app aims to provide instant solutions to
                             problems in science subjects at the high school
                             level. The user can provide an image of the question
                             or simply enter it in a prompt.
                             <br />
+                            <br />
                             SnapSearch sources answers from the internet,
                             subject to a unique ranking system.
+                            <br />
+                            <br />
+                            Features of SnapSearch:
                             <br />
                             <ol>
                                 <li>
