@@ -27,55 +27,53 @@ class QuotesSpider(scrapy.Spider):
 
         self.answer = {"answer": [], "domain": [], "success": []}
 
-    def log_error(self, *args):
+    def log_error(self, location, *args):
+        error = sys.exc_info()
         s = "[" + time.strftime("%d-%m %H:%M:%S") + " IST]   "
 
-        print("[ERRORS]\n\n\n\n\n", *args, "\n\n\n\n")
+        s += "[ERRORS]   " + location + "  " + str(error[0])[8:-2] + ": " + str(error[1]) + "\n\n\n\n"
 
-        for arg in args:
-            s += str(arg) + " "
-        s += "\n\n"
         if self.debug:
             print(s)
         else:
             with open(os.path.join(os.getcwd(), "error_logs", "scrapy.log"), "a+") as f:
                 f.write(s)
 
-    def start_requests(self):
-        # try:
-        self.log("[STARTED REQUETS]")
-        q = self.question
-        # if self.subject != "revisionNotes":
-        if True:
-            self.urls = self.return_links(q, True)["link"][:5]
-        elif self.subject == "revisionNotes":
-            self.urls = self.return_links(q, False)["link"][:5]
+    def start_requests(self): 
+        try:
+            self.log("[STARTED REQUETS]")
+            q = self.question
+            # if self.subject != "revisionNotes":
+            if True:
+                self.urls = self.return_links(q, True)["link"][:5]
+            elif self.subject == "revisionNotes":
+                self.urls = self.return_links(q, False)["link"][:5]
 
-        self.log("[URLS]  " + str(self.urls) +
-                 " ----- [LEN]  " + str(len(self.urls)))
+            self.log("[URLS]  " + str(self.urls) +
+                    " ----- [LEN]  " + str(len(self.urls)))
 
-        self.isAnswerThere = len(self.urls) != 0
-        if self.isAnswerThere:
-            self.answer["success"].append(1)
-            for url in self.urls:
-                website = tldextract.extract(url).domain
-                if website == 'brainly':
-                    yield scrapy.Request(url=url, callback=self.parsebrainly)
-                elif website == 'askiitians' and self.isQuestion == 1:
-                    yield scrapy.Request(url=url, callback=self.parseaskiitians)
-                elif website == "askiitians" and self.isQuestion == 0:
-                    yield scrapy.Request(url=url, callback=self.parseaskiitiansnotes)
-                elif website == 'doubtnut':
-                    yield scrapy.Request(url=url, callback=self.parsedoubtnut)
-                elif website == 'stackexchange':
-                    yield scrapy.Request(url=url, callback=self.parsestackexchange)
-                elif website == 'sarthaks':
-                    yield scrapy.Request(url=url, callback=self.parsesarthaks)
-        else:
-            self.answer["success"] = 0
-            self.writetheanswer(False, "FAX")
-        # except Exception as e:
-        #     self.writetheanswer(False, f"[START_REQUESTS]  {e}")
+            self.isAnswerThere = len(self.urls) != 0
+            if self.isAnswerThere:
+                self.answer["success"].append(1)
+                for url in self.urls:
+                    website = tldextract.extract(url).domain
+                    if website == 'brainly':
+                        yield scrapy.Request(url=url, callback=self.parsebrainly)
+                    elif website == 'askiitians' and self.isQuestion == 1:
+                        yield scrapy.Request(url=url, callback=self.parseaskiitians)
+                    elif website == "askiitians" and self.isQuestion == 0:
+                        yield scrapy.Request(url=url, callback=self.parseaskiitiansnotes)
+                    elif website == 'doubtnut':
+                        yield scrapy.Request(url=url, callback=self.parsedoubtnut)
+                    elif website == 'stackexchange':
+                        yield scrapy.Request(url=url, callback=self.parsestackexchange)
+                    elif website == 'sarthaks':
+                        yield scrapy.Request(url=url, callback=self.parsesarthaks)
+            else:
+                self.answer["success"] = 0
+                self.writetheanswer(False, "FAX")
+        except Exception as e:
+            self.writetheanswer(False, f"[START_REQUESTS]")
 
     def return_links(self, user_query, isQuestion):
         try:
@@ -122,7 +120,7 @@ class QuotesSpider(scrapy.Spider):
 
             return self.link_to_be_parsed
         except Exception as e:
-            self.writetheanswer(False, f"[RETURN_LINKS] {e}")
+            self.writetheanswer(False, f"[RETURN_LINKS]")
 
     def parsebrainly(self, response):
         try:
@@ -143,7 +141,7 @@ class QuotesSpider(scrapy.Spider):
             self.writetheanswer(True)
         except Exception as e:
 
-            self.log_error("[BRAINLY]", e)
+            self.log_error("[BRAINLY]")
 
     def parseaskiitiansnotes(self, response):
         self.log("[ASKNOTES CALLED]")
@@ -168,9 +166,9 @@ class QuotesSpider(scrapy.Spider):
 
             self.writetheanswer(True)
         except Exception as e:
-            self.log_error("[ASK_IITIANS_NOTES]", e)
+            self.log_error("[ASK_IITIANS_NOTES]")
 
-    def parseaskiitians(self, response):
+    def parseaskiitians(self, response: dict) -> None:
         self.log("[ASK IITIANS CALLED]")
         try:
 
@@ -193,8 +191,14 @@ class QuotesSpider(scrapy.Spider):
                 self.answer["answer"].append([*l])
 
                 self.writetheanswer(True)
-        except Exception as e:
-            self.log_error("[ASK_IITIANS]", e)
+        except scrapy.exceptions.NotSupported:
+            self.answer["answer"].append(["Please click the link below:", response.url])
+            self.answer["domain"].append(
+                ["ASK_IITIANS", response.request.url])
+            self.answer["success"] = 1
+        except Exception:
+            self.log_error("[ASK_IITIANS]")
+
 
     def parsestackexchange(self, response):
         try:
@@ -212,7 +216,7 @@ class QuotesSpider(scrapy.Spider):
 
             self.writetheanswer(True)
         except Exception as e:
-            self.log_error("[STACK_EXCHANGE]", e)
+            self.log_error("[STACK_EXCHANGE]")
 
     def parsedoubtnut(self, response):
         try:
@@ -233,7 +237,7 @@ class QuotesSpider(scrapy.Spider):
             self.answer["answer"].append([*answer])
             self.writetheanswer(True)
         except Exception as e:
-            self.log_error("[DOUBTNUT]", e)
+            self.log_error("[DOUBTNUT]")
 
     def parsesarthaks(self, response):
         try:
@@ -268,7 +272,7 @@ class QuotesSpider(scrapy.Spider):
                 self.writetheanswer(True)
 
         except Exception as e:
-            self.log_error("[SARTHAKS]", e)
+            self.log_error("[SARTHAKS]")
 
     def janitor(self, html_list):
         try:
@@ -328,7 +332,7 @@ class QuotesSpider(scrapy.Spider):
 
             return ans_list
         except Exception as e:
-            self.log_error("[JANITOR]", e)
+            self.log_error("[JANITOR]")
 
     def convertLinks(self, links):
         try:
@@ -345,13 +349,13 @@ class QuotesSpider(scrapy.Spider):
                 newLinks.append("link"+link)
             return newLinks
         except Exception as e:
-            self.writetheanswer(False, f"[CONVERT_LINKS]: {e}")
+            self.writetheanswer(False, f"[CONVERT_LINKS]: ")
 
-    def writetheanswer(self, works, e="NO ERROR"):
+    def writetheanswer(self, works, error="NO ERROR"):
         if works:
             add_answer(stringify(self.answer), 1, self.id)
         else:
-            self.log_error("[WRITE_THE_ANSWER]", e)
+            self.log_error("[WRITE_THE_ANSWER]")
 
             self.answer = {
                 "answer": ['Couldn\'t fetch answer, please try again'],
