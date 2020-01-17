@@ -84,6 +84,16 @@ class QuotesSpider(scrapy.Spider):
                                    "askiitians", "stackexchange", "sarthaks"]
 
             user_query = user_query.replace("++", "+")
+            list_user_query = user_query.split("+")
+            sorted_list_user_query = []
+            sorted_list_user_query.sort(key=lambda x: len(x[0]), reverse=True)
+            sorted_list_user_query = sorted_list_user_query[:13]
+            
+            for i in range(len(list_user_query)):
+                if list_user_query[i] not in sorted_list_user_query[0]:
+                    list_user_query.pop[i]
+
+
 
             self.log("\n" + "-" * 50 + "\n[USER_QUERY]  " + str(user_query))
             if isQuestion:
@@ -121,6 +131,7 @@ class QuotesSpider(scrapy.Spider):
             return self.link_to_be_parsed
         except Exception as e:
             self.writetheanswer(False, f"[RETURN_LINKS]")
+            return self.link_to_be_parsed
 
     def parsebrainly(self, response):
         try:
@@ -351,11 +362,11 @@ class QuotesSpider(scrapy.Spider):
         except Exception as e:
             self.writetheanswer(False, f"[CONVERT_LINKS]: ")
 
-    def writetheanswer(self, works, error="NO ERROR"):
+    def writetheanswer(self, works, error="[NO ERROR]"):
         if works:
             add_answer(stringify(self.answer), 1, self.id)
         else:
-            self.log_error("[WRITE_THE_ANSWER]")
+            self.log_error(f"[WRITE_THE_ANSWER]  {error}")
 
             self.answer = {
                 "answer": ['Couldn\'t fetch answer, please try again'],

@@ -2,18 +2,26 @@
 [LM] Get scores 1
 [INFO] loading EAST text detector...
 east:frozen_east_text_detection.pb
-[INFO] text detection took 0.763114 seconds
+[INFO] text detection took 0.591392 seconds
 [LM] Get scores 1 END
-[DATA] Initital mean: 5.00626697999677
-[DATA] Updated Theta:5.086204098948015
+[DATA] Initital mean: 1.4596120659619596
+[DATA] Updated Theta:0.0
 [DATA] Inclinations and theta: 
-THETAS:796
-INCL: 785
+THETAS:2689
+INCL: 2647
 [LM] Get scores 2
 [INFO] loading EAST text detector...
 east:frozen_east_text_detection.pb
-[INFO] text detection took 0.979974 seconds
+[INFO] text detection took 0.596374 seconds
 [LM] Get scores 2 END
-[INFO] Felzenszwalb NMS took 0.002990 seconds and found 26 boxes
-[DATA] Bounding boxes Before: 26
-[DATA] Bounding boxes After: 25
+[INFO] Felzenszwalb NMS took 0.012254 seconds and found 49 boxes
+[DATA] Bounding boxes Before: 49
+[DATA] Bounding boxes After: 49
+A small soap bubble of radius 4 cm is
+trapped inside another bubble of radius
+6 cm without any contact. Let P, be the
+pressure inside the inner bubble ‘and Py,
+the pressure outside the outer bubble.
+Radius of another bubble with pressure
+difference P,—P, between its inside and
+outside would be»
