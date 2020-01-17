@@ -2,7 +2,7 @@
 [LM] Get scores 1
 [INFO] loading EAST text detector...
 east:frozen_east_text_detection.pb
-[INFO] text detection took 0.591392 seconds
+[INFO] text detection took 0.582443 seconds
 [LM] Get scores 1 END
 [DATA] Initital mean: 1.4596120659619596
 [DATA] Updated Theta:0.0
@@ -12,9 +12,9 @@ INCL: 2647
 [LM] Get scores 2
 [INFO] loading EAST text detector...
 east:frozen_east_text_detection.pb
-[INFO] text detection took 0.596374 seconds
+[INFO] text detection took 0.579159 seconds
 [LM] Get scores 2 END
-[INFO] Felzenszwalb NMS took 0.012254 seconds and found 49 boxes
+[INFO] Felzenszwalb NMS took 0.009944 seconds and found 49 boxes
 [DATA] Bounding boxes Before: 49
 [DATA] Bounding boxes After: 49
 A small soap bubble of radius 4 cm is
