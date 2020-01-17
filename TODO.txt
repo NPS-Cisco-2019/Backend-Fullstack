@@ -1,19 +1,15 @@
-0. OCR:
-    ~ improvements:
-        - equation recognition
-
-1. Scrapy:
+0. Scrapy:
     ~ bugs:
         - doubtnut text formatting
         - relative links need to be edited to contain domain
     ~ improvements
+        - scrapy word limit
         - answer ranking
-        - link for each answer should be sent to Frontend
         - revision notes
 
-2. Databas:
-    ~ improvements
-        - memoization of answers
+1. Frontend:
+    ~ bugs:
+        - installed app takes to wrong url
 
-3. Server:
+2. Server:
     - Add cron to call reset_db.py file everytime we want to reset the database

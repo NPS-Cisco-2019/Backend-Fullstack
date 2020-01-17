@@ -1,6 +1,7 @@
 {
   "short_name": "SnapSearch",
   "name": "SnapSearch: Problem Solver",
+  "description": "SnapSearch is a problem solving app, just take a picture and the app automatically scans the web to find the best answers for you.",
   "icons": [
     {
       "src": "favicon.ico",

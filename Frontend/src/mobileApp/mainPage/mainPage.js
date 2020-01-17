@@ -293,7 +293,7 @@ class MainPage extends React.Component {
     // let imgRect = document.getElementById("image").getBoundingClientRect();
 
     startX += window.scrollX;
-    startY += window.scrollY - this.screenHt / 10;
+    startY += window.scrollY;
     endX += window.scrollX;
     endY += window.scrollY;
 
@@ -347,6 +347,7 @@ class MainPage extends React.Component {
       gotAnswer: true
     });
     console.log("answers gotten");
+    this.showAnswer();
   }
 
   /* Scraping function */
