@@ -11,8 +11,19 @@ import codecs
 from database.db_func import add_answer, connect, disconnect
 from json import dumps as stringify
 from html import unescape as unescapeHTML
-
-
+from traceback import format_exc
+'''
+  ██████  ███▄    █  ▄▄▄       ██▓███    ██████ ▓█████ ▄▄▄       ██▀███   ▄████▄   ██░ ██        ██▓ ███▄    █  ▄████▄          
+▒██    ▒  ██ ▀█   █ ▒████▄    ▓██░  ██▒▒██    ▒ ▓█   ▀▒████▄    ▓██ ▒ ██▒▒██▀ ▀█  ▓██░ ██▒      ▓██▒ ██ ▀█   █ ▒██▀ ▀█          
+░ ▓██▄   ▓██  ▀█ ██▒▒██  ▀█▄  ▓██░ ██▓▒░ ▓██▄   ▒███  ▒██  ▀█▄  ▓██ ░▄█ ▒▒▓█    ▄ ▒██▀▀██░      ▒██▒▓██  ▀█ ██▒▒▓█    ▄         
+  ▒   ██▒▓██▒  ▐▌██▒░██▄▄▄▄██ ▒██▄█▓▒ ▒  ▒   ██▒▒▓█  ▄░██▄▄▄▄██ ▒██▀▀█▄  ▒▓▓▄ ▄██▒░▓█ ░██       ░██░▓██▒  ▐▌██▒▒▓▓▄ ▄██▒        
+▒██████▒▒▒██░   ▓██░ ▓█   ▓██▒▒██▒ ░  ░▒██████▒▒░▒████▒▓█   ▓██▒░██▓ ▒██▒▒ ▓███▀ ░░▓█▒░██▓      ░██░▒██░   ▓██░▒ ▓███▀ ░ ██▓    
+▒ ▒▓▒ ▒ ░░ ▒░   ▒ ▒  ▒▒   ▓▒█░▒▓▒░ ░  ░▒ ▒▓▒ ▒ ░░░ ▒░ ░▒▒   ▓▒█░░ ▒▓ ░▒▓░░ ░▒ ▒  ░ ▒ ░░▒░▒      ░▓  ░ ▒░   ▒ ▒ ░ ░▒ ▒  ░ ▒▓▒    
+░ ░▒  ░ ░░ ░░   ░ ▒░  ▒   ▒▒ ░░▒ ░     ░ ░▒  ░ ░ ░ ░  ░ ▒   ▒▒ ░  ░▒ ░ ▒░  ░  ▒    ▒ ░▒░ ░       ▒ ░░ ░░   ░ ▒░  ░  ▒    ░▒     
+░  ░  ░     ░   ░ ░   ░   ▒   ░░       ░  ░  ░     ░    ░   ▒     ░░   ░ ░         ░  ░░ ░       ▒ ░   ░   ░ ░ ░         ░      
+      ░           ░       ░  ░               ░     ░  ░     ░  ░   ░     ░ ░       ░  ░  ░       ░           ░ ░ ░        ░     
+                                                                         ░                                     ░          ░     
+'''
 class QuotesSpider(scrapy.Spider):
     name = "spider"
 
@@ -28,10 +39,10 @@ class QuotesSpider(scrapy.Spider):
         self.answer = {"answer": [], "domain": [], "success": []}
 
     def log_error(self, location, *args):
-        error = sys.exc_info()
-        s = "[" + time.strftime("%d-%m %H:%M:%S") + " IST]   "
+        error = format_exc()
 
-        s += "[ERRORS]   " + location + "  " + str(error[0])[8:-2] + ": " + str(error[1]) + "\n\n\n\n"
+        s = "[" + time.strftime("%d-%m %H:%M:%S") + " IST]   "
+        s += "[ERRORS]   " + location + " \n" + error + "\n\n"
 
         if self.debug:
             print(s)
@@ -85,15 +96,21 @@ class QuotesSpider(scrapy.Spider):
 
             user_query = user_query.replace("++", "+")
             list_user_query = user_query.split("+")
-            sorted_list_user_query = []
-            sorted_list_user_query.sort(key=lambda x: len(x[0]), reverse=True)
+            self.log("[USSR_QUERY] {}".format(list_user_query))
+
+            sorted_list_user_query = list(list_user_query)
+
+            sorted_list_user_query.sort(key=lambda x: len(x), reverse=True)
             sorted_list_user_query = sorted_list_user_query[:13]
             
-            for i in range(len(list_user_query)):
-                if list_user_query[i] not in sorted_list_user_query[0]:
-                    list_user_query.pop[i]
-
-
+            i=0
+            while i < len(list_user_query) :
+                if list_user_query[i] not in sorted_list_user_query:
+                    list_user_query.pop(i)
+                i+=1
+            
+            user_query = ' '.join(list_user_query).replace(" ", "+")
+            self.log(f"[USSR QUERY] {user_query} \n[USSR QUERY]{sorted_list_user_query}")
 
             self.log("\n" + "-" * 50 + "\n[USER_QUERY]  " + str(user_query))
             if isQuestion:
@@ -131,6 +148,7 @@ class QuotesSpider(scrapy.Spider):
             return self.link_to_be_parsed
         except Exception as e:
             self.writetheanswer(False, f"[RETURN_LINKS]")
+            
             return self.link_to_be_parsed
 
     def parsebrainly(self, response):

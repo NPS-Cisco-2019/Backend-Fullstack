@@ -2,13 +2,18 @@ import time
 import os
 import json
 import database.db_func as db
+a = os.getcwd()
 
 db.create_table()
 
 s = "scrapy crawl spider -a question="
 
-q = ["an alkebe A on ozonolysis gives a mixture od ehtana and pentan-3-one.", "Draw the structure of BeCl2 vapour Becl2 solid", "what are electron deficient compounds?", "justify among halogens, fluorine is best oxidation" ]
-l_websites = ["sarthaks", "askiitians", "doubtnut", "stackexchange", "brainly"]
+q = ["two moles of helium are mixed with n moles of hydrogen. If cp/cv = 3/2 for the mixture then the value of n is :"]
+l_websites = sorted(["sarthaks", "askiitians", "doubtnut", "stackexchange", "brainly"])
+websites = sorted(["stackexchange.com", "doubtnut.com",
+                    "askiitians.com", "brainly.in", "sarthaks.com"])
+
+l_websites
 
 
 def join(lst, sep):
@@ -28,8 +33,7 @@ test_ans_json = dict(brainly={}, askiitians={},
                      doubtnut={}, stackexchange={}, sarthaks={})
 for i in range(len(l_websites)):
     for j in q:
-        websites = ["stackexchange.com", "doubtnut.com",
-                    "askiitians.com", "brainly.in", "sarthaks.com"]
+
 
         current_dict = {}
 
@@ -45,10 +49,8 @@ for i in range(len(l_websites)):
 
         j += "+site%3A"+websites[i]
 
-        print(
-            f'scrapy crawl spider -a question={j} -a _id={_id}')
-        os.system(
-            f'scrapy crawl spider -a question={j} -a _id={_id}')
+        print( f'scrapy crawl spider -a question={j} -a _id={_id}')
+        os.system( f'scrapy crawl spider -a question={j} -a _id={_id}')
 
         success = True
 
