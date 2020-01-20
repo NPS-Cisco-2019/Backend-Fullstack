@@ -1,6 +1,5 @@
 0. Scrapy:
     ~ bugs:
-        - doubtnut text formatting
         - relative links need to be edited to contain domain
     ~ improvements
         - scrapy word limit

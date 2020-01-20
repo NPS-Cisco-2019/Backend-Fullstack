@@ -139,7 +139,7 @@ class QuotesSpider(scrapy.Spider):
                 "//div[@class='sg-text js-answer-content brn-rich-content']").extract()
 
             imgsrc = self.convertLinks(response.xpath(
-                "//section[@id='answers']//img[@title='Attachment']/@src").extract())
+                "//section[@id='answers']//img[@title='Attachment']/@src").extract(), response.request.url)
 
             ans = self.janitor(ans)
 
@@ -162,7 +162,7 @@ class QuotesSpider(scrapy.Spider):
             l = self.janitor(l)
 
             img = self.convertLinks(response.xpath(
-                '//div[@id="content"]//p//img/@src').extract())
+                '//div[@id="content"]//p//img/@src').extract(), response.request.url)
 
             self.answer["domain"].append(["askiitans", response.request.url])
             self.answer["success"] = 1
@@ -188,7 +188,7 @@ class QuotesSpider(scrapy.Spider):
             l = self.janitor(l)
 
             img = self.convertLinks(response.xpath(
-                '//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract())
+                '//div[@id="rptAnswers_ctl01_pnlAnswer"]//img/@src').extract(), response.request.url)
 
             self.answer["domain"].append(["askiitans", response.request.url])
             self.answer["success"] = 1
@@ -216,7 +216,7 @@ class QuotesSpider(scrapy.Spider):
             answer = response.xpath(
                 "//div[@class='post-text']/p/text()").extract()
             links = self.convertLinks(response.xpath(
-                "//div[@class='post-text']//a/@href").extract())
+                "//div[@class='post-text']//a/@href").extract(), response.request.url)
             for i in range(len(answer)):
                 answer[i] = answer[i].replace("$$", "$")
 
@@ -345,8 +345,9 @@ class QuotesSpider(scrapy.Spider):
         except Exception as e:
             self.log_error("[JANITOR]")
 
-    def convertLinks(self, links):
+    def convertLinks(self, links, url):
         try:
+            url = url[:9] + url[9:].split("/")[0]
 
             if type(links) != list:
                 links = links.split(",")
@@ -356,7 +357,8 @@ class QuotesSpider(scrapy.Spider):
                 links.extend(links.pop(0).split(','))
 
             for link in links:
-
+                if link[0] == "/":
+                    link = url + link
                 newLinks.append("link"+link)
             return newLinks
         except Exception as e:
