@@ -144,8 +144,8 @@ def sw():
     return app.send_static_file("serviceWorker.js")
 
 
-@app.route("/mainfest.js")
-def mainfest():
+@app.route("/manifest.js")
+def manifest():
     return app.send_static_file("manifest.js")
 
 
