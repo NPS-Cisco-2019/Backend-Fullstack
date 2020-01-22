@@ -19,11 +19,7 @@ function App() {
   return (
     <BrowserRouter>
       <ErrorBoundary>
-        {typeof window.orientation !== "undefined" || dev ? (
-          <MobileApp />
-        ) : (
-          <CompApp />
-        )}
+        {typeof window.orientation !== "undefined" || dev ? <MobileApp /> : <CompApp />}
       </ErrorBoundary>
     </BrowserRouter>
   );

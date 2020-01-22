@@ -26,16 +26,12 @@ function Subject() {
       onClick={() => setOpen(!open)}
     >
       <button style={{ opacity, fontFamily: "Raleway" }}>
-        <div
-          className={`hamburger hamburger--collapse ${open ? "is-active" : ""}`}
-        >
+        <div className={`hamburger hamburger--collapse ${open ? "is-active" : ""}`}>
           <span className="hamburger-box">
             <span className="hamburger-inner"></span>
           </span>
         </div>
-        <p style={{ display: "inline", margin: 0, fontWeight: 400 }}>
-          {subjects[0]}
-        </p>
+        <p style={{ display: "inline", margin: 0, fontWeight: 400 }}>{subjects[0]}</p>
       </button>
       <section>
         {subjects.slice(1).map(subject => (
