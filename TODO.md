@@ -8,7 +8,7 @@
 ----------
 1. Frontend:
     - bugs:
-        - installed app takes to wrong url
+      - Fix the service-worker registration location
 -----------
 2. Server:
     - Add cron to call `reset_db.py` file everytime we want to reset the database
