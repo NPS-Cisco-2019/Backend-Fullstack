@@ -67,9 +67,7 @@ app = flask.Flask("__main__")
 @app.route("/Tutorial")
 @app.route("/Unknown")
 def main():
-    res = make_response(render_template("index.html"))
-    res.headers["Service-Worker-Allowed"] = "/"
-    return res
+    return render_template("index.html")
 
 # Route where image is sent
 @app.route("/OCR", methods=['POST', 'GET'])
@@ -139,13 +137,6 @@ def get_answer():
     except Exception as e:
         log_error(e)
         abort(500)
-
-
-@app.route("/static/react/service-worker.js")
-def sw():
-    res = make_response(send_from_directory("/static/react/", "service-worker.js"))
-    res.headers["Service-Worker-Allowed"] = "/"
-    return res
 
 @app.errorhandler(404)
 def error404(error):
