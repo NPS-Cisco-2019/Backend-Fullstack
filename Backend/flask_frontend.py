@@ -1,5 +1,5 @@
 import flask
-from flask import jsonify, request, render_template, redirect, abort
+from flask import jsonify, request, render_template, redirect, abort, make_response, send_from_directory
 import os
 import sys
 import OCR.text_from_im as OCR
@@ -67,7 +67,9 @@ app = flask.Flask("__main__")
 @app.route("/Tutorial")
 @app.route("/Unknown")
 def main():
-    return render_template("index.html")
+    res = make_response(render_template("index.html"))
+    res.headers["Service-Worker-Allowed"] = "/"
+    return res
 
 # Route where image is sent
 @app.route("/OCR", methods=['POST', 'GET'])
@@ -139,24 +141,15 @@ def get_answer():
         abort(500)
 
 
-@app.route("/serviceWorker.js")
+@app.route("/static/react/service-worker.js")
 def sw():
-    return app.send_static_file("serviceWorker.js")
-
-
-@app.route("/manifest.js")
-def manifest():
-    return app.send_static_file("manifest.js")
-
-
-@app.route("/static/react")
-def goto_main():
-    return redirect("/")
-
+    res = make_response(send_from_directory("/static/react/", "service-worker.js"))
+    res.headers["Service-Worker-Allowed"] = "/"
+    return res
 
 @app.errorhandler(404)
 def error404(error):
     return redirect("/Unknown")
 
 
-app.run(host="0.0.0.0")
+app.run(host="0.0.0.0", debug=True)
