@@ -138,6 +138,15 @@ def get_answer():
         log_error(e)
         abort(500)
 
+@app.route("/static/react/service-worker.js")
+def sw():
+    a = send_from_directory("static/react", "service-worker.js")
+    print("SERVICE", a)
+    res = make_response(a)
+    res.headers["Service-Worker-Allowed"] = "/"
+
+    return res
+
 @app.errorhandler(404)
 def error404(error):
     return redirect("/Unknown")
