@@ -5,7 +5,7 @@ import sys
 import OCR.text_from_im as OCR
 import time
 import database.db_func as db
-debug = False
+from config_backend import debug 
 
 db.create_table()
 '''
@@ -89,18 +89,12 @@ def get_question():
 @app.route("/scrapy", methods=['POST', 'GET'])
 def get_answer():
     try:
-        websites = ["stackexchange.com", "doubtnut.com",
-                    "askiitians.com", "brainly.in"]
+  
 
         current_dict = {}
         question = request.get_json()
-
         _id = int(time.time())
-
         db.add_question(question["question"], _id)
-
-        question["question"] = join(
-            (question["question"].split()[:15]), "+").replace(".", "")
 
         question["question"] = question["question"].replace(" ", "+").replace(
             "\\n", "+").replace("\\t", "+").replace("\n", "+").replace("(", "+").replace(")", "+")
@@ -116,13 +110,13 @@ def get_answer():
                 success = False
                 break
 
-        print("\n\n\n")
-        db.prt()
-        print("\n\n\n")
+        # print("\n\n\n")
+        # db.prt()
+        # print("\n\n\n")
 
         ans = db.get_answer(_id)
 
-        print("\n\n\n" + str(ans) + " - " + str(type(ans)) + "\n\n\n")
+        # print("\n\n\n" + str(ans) + " - " + str(type(ans)) + "\n\n\n")
 
         if ans["success"] and success:
             current_dict["question"] = question["question"]

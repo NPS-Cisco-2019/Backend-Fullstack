@@ -5,8 +5,9 @@ import sys
 import base64
 import os
 import time
+from config_backend import debug
 
-TESTING = False
+TESTING = debug
 p_thresh = 0.001
 
 

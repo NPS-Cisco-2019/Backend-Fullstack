@@ -8,10 +8,9 @@ db.create_table()
 
 s = "scrapy crawl spider -a question="
 
-q = ["two moles of helium are mixed with n moles of hydrogen. If cp/cv = 3/2 for the mixture then the value of n is :"]
-l_websites = sorted(["sarthaks", "askiitians", "doubtnut", "stackexchange", "brainly"])
-websites = sorted(["stackexchange.com", "doubtnut.com",
-                    "askiitians.com", "brainly.in", "sarthaks.com"])
+q = ["brainly man running"]
+l_websites = sorted([ "brainly" ])
+websites = sorted(["brainly.in"])
 
 l_websites
 

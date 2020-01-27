@@ -12,7 +12,7 @@ from database.db_func import add_answer, connect, disconnect
 from json import dumps as stringify
 from html import unescape as unescapeHTML
 from traceback import format_exc
-
+from config_backend import debug
 
 
 class QuotesSpider(scrapy.Spider):
@@ -23,7 +23,7 @@ class QuotesSpider(scrapy.Spider):
 
         self.question = question
         self.id = _id
-        self.debug = True
+        self.debug = debug
         self.subject = subject
 
         self.answer = {"answer": [], "domain": [], "success": 1}
@@ -59,9 +59,9 @@ class QuotesSpider(scrapy.Spider):
             if len(self.urls) != 0:
                 for url in self.urls:
                     website = tldextract.extract(url).domain
-                    if website == 'brainly':
-                        yield scrapy.Request(url=url, callback=self.parsebrainly)
-                    elif website == 'askiitians' and self.isQuestion == 1:
+                    # if website == 'brainly':
+                    #     yield scrapy.Request(url=url, callback=self.parsebrainly)
+                    if website == 'askiitians' and self.isQuestion == 1:
                         yield scrapy.Request(url=url, callback=self.parseaskiitians)
                     elif website == "askiitians" and self.isQuestion == 0:
                         yield scrapy.Request(url=url, callback=self.parseaskiitiansnotes)
@@ -76,7 +76,7 @@ class QuotesSpider(scrapy.Spider):
                 # self.writetheanswer(bool(len(self.answer["answer"])), "[NO ANSWERS]")
             else:
                 self.answer["success"] = 0
-                self.writetheanswer(False, "FAX")
+                self.writetheanswer(False, "[NO LINKS FOUND]")
         except Exception as e:
             self.writetheanswer(False, f"[START_REQUESTS]")
 
@@ -85,12 +85,13 @@ class QuotesSpider(scrapy.Spider):
             self.link_to_be_parsed = {}
             self.isQuestion = isQuestion
             self.user_query = user_query
-            self.useful_domains = ["doubtnut", "brainly",
+            websites = ["doubtnut.com", 
+                                   "askiitians.com", "stackexchange.com", "sarthaks.com"]
+            self.useful_domains = ["doubtnut",
                                    "askiitians", "stackexchange", "sarthaks"]
-
             user_query = user_query.replace("++", "+")
             list_user_query = user_query.split("+")
-            self.log("[USSR_QUERY] {}".format(list_user_query))
+           
 
             sorted_list_user_query = list(list_user_query)
 
@@ -103,8 +104,9 @@ class QuotesSpider(scrapy.Spider):
                     list_user_query.pop(i)
                 i+=1
             
-            user_query = ' '.join(list_user_query).replace(" ", "+")
-            self.log(f"[USSR QUERY] {user_query} \n[USSR QUERY]{sorted_list_user_query}")
+            user_query = '+'.join(list_user_query)+ "+site%3A" + "+OR+site%3A".join(websites)
+            
+            self.log(f"[USER QUERY] {user_query} \n[ SORTED LIST USER QUERY]{sorted_list_user_query}")
 
             self.log("\n" + "-" * 50 + "\n[USER_QUERY]  " + str(user_query))
             if isQuestion:
@@ -126,7 +128,8 @@ class QuotesSpider(scrapy.Spider):
             self.link_to_be_parsed["link"] = []
             self.link_to_be_parsed["domain"] = []
 
-            self.log(stringify(self.urls, indent=2))
+            # self.log(stringify(self.urls, indent=2))
+
 
             for url in self.urls:
                 # self.log(f"[RETURN LINKS URL] {url}")
@@ -137,7 +140,8 @@ class QuotesSpider(scrapy.Spider):
                     self.link_to_be_parsed["link"].append(str(self.urlx))
                     self.link_to_be_parsed["domain"].append(
                         str(tldextract.extract(self.urlx).domain))
-                self.log("[RETURNED LINKS]")
+                # self.log("[RETURNED LINKS]")
+            self.log(f"[RETURNED LINKS] : {stringify(self.link_to_be_parsed, indent =  2)}")
 
             return self.link_to_be_parsed
         except Exception as e:
@@ -145,25 +149,25 @@ class QuotesSpider(scrapy.Spider):
             
             return self.link_to_be_parsed
 
-    def parsebrainly(self, response):
-        try:
-            ans = response.xpath(
-                "//div[@class='sg-text js-answer-content brn-rich-content']").extract()
+    # def parsebrainly(self, response):
+    #     try:
+    #         ans = response.xpath(
+    #             "//div[@class='sg-text js-answer-content brn-rich-content']").extract()
 
-            imgsrc = self.convertLinks(response.xpath(
-                "//section[@id='answers']//img[@title='Attachment']/@src").extract(), response.request.url)
+    #         imgsrc = self.convertLinks(response.xpath(
+    #             "//section[@id='answers']//img[@title='Attachment']/@src").extract(), response.request.url)
 
-            ans = self.janitor(ans)
+    #         ans = self.janitor(ans)
 
-            self.answer["domain"].append(["brainly", response.request.url])
-            self.answer["success"] = 1
-            if imgsrc:
-                self.answer["answer"].append([*ans, *imgsrc])
-            else:
-                self.answer["answer"].append([*ans])
-        except Exception as e:
+    #         self.answer["domain"].append(["brainly", response.request.url])
+    #         self.answer["success"] = 1
+    #         if imgsrc:
+    #             self.answer["answer"].append([*ans, *imgsrc])
+    #         else:
+    #             self.answer["answer"].append([*ans])
+    #     except Exception as e:
 
-            self.log_error("[BRAINLY]")
+    #         self.log_error("[BRAINLY]")
 
     def parseaskiitiansnotes(self, response):
         self.log("[ASKNOTES CALLED]")
