@@ -45,7 +45,7 @@ class QuotesSpider(scrapy.Spider):
 
     def start_requests(self): 
         try:
-            self.log("[STARTED REQUETS]")
+            self.log("[STARTED REQUESTS]")
             q = self.question
             # if self.subject != "revisionNotes":
             if True:
