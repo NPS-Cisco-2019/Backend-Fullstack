@@ -49,7 +49,7 @@ for i in range(len(l_websites)):
 
         j += "+site%3A"+websites[i]
 
-        print( f'scrapy crawl spider -a question={j} -a _id={_id}')
+        # print( f'scrapy crawl spider -a question={j} -a _id={_id}')
         os.system( f'scrapy crawl spider -a question={j} -a _id={_id}')
 
         success = True
@@ -59,13 +59,13 @@ for i in range(len(l_websites)):
                 success = False
                 break
 
-        print("\n\n\n")
-        db.prt()
-        print("\n\n\n")
+        # print("\n\n\n")
+        # db.prt()
+        # print("\n\n\n")
 
         ans = db.get_answer(_id)
 
-        print("\n\n\n" + str(ans) + " - " + str(type(ans)) + "\n\n\n")
+        # print("\n\n\n" + str(ans) + " - " + str(type(ans)) + "\n\n\n")
 
         if ans["success"] and success:
             current_dict["question"] = j

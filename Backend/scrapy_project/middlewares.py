@@ -55,6 +55,11 @@ class ScrapyProjectSpiderMiddleware(object):
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
 
+    def spider_closed(self, spider, reason):
+
+        spider.logger.info("fkdg,jfdgsdafsdafskdfgsd")
+        # spider.writetheanswer(bool(len(spider.answer["answer"]), "[NO ANSWERS]")
+
 
 class ScrapyProjectDownloaderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -101,3 +106,8 @@ class ScrapyProjectDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+    def spider_closed(self, spider, reason):
+
+        spider.logger.info("fkdg,jfdgsdafsdafskdfgsd")
+        # spider.writetheanswer(bool(len(spider.answer["answer"]), "[NO ANSWERS]")

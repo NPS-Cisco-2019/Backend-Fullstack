@@ -12,18 +12,9 @@ from database.db_func import add_answer, connect, disconnect
 from json import dumps as stringify
 from html import unescape as unescapeHTML
 from traceback import format_exc
-'''
-  ██████  ███▄    █  ▄▄▄       ██▓███    ██████ ▓█████ ▄▄▄       ██▀███   ▄████▄   ██░ ██        ██▓ ███▄    █  ▄████▄          
-▒██    ▒  ██ ▀█   █ ▒████▄    ▓██░  ██▒▒██    ▒ ▓█   ▀▒████▄    ▓██ ▒ ██▒▒██▀ ▀█  ▓██░ ██▒      ▓██▒ ██ ▀█   █ ▒██▀ ▀█          
-░ ▓██▄   ▓██  ▀█ ██▒▒██  ▀█▄  ▓██░ ██▓▒░ ▓██▄   ▒███  ▒██  ▀█▄  ▓██ ░▄█ ▒▒▓█    ▄ ▒██▀▀██░      ▒██▒▓██  ▀█ ██▒▒▓█    ▄         
-  ▒   ██▒▓██▒  ▐▌██▒░██▄▄▄▄██ ▒██▄█▓▒ ▒  ▒   ██▒▒▓█  ▄░██▄▄▄▄██ ▒██▀▀█▄  ▒▓▓▄ ▄██▒░▓█ ░██       ░██░▓██▒  ▐▌██▒▒▓▓▄ ▄██▒        
-▒██████▒▒▒██░   ▓██░ ▓█   ▓██▒▒██▒ ░  ░▒██████▒▒░▒████▒▓█   ▓██▒░██▓ ▒██▒▒ ▓███▀ ░░▓█▒░██▓      ░██░▒██░   ▓██░▒ ▓███▀ ░ ██▓    
-▒ ▒▓▒ ▒ ░░ ▒░   ▒ ▒  ▒▒   ▓▒█░▒▓▒░ ░  ░▒ ▒▓▒ ▒ ░░░ ▒░ ░▒▒   ▓▒█░░ ▒▓ ░▒▓░░ ░▒ ▒  ░ ▒ ░░▒░▒      ░▓  ░ ▒░   ▒ ▒ ░ ░▒ ▒  ░ ▒▓▒    
-░ ░▒  ░ ░░ ░░   ░ ▒░  ▒   ▒▒ ░░▒ ░     ░ ░▒  ░ ░ ░ ░  ░ ▒   ▒▒ ░  ░▒ ░ ▒░  ░  ▒    ▒ ░▒░ ░       ▒ ░░ ░░   ░ ▒░  ░  ▒    ░▒     
-░  ░  ░     ░   ░ ░   ░   ▒   ░░       ░  ░  ░     ░    ░   ▒     ░░   ░ ░         ░  ░░ ░       ▒ ░   ░   ░ ░ ░         ░      
-      ░           ░       ░  ░               ░     ░  ░     ░  ░   ░     ░ ░       ░  ░  ░       ░           ░ ░ ░        ░     
-                                                                         ░                                     ░          ░     
-'''
+
+
+
 class QuotesSpider(scrapy.Spider):
     name = "spider"
 
@@ -31,12 +22,14 @@ class QuotesSpider(scrapy.Spider):
         super(QuotesSpider, self).__init__(*args, **kwargs)
 
         self.question = question
-        self.isAnswerThere = True
         self.id = _id
         self.debug = True
         self.subject = subject
 
-        self.answer = {"answer": [], "domain": [], "success": []}
+        self.answer = {"answer": [], "domain": [], "success": 1}
+
+    def closed(self, reason):
+        self.writetheanswer(bool(len(self.answer["answer"])), "[NO ANSWERS]")
 
     def log_error(self, location, *args):
         error = format_exc()
@@ -45,7 +38,7 @@ class QuotesSpider(scrapy.Spider):
         s += "[ERRORS]   " + location + " \n" + error + "\n\n"
 
         if self.debug:
-            print(s)
+            self.log(s)
         else:
             with open(os.path.join(os.getcwd(), "error_logs", "scrapy.log"), "a+") as f:
                 f.write(s)
@@ -63,9 +56,7 @@ class QuotesSpider(scrapy.Spider):
             self.log("[URLS]  " + str(self.urls) +
                     " ----- [LEN]  " + str(len(self.urls)))
 
-            self.isAnswerThere = len(self.urls) != 0
-            if self.isAnswerThere:
-                self.answer["success"].append(1)
+            if len(self.urls) != 0:
                 for url in self.urls:
                     website = tldextract.extract(url).domain
                     if website == 'brainly':
@@ -80,6 +71,9 @@ class QuotesSpider(scrapy.Spider):
                         yield scrapy.Request(url=url, callback=self.parsestackexchange)
                     elif website == 'sarthaks':
                         yield scrapy.Request(url=url, callback=self.parsesarthaks)
+
+                # print(stringify(self.answer, indent=2))
+                # self.writetheanswer(bool(len(self.answer["answer"])), "[NO ANSWERS]")
             else:
                 self.answer["success"] = 0
                 self.writetheanswer(False, "FAX")
@@ -167,7 +161,6 @@ class QuotesSpider(scrapy.Spider):
                 self.answer["answer"].append([*ans, *imgsrc])
             else:
                 self.answer["answer"].append([*ans])
-            self.writetheanswer(True)
         except Exception as e:
 
             self.log_error("[BRAINLY]")
@@ -192,8 +185,6 @@ class QuotesSpider(scrapy.Spider):
                 self.answer["answer"].append([*l, *img])
             else:
                 self.answer["answer"].append([*l])
-
-            self.writetheanswer(True)
         except Exception as e:
             self.log_error("[ASK_IITIANS_NOTES]")
 
@@ -219,7 +210,6 @@ class QuotesSpider(scrapy.Spider):
             else:
                 self.answer["answer"].append([*l])
 
-                self.writetheanswer(True)
         except scrapy.exceptions.NotSupported:
             self.answer["answer"].append(["Please click the link below:", response.url])
             self.answer["domain"].append(
@@ -242,8 +232,6 @@ class QuotesSpider(scrapy.Spider):
             self.answer["domain"].append(
                 ["Stack Exchange", response.request.url])
             self.answer["success"] = 1
-
-            self.writetheanswer(True)
         except Exception as e:
             self.log_error("[STACK_EXCHANGE]")
 
@@ -264,7 +252,6 @@ class QuotesSpider(scrapy.Spider):
 
             self.answer["domain"].append(["doubtnut", response.request.url])
             self.answer["answer"].append([*answer])
-            self.writetheanswer(True)
         except Exception as e:
             self.log_error("[DOUBTNUT]")
 
@@ -298,7 +285,6 @@ class QuotesSpider(scrapy.Spider):
             if len(ans) > 0:
                 self.answer["answer"].append(ans)
                 self.answer["success"] = 1
-                self.writetheanswer(True)
 
         except Exception as e:
             self.log_error("[SARTHAKS]")
