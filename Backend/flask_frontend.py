@@ -35,16 +35,11 @@ def log_error(*args):
 # function to join all the websites
 
 
-def join(lst, sep):
-    print("[LIST] ", str(lst))
-
-    s = ''
-    for i in range(len(lst) - 1):
-        s += lst[i] + sep
-
-    s += lst[-1]
-
-    return s
+def ans_len(lst):
+    length = 0
+    for s in ans_len:
+        length += len(s)
+    return length
 
 
 app = flask.Flask("__main__")
@@ -120,7 +115,7 @@ def get_answer():
 
         if ans["success"] and success:
             current_dict["question"] = question["question"]
-            current_dict["answers"] = ans["answer"]
+            current_dict["answers"] = sorted(ans["answer"], key=ans_len, reverse=True)
             current_dict["websites"] = ans["domain"]
         else:
             current_dict["question"] = question["question"]
