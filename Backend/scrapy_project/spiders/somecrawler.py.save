@@ -18,7 +18,7 @@ from config_backend import debug
 class QuotesSpider(scrapy.Spider):
     name = "spider"
 
-    def __init__(self, question="", subject="Physics", _id=0, *args, **kwargs):
+    def __init__(self, question="", subject=" ", _id=0, *args, **kwargs):
         super(QuotesSpider, self).__init__(*args, **kwargs)
 
         self.question = question
@@ -47,9 +47,10 @@ class QuotesSpider(scrapy.Spider):
         try:
             self.log("[STARTED REQUESTS]")
             q = self.question
-            if "notes" not in self.subject.lower() :
+            # if self.subject != "revisionNotes":
+            if True:
                 self.urls = self.return_links(q, True)["link"][:5]
-            else:
+            elif self.subject == "revisionNotes":
                 self.urls = self.return_links(q, False)["link"][:5]
 
             self.log("[URLS]  " + str(self.urls) +
@@ -58,12 +59,11 @@ class QuotesSpider(scrapy.Spider):
             if len(self.urls) != 0:
                 for url in self.urls:
                     website = tldextract.extract(url).domain
-                    self.log_error(self.subject)
                     # if website == 'brainly':
                     #     yield scrapy.Request(url=url, callback=self.parsebrainly)
-                    if website == 'askiitians' and self.isQuestion:
+                    if website == 'askiitians' and self.isQuestion == 1:
                         yield scrapy.Request(url=url, callback=self.parseaskiitians)
-                    elif website == 'askiitians' and (not self.isQuestion) :
+                    elif website == "askiitians" and self.isQuestion == 0:
                         yield scrapy.Request(url=url, callback=self.parseaskiitiansnotes)
                     elif website == 'doubtnut':
                         yield scrapy.Request(url=url, callback=self.parsedoubtnut)
@@ -105,10 +105,8 @@ class QuotesSpider(scrapy.Spider):
 #                i+=1
             
             user_query = '+'.join(list_user_query)+ "+site%3A" + "+OR+site%3A".join(websites)
-            
-#            self.log(f"[USER QUERY] {user_query} \n[ SORTED LIST USER QUERY]{sorted_list_user_query}")
-
-            self.log("\n" + "-" * 50 + "\n[USER_QUERY]  " + str(user_query))
+#            
+#            self.log(f"[USER QUERY] {user_query} \n[ SORTED LIST USER QUERY]{sorted_list_user_query}")            self.log("\n" + "-" * 50 + "\n[USER_QUERY]  " + str(user_query))
             if isQuestion:
                 google_search = "https://www.google.com/search?q=" + user_query
                 self.log("[GOOGLE_SEARCH]   " +
