@@ -1,10 +1,8 @@
 import React from "react";
 
 function HelpOverlay({ show, handleExitClick }) {
-  let screenHt =
-    window.innerHeight > window.innerWidth ? window.innerHeight : window.innerWidth;
-  let screenWd =
-    window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
+  let screenHt = window.innerHeight > window.innerWidth ? window.innerHeight : window.innerWidth;
+  let screenWd = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
 
   return (
     <div style={show ? {} : { display: "none" }}>
@@ -49,12 +47,12 @@ function HelpOverlay({ show, handleExitClick }) {
             }}
           >
             <p>
-              If it is plain red, it will take a picture.
+              This shows you the current answer you are at
               <br />
-              If it has a search symbol, it will process the image/question.
-              <br />
-              Otherwise, it's a loading indicator
+              You can also click it to go to any answer
             </p>
+            <p className="arrow-extension">|</p>
+            <p className="arrow-extension">|</p>
             <p className="arrow-extension">|</p>
             <p className="arrow-extension">|</p>
             <p className="arrow-extension">|</p>
@@ -64,9 +62,7 @@ function HelpOverlay({ show, handleExitClick }) {
             <p>Go to previous answer.</p>
             <p className="arrow">&#8595;</p>
           </div>
-          <div
-            style={{ width: 0.4 * screenWd, top: 0.82 * screenHt, left: 0.6 * screenWd }}
-          >
+          <div style={{ width: 0.4 * screenWd, top: 0.82 * screenHt, left: 0.6 * screenWd }}>
             <p>Go to previous answer.</p>
             <p className="arrow">&#8595;</p>
           </div>

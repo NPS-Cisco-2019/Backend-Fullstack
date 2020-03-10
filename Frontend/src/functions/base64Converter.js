@@ -1,4 +1,4 @@
-export default function base64(imgPath, { x, y, width, height, rotation }) {
+const base64 = (imgPath, { x, y, width, height, rotation }) => {
   let img = new Image();
   img.src = imgPath;
   let htmlImg = document.getElementById("image").getBoundingClientRect();
@@ -47,4 +47,6 @@ export default function base64(imgPath, { x, y, width, height, rotation }) {
   base64Img = canvas.toDataURL();
 
   return base64Img;
-}
+};
+
+export default base64;

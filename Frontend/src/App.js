@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import CompApp from "compWebsite";
 import MobileApp from "mobileApp";
-import ErrorBoundary from "shared/Error";
+import ErrorBoundary from "shared/ErrorBoundary";
 
 /* ANCHOR  Main app, renders all components and is attached to the DOM
  *
@@ -13,14 +13,27 @@ import ErrorBoundary from "shared/Error";
 
 // TEMPORARY, If its true the website shows mobile app on desktop also, just for developement
 // TODO remove this
-let dev = true;
+let dev = false;
 
+console.log(
+  `%c\
+  ██████  ███▄    █  ▄▄▄       ██▓███    ██████ ▓█████ ▄▄▄       ██▀███   ▄████▄   ██░ ██ 
+▒██    ▒  ██ ▀█   █ ▒████▄    ▓██░  ██▒▒██    ▒ ▓█   ▀▒████▄    ▓██ ▒ ██▒▒██▀ ▀█  ▓██░ ██▒
+░ ▓██▄   ▓██  ▀█ ██▒▒██  ▀█▄  ▓██░ ██▓▒░ ▓██▄   ▒███  ▒██  ▀█▄  ▓██ ░▄█ ▒▒▓█    ▄ ▒██▀▀██░
+  ▒   ██▒▓██▒  ▐▌██▒░██▄▄▄▄██ ▒██▄█▓▒ ▒  ▒   ██▒▒▓█  ▄░██▄▄▄▄██ ▒██▀▀█▄  ▒▓▓▄ ▄██▒░▓█ ░██ 
+▒██████▒▒▒██░   ▓██░ ▓█   ▓██▒▒██▒ ░  ░▒██████▒▒░▒████▒▓█   ▓██▒░██▓ ▒██▒▒ ▓███▀ ░░▓█▒░██▓
+▒ ▒▓▒ ▒ ░░ ▒░   ▒ ▒  ▒▒   ▓▒█░▒▓▒░ ░  ░▒ ▒▓▒ ▒ ░░░ ▒░ ░▒▒   ▓▒█░░ ▒▓ ░▒▓░░ ░▒ ▒  ░ ▒ ░░▒░▒
+░ ░▒  ░ ░░ ░░   ░ ▒░  ▒   ▒▒ ░░▒ ░     ░ ░▒  ░ ░ ░ ░  ░ ▒   ▒▒ ░  ░▒ ░ ▒░  ░  ▒    ▒ ░▒░ ░
+░  ░  ░     ░   ░ ░   ░   ▒   ░░       ░  ░  ░     ░    ░   ▒     ░░   ░ ░         ░  ░░ ░
+      ░           ░       ░  ░               ░     ░  ░     ░  ░   ░     ░ ░       ░  ░  ░
+                                                                         ░                \
+`,
+  "background-color: #222222; color: rgb(50, 90, 245);"
+);
 function App() {
   return (
     <BrowserRouter>
-      <ErrorBoundary>
-        {typeof window.orientation !== "undefined" || dev ? <MobileApp /> : <CompApp />}
-      </ErrorBoundary>
+      <ErrorBoundary>{typeof window.orientation !== "undefined" || dev ? <MobileApp /> : <CompApp />}</ErrorBoundary>
     </BrowserRouter>
   );
 }

@@ -21,8 +21,6 @@ import "style/helpOverlay.css";
 
 init();
 
-let newPerson = sessionStorage.getItem("new") === "true";
-
 class MobileApp extends React.Component {
   constructor(props) {
     super(props);
@@ -37,13 +35,11 @@ class MobileApp extends React.Component {
     };
 
     this.screenWd =
-      window.screen.orientation.type === "portrait-primary" ||
-      window.screen.orientation.type === "portrait-secondary"
+      window.screen.orientation.type === "portrait-primary" || window.screen.orientation.type === "portrait-secondary"
         ? window.innerWidth
         : window.innerHeight;
     this.screenHt =
-      window.screen.orientation.type === "portrait-primary" ||
-      window.screen.orientation.type === "portrait-secondary"
+      window.screen.orientation.type === "portrait-primary" || window.screen.orientation.type === "portrait-secondary"
         ? window.innerHeight
         : window.innerWidth;
 
@@ -52,10 +48,6 @@ class MobileApp extends React.Component {
     }, 100);
     this.changeState = this.changeState.bind(this);
     this.backToCamera = this.backToCamera.bind(this);
-
-    if (newPerson) {
-      this.props.history.push("/?new=true");
-    }
   }
 
   // Passed to child <MainPage /> to allow it to change the Parent state to show answer
@@ -91,20 +83,11 @@ class MobileApp extends React.Component {
                 )}
               />
 
-              <Route
-                path="/Picture"
-                render={() => <MainPage changeState={this.changeState} />}
-              />
+              <Route path="/Picture" render={() => <MainPage changeState={this.changeState} />} />
 
-              <Route
-                path="/Settings"
-                render={() => <SettingsPage backClick={this.backToCamera} />}
-              />
+              <Route path="/Settings" render={() => <SettingsPage backClick={this.backToCamera} />} />
 
-              <Route
-                path="/Saved Answers"
-                render={() => <SavedAnswerPage backClick={this.backToCamera} />}
-              />
+              <Route path="/Saved Answers" render={() => <SavedAnswerPage backClick={this.backToCamera} />} />
 
               <Route path="/GradeChoice" component={GradeChoice} />
 
@@ -119,13 +102,9 @@ class MobileApp extends React.Component {
 
               <Route exact path="/" component={StartScreen} />
 
-              {this.started ? (
-                <Route path="*" render={() => <Redirect to="/Unknown" />} />
-              ) : null}
+              {this.started ? <Route path="*" render={() => <Redirect to="/Unknown" />} /> : null}
             </Switch>
-            {!this.state.backToCam ? null : (
-              <MainPage changeState={this.changeState} backToCam={true} />
-            )}
+            {!this.state.backToCam ? null : <MainPage changeState={this.changeState} backToCam={true} />}
           </>
         ) : (
           <div

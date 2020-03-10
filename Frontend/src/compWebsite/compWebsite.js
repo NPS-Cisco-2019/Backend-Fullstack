@@ -1,104 +1,84 @@
 // SECTION imports
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import Tutorial from "shared/Tutorial";
 import "style/desktopApp.css";
 import "style/animations.css";
 // !SECTION
 
-export default class CompApp extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            headHeight: 0
-        };
-    }
+function CompApp() {
+  const [headHeight, setHeadHeight] = useState(0);
+  const [scroll, setScroll] = useState(0);
 
-    changeHeadHeight = () => {
-        const head = document.getElementById("head");
-        this.setState({ headHeight: head.clientHeight });
+  const changeHeadHeight = () => {
+    const head = document.getElementById("head");
+    setHeadHeight(head.clientHeight);
+  };
+
+  useEffect(() => {
+    changeHeadHeight();
+
+    const changeScroll = () => {
+      setScroll(() => window.scrollY);
     };
+    window.addEventListener("resize", changeHeadHeight);
+    window.addEventListener("scroll", changeScroll);
+    return () => {
+      window.removeEventListener("resize", changeHeadHeight);
+      window.removeEventListener("scroll", changeScroll);
+    };
+  }, []);
 
-    // SECTION Life Cycle Components
-    componentDidMount() {
-        this.changeHeadHeight();
-        window.addEventListener("resize", this.changeHeadHeight);
-    }
+  // opacity for header
+  let opacity = Math.max(Math.min(50 / scroll, 1), 0.7);
 
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.changeHeadHeight);
-    }
-    // !SECTION
+  return (
+    <div className="App deskApp">
+      <header className="deskHead" style={{ opacity }} id="head">
+        <h1>This app is not supported on Computers.</h1>
+      </header>
+      <div className="body" style={{ top: headHeight }} id="main">
+        {/* SECTION Main section, contains about and navlinks to tutorials */}
+        <div className="description">
+          <div
+            style={{
+              fontSize: "1.15rem",
+              marginBottom: 30
+            }}
+          >
+            <p>
+              SnapSearch is a problem solving app, just take a picture and the app automatically scans the web to find the best answers for
+              you.
+            </p>
+            <br />
+            <p>
+              This app aims to provide instant solutions to problems in science subjects at the high school level. The user can provide an
+              image of the question or simply enter it in a prompt.
+            </p>
+            <p>SnapSearch sources answers from the internet, subject to a unique ranking system.</p>
+            <br />
+            <br />
+            <p>
+              Features of SnapSearch:
+              <br />
+              <ol>
+                <li>Gives access to quality quality answers from the best of websites.</li>
 
-    render() {
-        // opacity for header
-        let opacity = Math.max(Math.min(50 / window.scrollY, 1), 0.7);
-        return (
-            <div className="App deskApp">
-                <header className="deskHead" style={{ opacity }} id="head">
-                    <h1>This app is not supported on Computers.</h1>
-                </header>
-                <div
-                    className="body"
-                    style={{ top: this.state.headHeight }}
-                    id="main"
-                >
-                    {/* SECTION Main section, contains about and navlinks to tutorials */}
-                    <div className="description">
-                        <p
-                            style={{
-                                fontSize: "1.15rem",
-                                marginBottom: 30
-                            }}
-                        >
-                            SnapSearch is a problem solving app, just take a
-                            picture and the app automatically scans the web to
-                            find the best answers for you.
-                            <br />
-                            <br />
-                            <br />
-                            This app aims to provide instant solutions to
-                            problems in science subjects at the high school
-                            level. The user can provide an image of the question
-                            or simply enter it in a prompt.
-                            <br />
-                            <br />
-                            SnapSearch sources answers from the internet,
-                            subject to a unique ranking system.
-                            <br />
-                            <br />
-                            Features of SnapSearch:
-                            <br />
-                            <ol>
-                                <li>
-                                    Gives access to quality quality answers from
-                                    the best of websites.
-                                </li>
+                <li>Converts images to text by using and hence saves effort of typing.</li>
 
-                                <li>
-                                    Converts images to text by using and hence
-                                    saves effort of typing.
-                                </li>
+                <li>Allows users to navigate between answers seamlessly through a simple swipe.</li>
 
-                                <li>
-                                    Allows users to navigate between answers
-                                    seamlessly through a simple swipe.
-                                </li>
-
-                                <li>
-                                    Enables users to save answers for later.
-                                </li>
-                            </ol>
-                        </p>
-                        <h2>
-                            Go to your mobile phone in one of the following
-                            browsers and follow these tutorials to install it.
-                        </h2>
-                    </div>
-                    {/* !SECTION */}
-                    <Tutorial headHeight={this.state.headHeight} />
-                </div>
-            </div>
-        );
-    }
+                <li>Enables users to save answers for later.</li>
+              </ol>
+            </p>
+          </div>
+          <h2>Go to your mobile phone in one of the following browsers and follow these tutorials to install it.</h2>
+        </div>
+        {/* !SECTION */}
+        <Tutorial headHeight={headHeight} />
+      </div>
+    </div>
+  );
 }
+
+export default CompApp;

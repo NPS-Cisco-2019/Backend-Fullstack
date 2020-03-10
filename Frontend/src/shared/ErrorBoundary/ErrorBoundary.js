@@ -16,7 +16,7 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     // You can also log the error to an error reporting service
-    console.log(error, errorInfo);
+    console.error(error, errorInfo);
   }
 
   render() {
@@ -24,9 +24,7 @@ class ErrorBoundary extends React.Component {
 
     let width = isMobile ? window.innerWidth / 2 : window.innerWidth / 6;
 
-    let home =
-      "/" +
-      (isMobile ? "Picture" : browser[0].toUpperCase() + browser.slice(1));
+    let home = "/" + (isMobile ? "Picture" : browser[0].toUpperCase() + browser.slice(1));
 
     if (this.state.hasError) {
       return (

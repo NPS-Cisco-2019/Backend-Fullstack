@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import Answer from "./Answer";
 import HelpOverlay from "./HelpOverlay";
 import { Back } from "shared/elements";
+import toShowHelp from "functions/showHelp";
 
 import styles from "style/style";
 // !SECTION
@@ -21,18 +22,13 @@ class AnswerPage extends React.Component {
       showMenu: false,
       backToAns: false,
       selectedArr: createArr(this.props.answers.length),
-      showHelp:
-        localStorage.getItem("helpMode") === "true" ||
-        sessionStorage.getItem("new") === "true"
+      showHelp: toShowHelp(2)
     };
 
     this.maxHeight = 0;
 
     document.body.style.overflowX = "hidden";
-    document.documentElement.style.setProperty(
-      "--popupHeight",
-      (this.props.websites.length * window.innerHeight) / 13 + "px"
-    );
+    document.documentElement.style.setProperty("--popupHeight", (this.props.websites.length * window.innerHeight) / 13 + "px");
 
     // SECTION function bindings
     this.jumpto = this.jumpto.bind(this);
@@ -69,9 +65,7 @@ class AnswerPage extends React.Component {
     this.setState({ num: e.target.value });
     this.returnToAnswer();
     setTimeout(() => {
-      let websitePosition = document
-        .getElementById("websitePosition")
-        .getBoundingClientRect();
+      let websitePosition = document.getElementById("websitePosition").getBoundingClientRect();
       this.setState({ pos: { top: websitePosition.top, left: websitePosition.left } });
     }, 250);
   }
@@ -97,9 +91,7 @@ class AnswerPage extends React.Component {
   backClick() {
     this.setState({ num: this.state.num - 1 });
     setTimeout(() => {
-      let websitePosition = document
-        .getElementById("websitePosition")
-        .getBoundingClientRect();
+      let websitePosition = document.getElementById("websitePosition").getBoundingClientRect();
       this.setState({ pos: { top: websitePosition.top, left: websitePosition.left } });
     }, 250);
   }
@@ -108,9 +100,7 @@ class AnswerPage extends React.Component {
   nextClick() {
     this.setState({ num: this.state.num + 1 });
     setTimeout(() => {
-      let websitePosition = document
-        .getElementById("websitePosition")
-        .getBoundingClientRect();
+      let websitePosition = document.getElementById("websitePosition").getBoundingClientRect();
       this.setState({ pos: { top: websitePosition.top, left: websitePosition.left } });
     }, 250);
   }
@@ -130,14 +120,13 @@ class AnswerPage extends React.Component {
   // !SECTION
 
   componentDidMount() {
-    let websitePosition = document
-      .getElementById("websitePosition")
-      .getBoundingClientRect();
+    let websitePosition = document.getElementById("websitePosition").getBoundingClientRect();
     this.setState({ pos: { top: websitePosition.top, left: websitePosition.left } });
 
     let ansContainer = document.getElementById("ansContainer").getBoundingClientRect();
     let bot = document.getElementById("bot").getBoundingClientRect();
 
+    sessionStorage.setItem("helpSeen", 2);
     this.maxHeight = window.innerHeight - ansContainer.top - bot.height;
     this.forceUpdate();
   }
@@ -157,10 +146,7 @@ class AnswerPage extends React.Component {
         }}
         className={this.state.backToCam ? "slideout" : ""}
       >
-        <HelpOverlay
-          show={this.state.showHelp}
-          handleExitClick={() => this.setState({ showHelp: false })}
-        />
+        <HelpOverlay show={this.state.showHelp} handleExitClick={() => this.setState({ showHelp: false })} />
         {/* SECTION Back Button */}
         <header
           className="top fadein"
@@ -171,11 +157,7 @@ class AnswerPage extends React.Component {
           id="head"
         >
           <Back handleClick={this.handleClick} />
-          <a
-            style={webStyle}
-            id="websitePosition"
-            href={this.props.websites[this.state.num][1]}
-          >
+          <a style={webStyle} id="websitePosition" href={this.props.websites[this.state.num][1]}>
             {this.props.websites[this.state.num][0]}
           </a>
           <div style={navObj}>
@@ -187,11 +169,7 @@ class AnswerPage extends React.Component {
               }}
               onClick={this.saveAnswer}
             >
-              <img
-                className="nav-img"
-                src={require("pictures/bookmark.png")}
-                alt="bookmark"
-              />
+              <img className="nav-img" src={require("pictures/bookmark.png")} alt="bookmark" />
             </div>
           </div>
         </header>
@@ -201,11 +179,7 @@ class AnswerPage extends React.Component {
           <div className="info" style={infoStyle} id="question">
             <p style={{ margin: 0, fontWeight: 400 }}>{this.props.question}</p>
           </div>
-          <Swipe
-            onSwipeLeft={this.swipeNext}
-            onSwipeRight={this.swipeBack}
-            tolerance={100}
-          >
+          <Swipe onSwipeLeft={this.swipeNext} onSwipeRight={this.swipeBack} tolerance={100}>
             <div
               className="answerContainer fadein"
               style={{
@@ -215,12 +189,7 @@ class AnswerPage extends React.Component {
               id="ansContainer"
             >
               {this.props.answers.map((item, i) => (
-                <Answer
-                  question={this.props.question}
-                  answer={item}
-                  key={this.props.websites[i]}
-                  id={`p${i}`}
-                />
+                <Answer question={this.props.question} answer={item} key={this.props.websites[i]} id={`p${i}`} />
               ))}
             </div>
           </Swipe>
@@ -271,11 +240,7 @@ class AnswerPage extends React.Component {
         {/* SECTION Bottom Navigation */}
         <div className="bot fadein" id="bot">
           {back ? (
-            <button
-              className="botItem button"
-              style={{ ...botNavStyle, opacity: 1 }}
-              onClick={this.backClick}
-            >
+            <button className="botItem button" style={{ ...botNavStyle, opacity: 1 }} onClick={this.backClick}>
               {"< Back"}
             </button>
           ) : (
@@ -285,11 +250,7 @@ class AnswerPage extends React.Component {
           )}
 
           <button className="botItem" style={botNavStyle} onClick={this.handleMenuClick}>
-            <div
-              className={`hamburger hamburger--collapse ${
-                this.state.showMenu ? "is-active" : ""
-              }`}
-            >
+            <div className={`hamburger hamburger--collapse ${this.state.showMenu ? "is-active" : ""}`}>
               <span className="hamburger-box">
                 <span className="hamburger-inner"></span>
               </span>
@@ -298,11 +259,7 @@ class AnswerPage extends React.Component {
           </button>
 
           {next ? (
-            <button
-              className="botItem button"
-              style={{ ...botNavStyle, opacity: 1 }}
-              onClick={this.nextClick}
-            >
+            <button className="botItem button" style={{ ...botNavStyle, opacity: 1 }} onClick={this.nextClick}>
               {"Next >"}
             </button>
           ) : (
