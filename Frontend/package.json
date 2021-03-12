@@ -49,7 +49,7 @@
     "react": "^16.12.0",
     "react-app-polyfill": "^1.0.5",
     "react-color": "^2.18.0",
-    "react-dev-utils": "^9.1.0",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.12.0",
     "react-easy-swipe": "0.0.18",
     "react-horizontal-scrolling-menu": "^0.7.5",
