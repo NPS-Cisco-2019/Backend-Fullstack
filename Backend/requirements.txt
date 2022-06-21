@@ -4,7 +4,7 @@ itsdangerous==1.1.0
 Jinja2==2.10.3
 MarkupSafe==1.1.1
 nms==0.1.6
-numpy==1.15.0
+numpy==1.22.0
 opencv-python==4.1.1.26
 Pillow==6.2.0
 pybase64==1.0.0
